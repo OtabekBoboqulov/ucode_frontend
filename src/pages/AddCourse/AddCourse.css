@@ -1,0 +1,34 @@
+@import "tailwindcss";
+
+@utility add-course {
+  @apply flex justify-center items-center min-h-screen bg-[url('../../assets/auth-bg.jpg')] bg-cover bg-center;
+}
+
+@utility form-container {
+  @apply w-xl p-6 rounded-2xl shadow-md space-y-4 bg-[var(--form-bg-light)] dark:bg-[var(--form-bg-dark)];
+}
+
+@utility form-label {
+  @apply block text-sm font-medium text-gray-700 dark:text-gray-200;
+}
+
+@utility form-input {
+  @apply w-full px-4 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+@utility form-textarea {
+  @apply form-input resize-none;
+}
+
+@utility form-select {
+  @apply form-input;
+}
+
+@utility form-button {
+  @apply mt-4 w-full bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white font-bold py-2 px-4 rounded-lg
+  transition duration-200 cursor-pointer text-lg h-10;
+}
+
+@utility banner-preview {
+  @apply w-full h-60 object-cover object-center rounded-xl overflow-hidden cursor-pointer;
+}

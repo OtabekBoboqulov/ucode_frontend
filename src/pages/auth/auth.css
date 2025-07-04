@@ -1,0 +1,96 @@
+@import "tailwindcss";
+
+@theme {
+  --form-bg-light: rgba(254, 252, 253, 0.87);
+  --form-bg-dark: rgba(9, 28, 50, 0.87);
+}
+
+@utility auth-container {
+  @apply min-h-screen flex justify-center items-center bg-[url('../../assets/auth-bg.jpg')] bg-cover bg-center;
+}
+
+@utility auth-form {
+  @apply w-md flex flex-col items-center justify-center bg-[var(--form-bg-light)] rounded-xl py-8 px-14 shadow-2xl
+  dark:bg-[var(--form-bg-dark)];
+}
+
+@utility text-input {
+  @apply w-full p-2 border-[1px] border-amber-500 bg-amber-50 rounded-xl my-2 focus:outline-none focus:bg-[#FEFCFD];
+}
+
+@utility image-input {
+  @apply absolute opacity-0;
+}
+
+@utility image-preview {
+  @apply rounded-full overflow-hidden w-40 h-40 m-auto cursor-pointer;
+}
+
+@utility auth-submit-btn {
+  @apply w-full h-10 p-2 bg-amber-500 text-white rounded-xl my-2 uppercase font-bold border-none cursor-pointer
+  hover:bg-amber-600 active:bg-amber-700;
+}
+
+@utility goto-login-signup {
+  @apply text-center dark:text-white;
+}
+
+@utility link {
+  @apply text-blue-500 hover:underline active:text-blue-600 font-bold;
+}
+
+
+/* From Uiverse.io by adamgiebl */
+.dots-container {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 100%;
+  width: 100%;
+}
+
+.dot {
+  height: 15px;
+  width: 15px;
+  margin-right: 10px;
+  border-radius: 10px;
+  background-color: #ffffff;
+  animation: pulse 1.5s infinite ease-in-out;
+}
+
+.dot:last-child {
+  margin-right: 0;
+}
+
+.dot:nth-child(1) {
+  animation-delay: -0.3s;
+}
+
+.dot:nth-child(2) {
+  animation-delay: -0.1s;
+}
+
+.dot:nth-child(3) {
+  animation-delay: 0.1s;
+}
+
+@keyframes pulse {
+  0% {
+    transform: scale(0.8);
+    background-color: #b3d4fc;
+    box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+  }
+
+  50% {
+    transform: scale(1.2);
+    background-color: #6793fb;
+    box-shadow: 0 0 0 10px rgba(178, 212, 252, 0);
+  }
+
+  100% {
+    transform: scale(0.8);
+    background-color: #b3d4fc;
+    box-shadow: 0 0 0 0 rgba(178, 212, 252, 0.7);
+  }
+}
+

@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+@utility error {
+  @apply text-red-500 border-red-500 border-[1px] rounded-lg mx-4 p-2 bg-amber-200 text-justify;
+}

@@ -1,0 +1,56 @@
+@import "tailwindcss";
+
+@theme {
+  --course-card-bg-light: rgba(254, 252, 253, 0.5);
+  --course-card-bg-dark: rgba(0, 0, 0, 0.5);
+  --shadow-light: 0 0 10px rgba(0, 0, 0, 0.25);
+  --shadow-dark: 0 0 10px rgba(100, 100, 100, 0.5);
+}
+
+@utility course-card {
+  @apply relative rounded-xl shadow-light overflow-hidden dark:text-amber-50 dark:shadow-dark;
+}
+
+@utility course-title {
+  @apply flex items-center p-2 font-bold justify-between text-2xl mr-2;
+}
+
+@utility course-complexity {
+  @apply font-bold text-lg capitalize;
+}
+
+@utility junior {
+  @apply text-green-600 dark:text-green-400 ;
+}
+
+@utility middle {
+  @apply text-orange-600 dark:text-orange-400;
+}
+
+@utility senior {
+  @apply text-red-600 dark:text-red-400;
+}
+
+@utility course-description {
+  @apply px-2 text-justify;
+}
+
+@utility start-course {
+  @apply my-2 mx-auto flex items-center justify-center h-12 w-[90%] bg-blue-700 text-white text-xl uppercase font-bold
+  hover:bg-blue-600 active:bg-blue-500 rounded-xl;
+}
+
+@utility course-data {
+  @apply absolute bottom-0 left-0 right-0 p-2 bg-[var(--course-card-bg-light)] dark:bg-[var(--course-card-bg-dark)]
+  md:translate-y-full transition-transform duration-500 ease-in-out;
+}
+
+@utility banner_image {
+  @apply w-full h-60 object-cover object-center;
+}
+
+@layer utilities {
+  .course-card:hover .course-data {
+    @apply translate-y-0 block;
+  }
+}

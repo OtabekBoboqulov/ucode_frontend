@@ -1,0 +1,5 @@
+@import "tailwindcss";
+
+@utility section {
+  @apply text-center font-bold mb-4 dark:text-[#E8F1F2];
+}

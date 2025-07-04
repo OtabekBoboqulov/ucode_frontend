@@ -1,0 +1,36 @@
+@import "tailwindcss";
+
+@theme {
+  --shadow-drop-down: -5px 5px 5px rgba(0, 0, 0, 0.1);
+}
+
+@utility header {
+  @apply bg-[#FEFCFD] fixed top-0 left-0 right-0 h-20 shadow-[#5D5D81] flex items-center justify-between md:px-20 px-5 z-50
+  dark:bg-[#091C32] dark:shadow-[#333333];
+}
+
+@utility auth-btn {
+  @apply uppercase cursor-pointer border-2 p-2 border-black hover:text-[#FEFCFD] hover:bg-black transition-all
+  duration-200 active:scale-95 dark:border-[#FEFCFD] dark:text-[#FEFCFD] dark:hover:text-[#091C32]
+  dark:hover:bg-[#FEFCFD];
+}
+
+@utility user-data {
+  @apply flex items-center justify-center gap-4;
+}
+
+@utility username {
+  @apply font-bold dark:text-[#FEFCFD] text-xl hidden md:block cursor-pointer;
+}
+
+@utility user-image {
+  @apply w-12 h-12 rounded-full overflow-hidden object-cover object-center cursor-pointer;
+}
+
+@utility drop-down {
+  @apply fixed top-20 right-0 bg-[#FEFCFD] z-50 shadow-drop-down text-right w-[80%] md:w-64 min-h-dvh dark:bg-[#091C32];
+}
+
+@utility drop-down-item {
+  @apply w-full py-4 px-10 hover:bg-[#E8F1F2] cursor-pointer border-b-0 dark:hover:bg-[#5D5D81] dark:text-[#FEFCFD];
+}

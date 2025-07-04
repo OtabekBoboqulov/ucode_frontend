@@ -1,0 +1,15 @@
+@import "tailwindcss";
+
+@theme {
+  --bg-light: rgba(254, 252, 253, 0.5);
+  --bg-dark: rgba(0, 0, 0, 0.5);
+}
+
+@utility create-course {
+  @apply h-60 rounded-xl border-2 border-dashed flex justify-center items-center bg-[var(--bg-light)]
+  dark:bg-[var(--bg-dark)];
+}
+
+@utility plus-image {
+  @apply h-30 cursor-pointer hover:opacity-75 active:opacity-50;
+}

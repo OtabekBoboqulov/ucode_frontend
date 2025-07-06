@@ -1,0 +1,13 @@
+@import "tailwindcss";
+
+@utility course-view {
+  @apply min-h-screen bg-[#BFCDE0] w-full dark:bg-[#223C5B];
+}
+
+@utility course-banner {
+  @apply w-full;
+}
+
+@utility banner-image {
+  @apply w-full h-60 object-cover object-center;
+}

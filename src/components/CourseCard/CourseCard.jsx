@@ -5,8 +5,9 @@ import {truncate_text} from "../../utils/text-utils.jsx";
 import {motion} from 'framer-motion';
 import {useInView} from 'react-intersection-observer';
 import {MEDIA_BASE_URL} from "../../constants.jsx";
+import {Link} from "react-router-dom";
 
-const CourseCard = ({course}) => {
+const CourseCard = ({course, btn_text}) => {
   const {ref, inView} = useInView({triggerOnce: true});
   return (
     <motion.div className="course-card"
@@ -24,9 +25,9 @@ const CourseCard = ({course}) => {
           <div className="course-description">
             {truncate_text(course.description, 70)}
           </div>
-          <button className="start-course cursor-pointer">Start</button>
+          <button className="start-course cursor-pointer"><Link to={`/courses/${course.id}`}>{btn_text}</Link></button>
         </div>
-        <div className="bg-transparent absolute top-0 right-0 p-2">
+        <div className="bg-transparent absolute top-0 right-0 p-2 text-gray-500">
           {(course.time_since_creation.years && `${course.time_since_creation.years} yil oldin`) ||
             (course.time_since_creation.months && `${course.time_since_creation.months} oy oldin`) ||
             (course.time_since_creation.days && `${course.time_since_creation.days} kun oldin`) ||

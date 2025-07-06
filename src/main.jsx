@@ -6,12 +6,14 @@ import App from './App.jsx'
 import Signup from "./pages/auth/Signup.jsx";
 import Login from "./pages/auth/Login.jsx";
 import AddCourse from "./pages/AddCourse/AddCourse.jsx";
+import CourseView from "./pages/CourseView/CourseView.jsx";
 
 const router = createBrowserRouter([
     {path: "/", element: <App/>},
     {path: "/signup", element: <Signup/>},
     {path: "/login", element: <Login/>},
     {path: "/add-course", element: <AddCourse/>},
+    {path: "/courses/:id", element: <CourseView/>},
   ])
 ;
 

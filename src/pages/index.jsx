@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, {useEffect, useState} from 'react';
+import {useNavigate} from 'react-router-dom';
 import Header from '../components/Header/Header.jsx';
 import CourseCard from '../components/CourseCard/CourseCard.jsx';
 import Intro from '../components/Intro/Intro.jsx';
@@ -8,8 +8,9 @@ import CreateCourse from '../components/CreateCourse/CreateCourse.jsx';
 import Footer from '../components/Footer/Footer.jsx';
 import '../components/Section/Section.css';
 import './index.css';
-import { BASE_URL } from '../constants.jsx';
-import { refreshToken, isAuthorized } from '../utils/auth-utils.jsx';
+import {BASE_URL} from '../constants.jsx';
+import {refreshToken, isAuthorized} from '../utils/auth-utils.jsx';
+import LoadingAnimation from "../components/LoadingAnimation.jsx";
 
 const Index = () => {
   const [courses, setCourses] = useState([]);
@@ -49,7 +50,6 @@ const Index = () => {
         if (coursesResponse.status === 401) {
           const refreshResult = await refreshToken();
           if (refreshResult === 'success') {
-            // Retry fetching enrolled courses
             const retryResponse = await fetch(`${BASE_URL}/api/courses/enrolled/`, {
               method: 'GET',
               headers: {
@@ -94,13 +94,14 @@ const Index = () => {
           {courses.length > 0 ? (
             courses.map((course) => (
               <CourseCard course={course} btn_text={enrolledCourses.includes(course.id) ? 'Davom etish' : 'Boshlash'}
-              key={course.id}/>
+                          key={course.id}/>
             ))
-          ) : (
-            <p>Loading courses...</p>
-          )}
-          {isAuthorized() && JSON.parse(localStorage.getItem('loginData'))?.is_staff && <CreateCourse />}
+          ) : ''}
+          {isAuthorized() && JSON.parse(localStorage.getItem('loginData'))?.is_staff && <CreateCourse/>}
         </section>
+        {isLoading && (
+          <LoadingAnimation/>
+        )}
       </div>
       <Footer/>
     </div>

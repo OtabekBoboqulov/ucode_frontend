@@ -25,7 +25,9 @@ const CourseCard = ({course, btn_text}) => {
           <div className="course-description">
             {truncate_text(course.description, 70)}
           </div>
-          <button className="start-course cursor-pointer"><Link to={`/courses/${course.id}`}>{btn_text}</Link></button>
+          <button className="start-course cursor-pointer"><Link to={`/courses/${course.id}`}>
+            {btn_text}
+          </Link></button>
         </div>
         <div className="bg-transparent absolute top-0 right-0 p-2 text-gray-500">
           {(course.time_since_creation.years && `${course.time_since_creation.years} yil oldin`) ||

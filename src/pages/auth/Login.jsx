@@ -5,6 +5,8 @@ import Section from '../../components/Section/Section.jsx';
 import Error from "../../components/Error/Error.jsx";
 import {BASE_URL} from "../../constants.jsx";
 import {isAuthorized} from "../../utils/auth-utils.jsx";
+import HomeButton from "../../components/HomeButton/HomeButton.jsx";
+import ButtonLoadingAnimation from "../../components/ButtonLoadingAnimation/ButtonLoadingAnimation.jsx";
 
 const Login = () => {
   const {state} = useLocation();
@@ -91,11 +93,7 @@ const Login = () => {
           <button type="submit" className="auth-submit-btn">
             <span className={!isLoading ? 'block' : 'hidden'}>Kirish</span>
             <div className={`loading ${isLoading ? 'block' : 'hidden'}`}>
-              <section className="dots-container">
-                <div className="dot"></div>
-                <div className="dot"></div>
-                <div className="dot"></div>
-              </section>
+              <ButtonLoadingAnimation/>
             </div>
           </button>
           <div className="goto-login-signup">Akkauntingiz yo'qmi? <Link to={"/signup"} className="link">Ro'yxat
@@ -103,6 +101,7 @@ const Login = () => {
           </div>
         </form>
       </div>
+      <HomeButton/>
     </div>
   )
     ;

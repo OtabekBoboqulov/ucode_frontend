@@ -6,6 +6,8 @@ import default_profile_image from '../../assets/default_profile_image.jpg';
 import {BASE_URL} from "../../constants.jsx";
 import Error from "../../components/Error/Error.jsx";
 import {isAuthorized} from "../../utils/auth-utils.jsx";
+import HomeButton from "../../components/HomeButton/HomeButton.jsx";
+import ButtonLoadingAnimation from "../../components/ButtonLoadingAnimation/ButtonLoadingAnimation.jsx";
 
 const Signup = () => {
   const [imageSrc, setImageSrc] = useState(default_profile_image);
@@ -205,16 +207,13 @@ const Signup = () => {
           <button type="submit" className="auth-submit-btn">
             <span className={!isLoading ? 'block' : 'hidden'}>Ro'yxatdan o'tish</span>
             <div className={`loading ${isLoading ? 'block' : 'hidden'}`}>
-              <section className="dots-container">
-                <div className="dot"></div>
-                <div className="dot"></div>
-                <div className="dot"></div>
-              </section>
+              <ButtonLoadingAnimation/>
             </div>
           </button>
           <div className="goto-login-signup">Akkaunt bormi? <Link to={"/login"} className="link">Kirish</Link></div>
         </form>
       </div>
+      <HomeButton/>
     </div>
   );
 };

@@ -1,19 +1,22 @@
-import React, { useEffect, useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import { BASE_URL, MEDIA_BASE_URL } from '../../constants.jsx';
-import { refreshToken, isAuthorized } from '../../utils/auth-utils.jsx';
-import Header from '../../components/Header/Header.jsx';
+import React, {useEffect, useState} from 'react';
+import {useParams, useNavigate, Link} from 'react-router-dom';
+import {BASE_URL, MEDIA_BASE_URL} from '../../constants.jsx';
+import {refreshToken, isAuthorized} from '../../utils/auth-utils.jsx';
 import Error from "../../components/Error/Error.jsx";
 import './CourseView.css';
 import HomeButton from "../../components/HomeButton/HomeButton.jsx";
+import LoadingAnimation from "../../components/LoadingAnimation.jsx";
+import LessonCard from "../../components/LessonCard/LessonCard.jsx";
+import Footer from "../../components/Footer/Footer.jsx";
 
 const CourseView = () => {
-  const { id } = useParams();
+  const {id} = useParams();
   const navigate = useNavigate();
   const [courseData, setCourseData] = useState(null);
   const [lessonsData, setLessonsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  let userData = JSON.parse(localStorage.getItem('loginData'));
 
   const getCourseData = async () => {
     if (!isAuthorized()) {
@@ -25,7 +28,7 @@ const CourseView = () => {
     setError(null);
 
     try {
-      const userData = JSON.parse(localStorage.getItem('loginData'));
+      userData = JSON.parse(localStorage.getItem('loginData'));
       const controller = new AbortController();
       const timeoutId = setTimeout(() => controller.abort(), 10000); // 10s timeout
 
@@ -88,20 +91,29 @@ const CourseView = () => {
     <div>
       <div className="course-view">
         {isLoading ? (
-          <p>Loading course...</p>
+          <LoadingAnimation/>
         ) : error ? (
           <Error error_message={error}/>
         ) : (
           <div className="course-banner">
-              <img
-                src={`${MEDIA_BASE_URL}${courseData.banner_image}`}
-                alt="Course banner"
-                className="banner-image"
-              />
+            <img
+              src={`${MEDIA_BASE_URL}${courseData.banner_image}`}
+              alt="Course banner"
+              className="banner-image"
+            />
           </div>
         )}
+        <div className="lessonsGrid">
+          {lessonsData.map((lesson) => (
+            <Link to={`/courses/${id}/lessons/${lesson.id}`} key={`${id}${lesson.id}`}>
+              <LessonCard lessonData={lesson} key={lesson.id}
+                          userLesson={lesson.user_lessons.find((item) => item.user === userData.id)}/>
+            </Link>
+          ))}
+        </div>
       </div>
       <HomeButton/>
+      <Footer/>
     </div>
   );
 };

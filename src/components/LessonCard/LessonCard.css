@@ -1,0 +1,32 @@
+@import "tailwindcss";
+
+@theme {
+  --bg-light: rgba(254, 252, 253, 0.6);
+  --bg-dark: rgba(9, 28, 50, 0.6);
+}
+
+@utility lessonCard {
+  @apply min-h-30 flex flex-col justify-center items-center rounded-xl p-2 shadow-md text-[#5D5D81] cursor-pointer
+  dark:bg-[var(--bg-dark)] dark:text-[#FEFCFD] hover:shadow-2xl relative bg-[var(--bg-light)];
+}
+
+@utility lessonNumber {
+  @apply text-6xl font-bold w-full text-center;
+}
+
+@utility lessonTitle {
+  @apply text-xl font-bold text-center lg:hidden px-3;
+}
+
+@layer utilities {
+  .lessonCard:hover .lessonTitle {
+    @apply block;
+  }
+  .lessonCard:hover .lessonNumber {
+     @apply lg:hidden;
+   }
+}
+
+@utility isCompleted {
+  @apply text-green-600 absolute bottom-3 right-4;
+}

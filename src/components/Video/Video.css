@@ -1,0 +1,9 @@
+@import "tailwindcss";
+
+@utility video-container {
+  @apply relative w-full pt-[56.25%];
+}
+
+@utility lesson-video {
+  @apply absolute top-0 left-0 w-full h-full;
+}

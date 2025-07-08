@@ -1,0 +1,19 @@
+@import "tailwindcss";
+
+@utility check-btn {
+  @apply appearance-none;
+}
+
+@layer utilities {
+  .option:has(.check-btn:checked) {
+    @apply bg-[#3B3355] text-white dark:bg-[#091C32];
+  }
+}
+
+@utility btn {
+  @apply flex justify-end m-2;
+}
+
+@utility submit-question {
+  @apply font-bold p-2 bg-green-500 hover:bg-green-600 active:bg-green-800 rounded-xl cursor-pointer;
+}

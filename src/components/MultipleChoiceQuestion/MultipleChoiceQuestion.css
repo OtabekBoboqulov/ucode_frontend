@@ -1,0 +1,40 @@
+@import "tailwindcss";
+
+@theme {
+  --bg-light: rgb(59, 51, 85);
+  --bg-dark: rgb(9, 28, 50);
+}
+
+@utility question-container {
+  @apply my-4 p-2 md:p-5 rounded-2xl bg-[var(--bg-light)] text-white dark:bg-[var(--bg-dark)] shadow-2xl;
+}
+
+@utility question {
+  @apply text-sm md:text-xl font-bold p-2;
+}
+
+@utility option {
+  @apply text-sm md:text-lg mx-2 border-[1px] rounded-xl my-1 bg-[#5D5D81] dark:bg-[#223C5B];
+}
+
+@utility option-text {
+  @apply w-full flex items-center cursor-pointer p-2;
+}
+
+@utility radio-btn {
+  @apply appearance-none;
+}
+
+@layer utilities {
+  .option:has(.radio-btn:checked) {
+    @apply bg-[#3B3355] text-white dark:bg-[#091C32];
+  }
+}
+
+@utility btn {
+  @apply flex justify-end m-2;
+}
+
+@utility submit-question {
+  @apply font-bold p-2 bg-green-500 hover:bg-green-600 active:bg-green-800 rounded-xl cursor-pointer;
+}

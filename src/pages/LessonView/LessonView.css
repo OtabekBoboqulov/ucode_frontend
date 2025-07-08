@@ -1,0 +1,10 @@
+@import "tailwindcss";
+
+@utility lesson-view {
+  @apply min-h-screen bg-[#BFCDE0] w-full dark:bg-[#223C5B] px-5 md:px-40 pt-5;
+}
+
+@utility lesson-materials {
+  @apply my-5 p-2 cursor-pointer rounded-lg inline-block bg-amber-600 text-white font-bold hover:bg-amber-700
+  active:bg-amber-800 text-sm md:text-lg;
+}

@@ -1,5 +1,4 @@
 import React, {useEffect} from 'react';
-import banner from '../../assets/default_banner.jpg';
 import './CourseCard.css';
 import {truncate_text} from "../../utils/text-utils.jsx";
 import {motion} from 'framer-motion';

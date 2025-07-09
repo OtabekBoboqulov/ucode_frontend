@@ -1,6 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import './LessonView.css';
-import {useNavigate, useParams} from "react-router-dom";
+import {Link, useNavigate, useParams} from "react-router-dom";
 import HomeButton from "../../components/HomeButton/HomeButton.jsx";
 import {isAuthorized, refreshToken} from "../../utils/auth-utils.jsx";
 import {BASE_URL, MEDIA_BASE_URL} from "../../constants.jsx";
@@ -13,6 +13,7 @@ import Footer from "../../components/Footer/Footer.jsx";
 import MultipleChoiceQuestion from "../../components/MultipleChoiceQuestion/MultipleChoiceQuestion.jsx";
 import MultipleOptionsQuestion from "../../components/MultipleOptionsQuestion/MultipleOptionsQuestion.jsx";
 import CodingQuestion from "../../components/CodingQuestion/CodingQuestion.jsx";
+import LessonsSidebar from "../../components/LessonsSidebar/LessonsSidebar.jsx";
 
 const LessonView = () => {
   const {id, lessonId} = useParams();
@@ -21,6 +22,7 @@ const LessonView = () => {
   const [components, setComponents] = useState([])
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [nextLesson, setNextLesson] = useState(null);
   let userData = JSON.parse(localStorage.getItem('loginData'));
 
   const startLesson = async (lessonId) => {
@@ -83,6 +85,19 @@ const LessonView = () => {
           if (!retryData.user_lessons.find((item) => item.user === userData.id)) {
             startLesson(retryData.id);
           }
+          const nextLessonResponse = await fetch(`${BASE_URL}/api/courses/${Number(id)}/next-lesson/${retryData.serial_number}`, {
+            method: 'GET',
+            headers: {
+              'Content-Type': 'application/json',
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loginData'))?.access}`,
+            },
+          });
+          if (!nextLessonResponse.ok) {
+            throw new Error(`Failed to fetch next lesson data: ${nextLessonResponse.status}`);
+          }
+          const nextLessonData = await nextLessonResponse.json();
+          setNextLesson(nextLessonData.id || {});
         } else {
           localStorage.removeItem('loginData');
           navigate('/login');
@@ -91,12 +106,24 @@ const LessonView = () => {
         throw new Error(`Failed to fetch course data: ${response.status}`);
       } else {
         const data = await response.json();
-        console.log(data);
         setLessonData(data || {});
         setComponents(data.components || []);
         if (!data.user_lessons.find((item) => item.user === userData.id)) {
           startLesson(data.id);
         }
+        const nextLessonResponse = await fetch(`${BASE_URL}/api/courses/${Number(id)}/next-lesson/${data.serial_number}`, {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            'Accept': 'application/json',
+            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loginData'))?.access}`,
+          },
+        });
+        if (!nextLessonResponse.ok) {
+          throw new Error(`Failed to fetch next lesson data: ${nextLessonResponse.status}`);
+        }
+        const nextLessonData = await nextLessonResponse.json();
+        setNextLesson(nextLessonData.id || {});
       }
     } catch (err) {
       console.error('Error fetching lesson data:', err);
@@ -111,17 +138,19 @@ const LessonView = () => {
   }, [lessonId]);
 
   return (
-    <div className="bg-[#BFCDE0] dark:bg-[#223C5B]">
+    <div className="bg-[#BFCDE0] dark:bg-[#223C5B]" id="outer-container">
       {error ? (
         <Error error_message={error}/>
       ) : ''}
       {isLoading ? (
         <LoadingAnimation/>
       ) : ''}
-      <div className="lesson-view">
+      <LessonsSidebar courseId={id}/>
+      <div className="lesson-view" id="page-wrap">
         {lessonData.title && (
           <div className="lesson-caption">
-            <Section title={`${lessonData.serial_number}. ${lessonData.title}`} textSize='md:text-4xl' textSizeSm='text-lg'/>
+            <Section title={`${lessonData.serial_number}. ${lessonData.title}`} textSize='md:text-4xl'
+                     textSizeSm='text-lg'/>
           </div>
         )}
         {components && components.map((component) => {
@@ -151,6 +180,17 @@ const LessonView = () => {
             <a href={`${MEDIA_BASE_URL}${lessonData.lesson_materials}`} target='_blank'>
               Dars materiallari
             </a>
+          </div>
+        )}
+        {nextLesson && nextLesson > 0 && (
+          <div className="next-lesson">
+            <Link className='next-lesson-btn' to={`/courses/${id}/lessons/${nextLesson}`}>
+              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                   className="bi bi-arrow-right" viewBox="0 0 16 16">
+                <path fillRule="evenodd"
+                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+              </svg>
+            </Link>
           </div>
         )}
       </div>

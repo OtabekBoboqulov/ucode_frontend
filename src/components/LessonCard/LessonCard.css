@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --bg-light: rgba(254, 252, 253, 0.6);
-  --bg-dark: rgba(9, 28, 50, 0.6);
+  --bg-lesson-light: rgba(254, 252, 253, 0.6);
+  --bg-lesson-dark: rgba(9, 28, 50, 0.6);
 }
 
 @utility lessonCard {
-  @apply min-h-30 flex flex-col justify-center items-center rounded-xl p-2 shadow-md text-[#5D5D81] cursor-pointer
-  dark:bg-[var(--bg-dark)] dark:text-[#FEFCFD] hover:shadow-2xl relative bg-[var(--bg-light)];
+  @apply bg-[var(--bg-lesson-light)] min-h-30 flex flex-col justify-center items-center rounded-xl p-2 shadow-md text-[#5D5D81] cursor-pointer
+  dark:bg-[var(--bg-lesson-dark)] dark:text-[#FEFCFD] hover:shadow-2xl relative;
 }
 
 @utility lessonNumber {

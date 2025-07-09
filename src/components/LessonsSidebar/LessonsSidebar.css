@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@utility sidebar-menu {
+  @apply dark:bg-gray-900 bg-gray-100;
+}
+
+@utility link-container {
+  @apply flex items-center justify-between gap-2 p-2 px-4 cursor-pointer hover:bg-gray-300 dark:hover:bg-gray-700
+  transition-all duration-200;
+}
+
+@utility link-text {
+  @apply text-gray-700 dark:text-white;
+}
+
+@utility course-link {
+  @apply text-lg font-bold border-b-[1px] dark:border-gray-700;
+}
+
+@utility lesson-status {
+  @apply text-green-500;
+}
+
+@utility logo-container {
+  @apply flex justify-center items-center p-5 border-b-[1px] dark:border-gray-700;
+}
+
+@utility logo-image {
+  @apply w-50;
+}
+
+@utility logo-light {
+  @apply block dark:hidden;
+}
+
+@utility logo-dark {
+  @apply hidden dark:block;
+}

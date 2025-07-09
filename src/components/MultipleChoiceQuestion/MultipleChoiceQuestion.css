@@ -6,7 +6,8 @@
 }
 
 @utility question-container {
-  @apply my-4 p-2 md:p-5 rounded-2xl bg-[var(--bg-light)] text-white dark:bg-[var(--bg-dark)] shadow-2xl;
+  @apply my-4 p-2 md:p-5 rounded-2xl bg-[var(--bg-light)] text-white dark:bg-[var(--bg-dark)] shadow-2xl relative
+  overflow-hidden;
 }
 
 @utility question {
@@ -37,4 +38,20 @@
 
 @utility submit-question {
   @apply font-bold p-2 bg-green-500 hover:bg-green-600 active:bg-green-800 rounded-xl cursor-pointer;
+}
+
+@utility question-layer {
+  @apply absolute top-0 left-0 right-0 bottom-0 bg-green-400 opacity-35;
+}
+
+@utility question-layer-incorrect {
+  @apply bg-red-600;
+}
+
+@utility question-layer-loading {
+  @apply bg-gray-500 flex justify-center items-center opacity-60;
+}
+
+@utility tries-left {
+  @apply md:absolute md:top-2 md:right-4 text-sm;
 }

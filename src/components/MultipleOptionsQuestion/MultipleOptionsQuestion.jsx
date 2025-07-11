@@ -24,6 +24,9 @@ const MultipleChoiceQuestions = ({question_data, id}) => {
   };
 
   useEffect(() => {
+    if (id === null) {
+      setIsDoneCorrect(true);
+    }
     if (triesLeft === 0) {
       setIsDoneIncorrect(true);
     }

@@ -8,6 +8,7 @@ import HomeButton from "../../components/HomeButton/HomeButton.jsx";
 import LoadingAnimation from "../../components/LoadingAnimation.jsx";
 import LessonCard from "../../components/LessonCard/LessonCard.jsx";
 import Footer from "../../components/Footer/Footer.jsx";
+import plus from "../../assets/plus.png";
 
 const CourseView = () => {
   const {id} = useParams();
@@ -16,6 +17,7 @@ const CourseView = () => {
   const [lessonsData, setLessonsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+
   let userData = JSON.parse(localStorage.getItem('loginData'));
 
   const getCourseData = async () => {
@@ -74,6 +76,7 @@ const CourseView = () => {
         const data = await response.json();
         setCourseData(data.course || {});
         setLessonsData(data.lessons || []);
+        console.log(data.lessons.length);
       }
     } catch (err) {
       console.error('Error fetching course data:', err);
@@ -110,6 +113,15 @@ const CourseView = () => {
                           userLesson={lesson.user_lessons.find((item) => item.user === userData.id)}/>
             </Link>
           ))}
+          {userData && userData.is_staff && (
+            <Link to={`/courses/${id}/lessons/create`} className="create-lesson"
+                  state={{
+                    'serial_number': lessonsData.length + 1,
+                    'assigned_score': lessonsData.map((item) => item.max_score).reduce((a, b) => a + b, 0)
+                  }}>
+              <img src={plus} alt="Add" className="plus-lesson-image"/>
+            </Link>
+          )}
         </div>
       </div>
       <HomeButton/>

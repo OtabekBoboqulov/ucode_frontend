@@ -1,0 +1,115 @@
+@import "tailwindcss";
+
+@theme {
+  --bg-light-modal: rgba(254, 252, 253, 0.5);
+  --bg-dark-modal: rgba(34, 60, 91, 0.5);
+}
+
+@utility add-lesson-container {
+  @apply bg-[#BFCDE0] min-h-screen dark:bg-[#223C5B] px-40 pt-4;
+}
+
+@utility modal-overlay {
+  @apply fixed inset-0 bg-[var(--bg-light-modal)] dark:bg-[var(--bg-dark-modal)] flex items-center justify-center;
+}
+
+@utility modal-window {
+  @apply bg-white dark:bg-[#091C31] dark:text-white p-6 rounded-lg shadow-lg md:w-[500px] mx-auto my-8
+  focus:outline-none;
+}
+
+@utility modal-title {
+  @apply text-xl font-semibold mb-4;
+}
+
+@utility modal-label {
+  @apply block text-sm font-medium text-gray-700 dark:text-gray-300;
+}
+
+@utility modal-input {
+  @apply mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+}
+
+@utility modal-button-container {
+  @apply flex justify-end space-x-2;
+}
+
+@utility modal-submit-btn {
+  @apply px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer;
+}
+
+@utility add-element-btn {
+  @apply flex justify-center items-center gap-2 h-60 rounded-xl border-2 border-dashed bg-[var(--bg-light-modal)]
+  dark:bg-[#091C32] cursor-pointer;
+}
+
+@utility add-element-icon {
+  @apply w-20;
+}
+
+@utility modal-option-item {
+  @apply dark:text-[#091C32];
+}
+
+@utility toolbar {
+  @apply flex justify-center items-center gap-2 bg-gray-200 rounded-xl p-2 dark:bg-[#223C5B] mb-2;
+}
+
+@utility toolbar-btn {
+  @apply p-2 rounded-lg min-w-10 cursor-pointer bg-gray-300 dark:bg-[#091C32];
+}
+
+@utility modal-editor-content {
+  @apply h-[150px] w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+  overflow-y-auto;
+}
+
+@utility modal-mcq-container {
+  @apply space-y-2;
+}
+
+@utility new-option-container {
+  @apply flex justify-evenly items-center gap-2;
+}
+
+@utility new-option-input {
+  @apply flex-1 mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+@utility new-option-checkbox {
+  @apply h-8 w-8 text-blue-500 dark:text-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400 rounded
+  border-gray-300 dark:border-gray-600
+}
+
+@utility new-option-btn {
+  @apply px-2 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 cursor-pointer;
+}
+
+@utility new-option-container {
+  @apply flex justify-evenly items-center gap-2;
+}
+
+@utility new-option-text {
+  @apply flex-1 bg-red-600 text-white rounded-md p-2;
+}
+
+@utility correct-option {
+  @apply bg-green-500;
+}
+
+@utility remove-option-btn {
+  @apply bg-red-600 text-white rounded-md p-2 cursor-pointer hover:bg-red-700 active:bg-red-800;
+}
+
+@utility component {
+  @apply relative;
+}
+
+@utility remove-component-btn {
+  @apply absolute top-0 right-0 bg-red-600 text-white rounded-full p-4 cursor-pointer hover:bg-red-700 active:bg-red-800;
+}
+
+@utility new-materials-input {
+  @apply mt-1 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-amber-600 text-white border-none
+  cursor-pointer;
+}

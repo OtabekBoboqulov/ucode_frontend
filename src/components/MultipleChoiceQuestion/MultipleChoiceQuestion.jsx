@@ -21,6 +21,9 @@ const MultipleChoiceQuestions = ({question_data, id}) => {
   };
 
   useEffect(() => {
+    if (id === null) {
+      setIsDoneCorrect(true);
+    }
     if (triesLeft === 0) {
       setIsDoneIncorrect(true);
     }
@@ -44,7 +47,7 @@ const MultipleChoiceQuestions = ({question_data, id}) => {
         </div>
       </form>
       <div className="tries-left">
-        {Array.from({ length: triesLeft }).map((_, index) => (
+        {Array.from({length: triesLeft}).map((_, index) => (
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                className="bi bi-cup-hot-fill inline-block mr-2" viewBox="0 0 16 16">
             <path fillRule="evenodd"

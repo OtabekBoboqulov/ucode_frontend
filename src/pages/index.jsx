@@ -85,23 +85,25 @@ const Index = () => {
     getCourses();
   }, []);
   return (
-    <div className="main">
-      <Header/>
-      <div className="container mx-auto pt-24">
-        <Intro/>
-        <Section title="Kurslar" textSize='text-4xl'/>
-        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-12">
-          {courses.length > 0 ? (
-            courses.map((course) => (
-              <CourseCard course={course} btn_text={enrolledCourses.includes(course.id) ? 'Davom etish' : 'Boshlash'}
-                          key={course.id}/>
-            ))
-          ) : ''}
-          {isAuthorized() && JSON.parse(localStorage.getItem('loginData'))?.is_staff && <CreateCourse/>}
-        </section>
-        {isLoading && (
-          <LoadingAnimation/>
-        )}
+    <div>
+      <div className="main">
+        <Header/>
+        <div className="container mx-auto pt-10">
+          <Intro/>
+          <Section title="Kurslar" textSize='text-4xl'/>
+          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-12" id="courses">
+            {courses.length > 0 ? (
+              courses.map((course) => (
+                <CourseCard course={course} btn_text={enrolledCourses.includes(course.id) ? 'Davom etish' : 'Boshlash'}
+                            key={course.id}/>
+              ))
+            ) : ''}
+            {isAuthorized() && JSON.parse(localStorage.getItem('loginData'))?.is_staff && <CreateCourse/>}
+          </section>
+          {isLoading && (
+            <LoadingAnimation/>
+          )}
+        </div>
       </div>
       <Footer/>
     </div>

@@ -1,13 +1,13 @@
 @import "tailwindcss";
 
 @theme {
-  --bg-light: rgba(254, 252, 253, 0.5);
-  --bg-dark: rgba(0, 0, 0, 0.5);
+  --bg-light-add-course: rgba(254, 252, 253, 0.5);
+  --bg-dark-add-course: rgba(0, 0, 0, 0.5);
 }
 
 @utility create-course {
-  @apply h-60 rounded-xl border-2 border-dashed flex justify-center items-center bg-[var(--bg-light)]
-  dark:bg-[var(--bg-dark)];
+  @apply h-60 rounded-xl border-2 border-dashed flex justify-center items-center bg-[var(--bg-light-add-course)]
+  dark:bg-[var(--bg-dark-add-course)];
 }
 
 @utility plus-image {

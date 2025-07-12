@@ -106,10 +106,14 @@
 }
 
 @utility remove-component-btn {
-  @apply absolute top-0 right-0 bg-red-600 text-white rounded-full p-4 cursor-pointer hover:bg-red-700 active:bg-red-800;
+  @apply absolute top-2 right-2 bg-red-600 text-white rounded-full p-4 cursor-pointer hover:bg-red-700 active:bg-red-800;
 }
 
 @utility new-materials-input {
   @apply mt-1 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-amber-600 text-white border-none
   cursor-pointer;
+}
+
+@utility lesson-create-btn {
+  @apply bg-green-500 text-white rounded-md p-2 cursor-pointer hover:bg-green-600 active:bg-green-800;
 }

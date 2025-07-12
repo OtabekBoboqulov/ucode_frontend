@@ -2,17 +2,22 @@
 
 @theme {
   --shadow-drop-down: -5px 5px 5px rgba(0, 0, 0, 0.1);
+  --shadow-drop-down-dark: -5px 5px 5px rgba(223, 223, 223, 0.1);
 }
 
 @utility header {
-  @apply bg-[#FEFCFD] fixed top-0 left-0 right-0 h-20 shadow-[#5D5D81] flex items-center justify-between md:px-20 px-5 z-50
-  dark:bg-[#091C32] dark:shadow-[#333333];
+  @apply bg-[#FEFCFD] fixed top-0 left-0 right-0 md:h-20 h-30 shadow-[#5D5D81] flex items-center justify-between md:px-20
+  px-5 z-50 dark:bg-[#091C32] dark:shadow-[#333333] gap-2;
+}
+
+@utility no-user-header {
+  @apply flex-col md:flex-row gap-2 py-4 md:py-0;
 }
 
 @utility auth-btn {
-  @apply uppercase cursor-pointer border-2 p-2 border-black hover:text-[#FEFCFD] hover:bg-black transition-all
-  duration-200 active:scale-95 dark:border-[#FEFCFD] dark:text-[#FEFCFD] dark:hover:text-[#091C32]
-  dark:hover:bg-[#FEFCFD];
+  @apply uppercase cursor-pointer border-2 px-4 py-2 rounded-lg text-sm font-medium border-black hover:bg-black
+  hover:text-[#FEFCFD] transition-all duration-200 active:scale-95 dark:border-[#FEFCFD] dark:text-[#FEFCFD]
+  dark:hover:bg-[#FEFCFD] dark:hover:text-[#091C32];
 }
 
 @utility user-data {
@@ -28,9 +33,54 @@
 }
 
 @utility drop-down {
-  @apply fixed top-20 right-0 bg-[#FEFCFD] z-50 shadow-drop-down text-right w-[80%] md:w-64 min-h-dvh dark:bg-[#091C32];
+  @apply fixed top-30 md:top-20 right-0 bg-[#FEFCFD] z-50 shadow-drop-down text-right w-[80%] md:w-64 min-h-dvh
+  dark:bg-[#091C32] dark:shadow-drop-down-dark;
 }
 
 @utility drop-down-item {
-  @apply w-full py-4 px-10 hover:bg-[#E8F1F2] cursor-pointer border-b-0 dark:hover:bg-[#5D5D81] dark:text-[#FEFCFD];
+  @apply w-full py-4 px-10 hover:bg-[#E8F1F2] cursor-pointer border-b-0 dark:hover:bg-[#5D5D81]
+  dark:text-[#FEFCFD];
+}
+
+@utility header-banner {
+  @apply mt-30 md:mt-20 flex flex-col-reverse md:flex-row justify-center items-center bg-[#FEFCFD] dark:bg-[#091C32] px-10 pb-10;
+}
+
+@utility header-banner-text {
+  @apply flex-1 pr-8;
+}
+
+@layer utilities {
+  .header-banner-image {
+    animation: custom-bounce 2s infinite ease-in-out;
+  }
+}
+
+@keyframes custom-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-15px);
+  }
+}
+
+@utility header-banner-image {
+  @apply flex-1;
+}
+
+@utility header-greeting {
+  @apply text-4xl font-bold text-gray-900 dark:text-white mb-4;
+}
+
+@utility header-message {
+  @apply text-lg text-gray-600 dark:text-gray-300 mb-6;
+}
+
+@utility header-btn {
+  @apply inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition;
+}
+
+@utility loading-overlay {
+  @apply absolute top-0 left-0 right-0 bottom-0 bg-gray-500 opacity-75 z-50 flex justify-center items-center;
 }

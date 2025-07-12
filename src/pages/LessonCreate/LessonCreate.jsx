@@ -3,7 +3,7 @@ import HomeButton from "../../components/HomeButton/HomeButton.jsx";
 import './LessonCreate.css';
 import Section from "../../components/Section/Section.jsx";
 import Modal from 'react-modal';
-import {useLocation, useParams} from "react-router-dom";
+import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useEditor, EditorContent} from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link'
@@ -18,14 +18,19 @@ import MultipleChoiceQuestion from "../../components/MultipleChoiceQuestion/Mult
 import MultipleOptionsQuestion from "../../components/MultipleOptionsQuestion/MultipleOptionsQuestion.jsx";
 import CodingQuestion from "../../components/CodingQuestion/CodingQuestion.jsx";
 import Footer from "../../components/Footer/Footer.jsx";
+import {BASE_URL} from "../../constants.jsx";
+import {refreshToken} from "../../utils/auth-utils.jsx";
+import Error from "../../components/Error/Error.jsx";
+import LoadingAnimation from "../../components/LoadingAnimation.jsx";
 
 const LessonCreate = () => {
   const {id} = useParams();
   const {state} = useLocation();
+  const navigate = useNavigate();
   const [lessonTitle, setLessonTitle] = useState('Yangi dars');
   const [lessonSerialNumber, setLessonSerialNumber] = useState(state?.serial_number || 1);
   const [maxScore, setMaxScore] = useState(0);
-  const [isLessonOpen, setIsLessonOpen] = useState(true);
+  const [isLessonOpen, setIsLessonOpen] = useState(true );
   const [isAddComponentOpen, setIsAddComponentOpen] = useState(false);
   const [lessonType, setLessonType] = useState('video');
   const [components, setComponents] = useState([]);
@@ -36,6 +41,7 @@ const LessonCreate = () => {
   const [newOptionIsCorrect, setNewOptionIsCorrect] = useState(false);
   const [materialsSrc, setMaterialsSrc] = useState(null);
   const [materialsFile, setMaterialsFile] = useState(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const editor = useEditor({
     extensions: [
@@ -164,6 +170,70 @@ const LessonCreate = () => {
     closeAddComponentModal();
   };
 
+  const submitLesson = async (data) => {
+    setIsLoading(true);
+    try {
+      const response = await fetch(`${BASE_URL}/api/lessons/create/`, {
+        method: 'POST',
+        body: data,
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${userData.access}`
+        }
+      });
+
+      if (response.status === 401) {
+        const refreshResult = await refreshToken();
+        if (refreshResult === 'success') {
+          const retryResponse = await fetch(`${BASE_URL}/api/lessons/create/`, {
+            method: 'POST',
+            body: data,
+            headers: {
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${userData.access}`
+            }
+          });
+          if (!retryResponse.ok) {
+            throw new Error(`Failed to fetch lesson data: ${retryResponse.status}`);
+          }
+
+          const retryData = await retryResponse.json();
+          if (retryResponse.status === 200) {
+            navigate(`/courses/${id}`);
+          }
+        } else {
+          localStorage.removeItem('loginData');
+          navigate('/login');
+        }
+      } else if (!response.ok) {
+        throw new Error(`Failed to fetch course data: ${response.status}`);
+      } else {
+        const data = await response.json();
+        if (response.status === 200) {
+          navigate(`/courses/${id}`);
+        }
+      }
+    } catch (err) {
+      console.error('Error creating lesson:', err);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const handleLessonCreate = (e) => {
+    e.preventDefault();
+    const submitData = new FormData();
+    submitData.append('course_id', id);
+    submitData.append('title', lessonTitle);
+    submitData.append('max_score', maxScore);
+    submitData.append('serial_number', lessonSerialNumber);
+    if (materialsFile) {
+      submitData.append('lesson_materials', materialsFile);
+    }
+    submitData.append('components', JSON.stringify(components));
+    submitLesson(submitData);
+  };
+
   useEffect(() => {
     if (!userData || !userData.is_staff) {
       window.location.href = '/';
@@ -208,10 +278,15 @@ const LessonCreate = () => {
           <img src={coding} alt="coding-icon" className="add-element-icon"/>
         </div>
         <div className="mt-2 dark:text-white">
-          <form>
+          <form onSubmit={handleLessonCreate}>
             <label htmlFor="materials">Dars uchun materiallar (agar bo'lsa)</label>
             <input type="file" name="materials" id="materials" className="new-materials-input"
                    onChange={handleMaterialsChange}/>
+            <div className="flex justify-end">
+              <button className="lesson-create-btn">
+                Yaratish
+              </button>
+            </div>
           </form>
         </div>
         <Modal
@@ -328,7 +403,7 @@ const LessonCreate = () => {
                                checked={newOptionIsCorrect}
                                onChange={() => setNewOptionIsCorrect(!newOptionIsCorrect)}/>
                       )}
-                      <button className="new-option-btn" form="new-option-form" onClick={addNewOption}>
+                      <button className="new-option-btn" onClick={addNewOption} type="button">
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                              className="bi bi-check-lg"
                              viewBox="0 0 16 16">
@@ -371,7 +446,7 @@ const LessonCreate = () => {
                       <input type="checkbox" name="is_correct" id="is_correct" className="new-option-checkbox"
                              checked={newOptionIsCorrect}
                              onChange={() => setNewOptionIsCorrect(!newOptionIsCorrect)}/>
-                      <button className="new-option-btn" form="new-option-form" onClick={addNewOption}>
+                      <button className="new-option-btn" type="button" onClick={addNewOption}>
                         <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
                              className="bi bi-check-lg"
                              viewBox="0 0 16 16">
@@ -386,7 +461,7 @@ const LessonCreate = () => {
             </div>
             <div>
               <label htmlFor="max_score" className="modal-label">Maksimal ball (max:100)</label>
-              <input type="number" name="max_score" id="max_score" className="modal-input" max="100" min="0"/>
+              <input type="number" name="max_score" id="max_score" className="modal-input" max="100" min="0" required/>
             </div>
             <div>
               <label htmlFor="serial_number" className="modal-label">Tartib raqami</label>
@@ -404,6 +479,11 @@ const LessonCreate = () => {
           </form>
         </Modal>
       </div>
+      {isLoading && (
+        <div className="loading-overlay">
+          <LoadingAnimation/>
+        </div>
+      )}
       <Footer/>
       <HomeButton/>
     </div>

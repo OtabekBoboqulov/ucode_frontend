@@ -1,5 +1,5 @@
 @import "tailwindcss";
 
 @utility main {
-  @apply bg-[#BFCDE0] min-h-screen dark:bg-[#223C5B];
+  @apply bg-[#BFCDE0] min-h-screen dark:bg-[#223C5B] pb-10;
 }

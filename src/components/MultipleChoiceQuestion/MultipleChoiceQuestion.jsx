@@ -35,9 +35,9 @@ const MultipleChoiceQuestions = ({question_data, id}) => {
         <div className="question">{question_data.question}</div>
         {question_data.options.map((option) => (
           <div className="option">
-            <label htmlFor={option.option.toLowerCase()} className='option-text'>
-              <input type="radio" name={option.question} id={option.option.toLowerCase()} value={option.is_correct}
-                     className='radio-btn'/>
+            <label htmlFor={`${option.option.toLowerCase()}${option.id}`} className='option-text'>
+              <input type="radio" name={option.question} id={`${option.option.toLowerCase()}${option.id}`}
+                     value={option.is_correct} className='radio-btn'/>
               {option.option}
             </label>
           </div>

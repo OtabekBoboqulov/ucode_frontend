@@ -38,9 +38,9 @@ const MultipleChoiceQuestions = ({question_data, id}) => {
         <div className="question">{question_data.question}</div>
         {question_data.options.map((option) => (
           <div className="option">
-            <label htmlFor={option.option.toLowerCase()} className='option-text'>
-              <input type="checkbox" name={option.id} id={option.option.toLowerCase()} value={option.is_correct}
-                     className='check-btn'/>
+            <label htmlFor={`${option.option.toLowerCase()}${option.id}`} className='option-text'>
+              <input type="checkbox" name={option.id} id={`${option.option.toLowerCase()}${option.id}`}
+                     value={option.is_correct} className='check-btn'/>
               {option.option}
             </label>
           </div>
@@ -50,7 +50,7 @@ const MultipleChoiceQuestions = ({question_data, id}) => {
         </div>
       </form>
       <div className="tries-left">
-        {Array.from({ length: triesLeft }).map((_, index) => (
+        {Array.from({length: triesLeft}).map((_, index) => (
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                className="bi bi-cup-hot-fill inline-block mr-2" viewBox="0 0 16 16">
             <path fillRule="evenodd"

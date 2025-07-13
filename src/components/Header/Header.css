@@ -38,7 +38,7 @@
 }
 
 @utility drop-down-item {
-  @apply w-full py-4 px-10 hover:bg-[#E8F1F2] cursor-pointer border-b-0 dark:hover:bg-[#5D5D81]
+  @apply w-full py-4 pr-3 hover:bg-[#E8F1F2] cursor-pointer dark:hover:bg-[#5D5D81]
   dark:text-[#FEFCFD];
 }
 
@@ -83,4 +83,8 @@
 
 @utility loading-overlay {
   @apply absolute top-0 left-0 right-0 bottom-0 bg-gray-500 opacity-75 z-50 flex justify-center items-center;
+}
+
+@utility header-banner-imagefile {
+  @apply w-full;
 }

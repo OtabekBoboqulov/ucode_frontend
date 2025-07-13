@@ -76,7 +76,6 @@ const CourseView = () => {
         const data = await response.json();
         setCourseData(data.course || {});
         setLessonsData(data.lessons || []);
-        console.log(data.lessons.length);
       }
     } catch (err) {
       console.error('Error fetching course data:', err);
@@ -98,12 +97,17 @@ const CourseView = () => {
         ) : error ? (
           <Error error_message={error}/>
         ) : (
-          <div className="course-banner">
-            <img
-              src={`${MEDIA_BASE_URL}${courseData.banner_image}`}
-              alt="Course banner"
-              className="banner-image"
-            />
+          <div>
+            <div className="course-banner">
+              <img
+                src={`${MEDIA_BASE_URL}${courseData.banner_image}`}
+                alt="Course banner"
+                className="banner-image"
+              />
+            </div>
+            <div className="course-view-description">
+              {courseData.description}
+            </div>
           </div>
         )}
         <div className="lessonsGrid">
@@ -124,8 +128,8 @@ const CourseView = () => {
           )}
         </div>
       </div>
-      <HomeButton/>
       <Footer/>
+      <HomeButton/>
     </div>
   );
 };

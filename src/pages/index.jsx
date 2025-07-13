@@ -62,8 +62,8 @@ const Index = () => {
             if (!retryResponse.ok) {
               throw new Error(`Failed to fetch enrolled courses: ${retryResponse.status}`);
             }
-
-            setEnrolledCourses(await retryResponse.json());
+            const data = await retryResponse.json();
+            setEnrolledCourses(data.enrolled_courses_ids);
           } else {
             localStorage.removeItem('loginData');
             navigate('/login');
@@ -71,7 +71,8 @@ const Index = () => {
         } else if (!coursesResponse.ok) {
           throw new Error(`Failed to fetch enrolled courses: ${coursesResponse.status}`);
         } else {
-          setEnrolledCourses(await coursesResponse.json());
+          const data = await coursesResponse.json();
+          setEnrolledCourses(data.enrolled_courses_ids);
         }
       }
     } catch (error) {

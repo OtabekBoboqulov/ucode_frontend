@@ -194,7 +194,6 @@ const LessonView = () => {
           </div>
         )}
       </div>
-      <Footer/>
       <HomeButton/>
     </div>
   );

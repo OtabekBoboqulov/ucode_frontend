@@ -1,0 +1,42 @@
+@import "tailwindcss";
+
+@utility my-course-card {
+  @apply flex flex-col md:flex-row items-stretch rounded-xl overflow-hidden bg-[#FEFCFD] w-full mb-4 shadow-xl
+  hover:transform hover:scale-101 transition-all duration-200 dark:bg-[#091C32] dark:text-white;
+}
+
+@utility my-course-banner {
+  @apply md:w-[300px];
+}
+
+@utility my-course-banner-img {
+  @apply w-full h-full object-cover object-center;
+}
+
+@utility my-course-data {
+  @apply flex-1 p-4 flex flex-col gap-2;
+}
+
+@utility my-course-name {
+  @apply text-2xl font-bold leading-tight;
+}
+
+@utility my-course-complexity {
+  @apply bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full text-xs font-semibold w-fit capitalize;
+}
+
+@utility my-course-description {
+  @apply leading-tight text-gray-500 dark:text-gray-300;
+}
+
+@utility my-course-created-at {
+  @apply text-gray-500 dark:text-gray-300 leading-tight text-sm;
+}
+
+@utility continue-btn-container {
+  @apply flex justify-end px-4;
+}
+
+@utility continue-btn {
+  @apply bg-blue-700 w-fit p-2 text-white font-bold rounded-lg;
+}

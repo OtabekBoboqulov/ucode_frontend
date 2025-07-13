@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @utility course-view {
-  @apply min-h-screen bg-[#BFCDE0] w-full dark:bg-[#223C5B];
+  @apply min-h-screen bg-[#BFCDE0] w-full dark:bg-[#223C5B] pb-5;
 }
 
 @utility course-banner {
@@ -13,7 +13,7 @@
 }
 
 @utility lessonsGrid {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mx-10 md:mx-20 my-5;
+  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mx-10 md:mx-20 my-5 mb-0;
 }
 
 @utility create-lesson {
@@ -23,4 +23,8 @@
 
 @utility plus-lesson-image {
   @apply h-full hover:opacity-75 active:opacity-50;
+}
+
+@utility course-view-description {
+  @apply text-justify mx-10 md:mx-20 my-5 dark:text-amber-50 md:text-lg;
 }

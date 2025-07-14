@@ -59,21 +59,27 @@ const Footer = () => {
                          className="footer-nav-link">Kurslar
                       </a>
                     </li>
+                    <li>
+                      <a href="/courses/enrolled"
+                         className="footer-nav-link">Mening kurslarim
+                      </a>
+                    </li>
                   </ul>
                 </div>
               </div>
               <div className="footer-nav-section">
                 <div className="mt-10 md:mt-0">
-                  <h3 className="footer-nav-section-title">Navigatsiya</h3>
+                  <h3 className="footer-nav-section-title">Havolalar</h3>
                   <ul role="list" className="mt-6 space-y-4">
                     <li>
-                      <a href="#intro"
-                         className="footer-nav-link">Intro
+                      <a href="https://otabekboboqulov.uz" className="footer-nav-link" target="_blank">
+                        Dasturchi
                       </a>
                     </li>
                     <li>
-                      <a href="#courses"
-                         className="footer-nav-link">Kurslar
+                      <a href="https://www.youtube.com/@ulugbekmamatqulov8385" className="footer-nav-link"
+                         target="_blank">
+                        YouTube
                       </a>
                     </li>
                   </ul>

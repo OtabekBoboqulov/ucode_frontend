@@ -4,6 +4,10 @@ export function isAuthorized() {
   return localStorage.getItem('loginData') !== null;
 }
 
+export function isStaff() {
+  return JSON.parse(localStorage.getItem('loginData')).is_staff || false;
+}
+
 export async function refreshToken() {
   const userData = localStorage.getItem('loginData');
   if (!userData) {

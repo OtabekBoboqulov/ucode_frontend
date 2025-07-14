@@ -43,7 +43,7 @@ const LessonsSidebar = ({courseId}) => {
       })
       items.push(
         <div>
-          <Link to={`/courses/${courseId}/lessons/${lesson.id}`} className="link-container">
+          <a href={`/courses/${courseId}/lessons/${lesson.id}`} className="link-container">
             <div className="link-text">
               {lesson.serial_number}. {lesson.title}
             </div>
@@ -57,7 +57,7 @@ const LessonsSidebar = ({courseId}) => {
                 </svg>
               ) : `${userScore.score}%` : ''}
             </div>
-          </Link>
+          </a>
         </div>
       )
     });

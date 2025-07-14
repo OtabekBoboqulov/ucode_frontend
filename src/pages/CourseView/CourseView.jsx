@@ -1,7 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {useParams, useNavigate, Link} from 'react-router-dom';
 import {BASE_URL, MEDIA_BASE_URL} from '../../constants.jsx';
-import {refreshToken, isAuthorized} from '../../utils/auth-utils.jsx';
+import {refreshToken, isAuthorized, isStaff} from '../../utils/auth-utils.jsx';
 import Error from "../../components/Error/Error.jsx";
 import './CourseView.css';
 import HomeButton from "../../components/HomeButton/HomeButton.jsx";
@@ -9,6 +9,8 @@ import LoadingAnimation from "../../components/LoadingAnimation.jsx";
 import LessonCard from "../../components/LessonCard/LessonCard.jsx";
 import Footer from "../../components/Footer/Footer.jsx";
 import plus from "../../assets/plus.png";
+import Modal from "react-modal";
+import PopupMessage from "../../components/PopupMessage/PopupMessage.jsx";
 
 const CourseView = () => {
   const {id} = useParams();
@@ -17,8 +19,20 @@ const CourseView = () => {
   const [lessonsData, setLessonsData] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
+  const [message, setMessage] = useState('');
+  const [isDeleteAskOpen, setIsDeleteAskOpen] = useState(false)
+  const [deleteLessonId, setDeleteLessonId] = useState(null);
 
   let userData = JSON.parse(localStorage.getItem('loginData'));
+
+  const closeDeleteAskModal = () => {
+    setIsDeleteAskOpen(false);
+  }
+
+  const openDeleteAskModal = (courseId) => {
+    setDeleteLessonId(courseId);
+    setIsDeleteAskOpen(true);
+  }
 
   const getCourseData = async () => {
     if (!isAuthorized()) {
@@ -85,6 +99,32 @@ const CourseView = () => {
     }
   };
 
+  const deleteLesson = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/lessons/delete/${deleteLessonId}/`, {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userData.access}`
+        }
+      });
+      if (!response.ok) {
+        window.location.href = '/login';
+        localStorage.removeItem('loginData');
+      }
+      setIsDeleteAskOpen(false);
+      setDeleteLessonId(null);
+      await getCourseData();
+      const data = await response.json();
+      setMessage(data.message);
+      setTimeout(() => {
+        setMessage('');
+      }, 3000);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
   useEffect(() => {
     getCourseData();
   }, [id]);
@@ -112,10 +152,21 @@ const CourseView = () => {
         )}
         <div className="lessonsGrid">
           {lessonsData.map((lesson) => (
-            <Link to={`/courses/${id}/lessons/${lesson.id}`} key={`${id}${lesson.id}`}>
-              <LessonCard lessonData={lesson} key={lesson.id}
-                          userLesson={lesson.user_lessons.find((item) => item.user === userData.id)}/>
-            </Link>
+            <div className="relative">
+              <Link to={`/courses/${id}/lessons/${lesson.id}`} key={`${id}${lesson.id}`}>
+                <LessonCard lessonData={lesson} key={lesson.id}
+                            userLesson={lesson.user_lessons.find((item) => item.user === userData.id)}/>
+              </Link>
+              {isAuthorized() && isStaff() && (
+                <button className="delete-course-btn" onClick={() => openDeleteAskModal(lesson.id)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                       stroke="currentColor" className="size-6">
+                    <path strokeLinecap="round" strokeLinejoin="round"
+                          d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
+                  </svg>
+                </button>
+              )}
+            </div>
           ))}
           {userData && userData.is_staff && (
             <Link to={`/courses/${id}/lessons/create`} className="create-lesson"
@@ -127,7 +178,23 @@ const CourseView = () => {
             </Link>
           )}
         </div>
+        {message && (
+          <PopupMessage message={message}/>
+        )}
       </div>
+      <Modal
+        isOpen={isDeleteAskOpen}
+        onRequestClose={closeDeleteAskModal}
+        className="modal-window"
+        overlayClassName="modal-overlay"
+        contentLabel="Delete Lesson"
+      >
+        <h2 className="modal-title">Darsni o'chirmoqchimisiz?</h2>
+        <div className="delete-btn-group">
+          <button className="delete-course" onClick={deleteLesson}>Ha</button>
+          <button className="cancel-delete" onClick={closeDeleteAskModal}>Bekor qilish</button>
+        </div>
+      </Modal>
       <Footer/>
       <HomeButton/>
     </div>

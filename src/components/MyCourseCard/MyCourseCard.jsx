@@ -1,14 +1,51 @@
-import React from 'react';
-import {MEDIA_BASE_URL} from "../../constants.jsx";
+import React, {useEffect, useState} from 'react';
+import {BASE_URL, MEDIA_BASE_URL} from "../../constants.jsx";
 import {motion} from 'framer-motion';
 import './MyCourseCard.css'
 import ProgressBar from "../ProgressBar/ProgressBar.jsx";
 import {Link} from "react-router-dom";
 import {useInView} from "react-intersection-observer";
+import Error from "../Error/Error.jsx";
+import ButtonLoadingAnimation from "../ButtonLoadingAnimation/ButtonLoadingAnimation.jsx";
 
 const MyCourseCard = ({courseData}) => {
   const userData = JSON.parse(localStorage.getItem("loginData"));
   const {ref, inView} = useInView({triggerOnce: true});
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState(null);
+
+  const getCertificate = async () => {
+    setIsLoading(true);
+    setError(null);
+
+    try {
+      const response = await fetch(`${BASE_URL}/api/courses/certificate/${courseData.id}/`, {
+        method: 'GET',
+        headers: {
+          'Authorization': `Bearer ${userData.access}`,
+        },
+      });
+
+      if (!response.ok) {
+        throw new Error('Failed to generate certificate');
+      }
+
+      const blob = await response.blob();
+      const url = window.URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `certificate_${courseData.name}.pdf`;
+      document.body.appendChild(a);
+      a.click();
+      a.remove();
+      window.URL.revokeObjectURL(url);
+    } catch (err) {
+      setError(err.message);
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   return (
     <motion.div ref={ref}
                 initial={{opacity: 0, y: 50}}
@@ -37,10 +74,21 @@ const MyCourseCard = ({courseData}) => {
               'Bugun'}
           </div>
           <ProgressBar progressValue={courseData.user_courses.find(item => item.user === userData.id).progress}/>
+          {error && (
+            <Error error_message={error}/>
+          )}
           <div className="continue-btn-container">
-            <Link to={`/courses/${courseData.id}`} className="continue-btn">
-              Davom etish
-            </Link>
+            {courseData.user_courses.find(item => item.user === userData.id).is_completed ? (
+              <button className="continue-btn" onClick={getCertificate}>
+                {isLoading ? (
+                  <ButtonLoadingAnimation/>
+                ) : ('Sertifikatni yuklab olish')}
+              </button>
+            ) : (
+              <Link to={`/courses/${courseData.id}`} className="continue-btn">
+                Davom etish
+              </Link>
+            )}
           </div>
         </div>
       </div>

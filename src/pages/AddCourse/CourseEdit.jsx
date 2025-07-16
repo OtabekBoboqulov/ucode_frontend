@@ -3,17 +3,22 @@ import './AddCourse.css';
 import Section from "../../components/Section/Section.jsx";
 import default_banner from "../../assets/default_banner.jpg";
 import Error from "../../components/Error/Error.jsx";
-import {BASE_URL} from "../../constants.jsx";
+import {BASE_URL, MEDIA_BASE_URL} from "../../constants.jsx";
 import {refreshToken} from "../../utils/auth-utils.jsx";
+import {useParams} from "react-router-dom";
 import ButtonLoadingAnimation from "../../components/ButtonLoadingAnimation/ButtonLoadingAnimation.jsx";
 import HomeButton from "../../components/HomeButton/HomeButton.jsx";
 
-const AddCourse = () => {
+const CourseEdit = () => {
+  const {id} = useParams();
   const [imageSrc, setImageSrc] = useState(default_banner);
   const [imageFile, setImageFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
   const [errorMessage, setErrorMessage] = useState('');
+  const [courseName, setCourseName] = useState('');
+  const [courseDescription, setCourseDescription] = useState('');
+  const [courseComplexity, setCourseComplexity] = useState('');
   const fileInputRef = useRef(null);
 
   let userData = JSON.parse(localStorage.getItem('loginData'));
@@ -38,15 +43,30 @@ const AddCourse = () => {
     }
   };
 
+  const handleCourseNameChange = (e) => {
+    const value = e.target.value;
+    setCourseName(value);
+  }
+
+  const handleCourseDescriptionChange = (e) => {
+    const value = e.target.value;
+    setCourseDescription(value);
+  }
+
+  const handleCourseComplexityChange = (e) => {
+    const value = e.target.value;
+    setCourseComplexity(value);
+  }
+
   const handleContainerClick = () => {
     fileInputRef.current.click();
   };
 
-  const createCourse = async (formData) => {
+  const updateCourse = async (formData) => {
     try {
       userData = JSON.parse(localStorage.getItem('loginData'));
-      const response = await fetch(`${BASE_URL}/api/courses/create/`, {
-        method: 'POST',
+      const response = await fetch(`${BASE_URL}/api/courses/update/${id}/`, {
+        method: 'PUT',
         body: formData,
         headers: {
           'Accept': 'application/json',
@@ -55,7 +75,7 @@ const AddCourse = () => {
       });
       if (response.status === 401) {
         if (await refreshToken() === 'success') {
-          await createCourse(formData);
+          await updateCourse(formData);
         } else {
           localStorage.removeItem('loginData');
           window.location.href = '/login';
@@ -67,7 +87,7 @@ const AddCourse = () => {
     }
   }
 
-  const handleCourseCreateForm = (e) => {
+  const handleCourseUpdateForm = (e) => {
     e.preventDefault();
     const formData = new FormData();
     const formValues = Object.fromEntries(new FormData(e.target));
@@ -83,22 +103,55 @@ const AddCourse = () => {
     if (imageFile) {
       formData.append('banner_image', imageFile);
     }
-    createCourse(formData);
+    updateCourse(formData);
   };
+
+  const getCourse = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/courses/update/${id}/`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${userData.access}`,
+        }
+      });
+      if (response.status === 401) {
+        if (await refreshToken() === 'success') {
+          await getCourse();
+        } else {
+          localStorage.removeItem('loginData');
+          window.location.href = '/login';
+        }
+      }
+      const data = await response.json();
+      setImageSrc(`${MEDIA_BASE_URL}${data.banner_image}`)
+      setCourseName(data.name);
+      setCourseDescription(data.description);
+      setCourseComplexity(data.complexity);
+    } catch (error) {
+      console.error('Error during course creation:', error);
+    }
+  }
+
+  useEffect(() => {
+    getCourse();
+  }, [])
 
   return (
     <div className="add-course">
       <div className="form-container">
-        <Section title='Kurs yaratish' textSize='text-3xl'/>
+        <Section title='Kursni o`zgartirish' textSize='text-3xl'/>
         {hasError && (<Error error_message={errorMessage}/>)}
-        <form onSubmit={handleCourseCreateForm}>
+        <form onSubmit={handleCourseUpdateForm}>
           <div>
             <label htmlFor="name" className="form-label">Kurs nomi</label>
-            <input type="text" name="name" id="name" placeholder="Python Django" className="form-input" required/>
+            <input type="text" name="name" id="name" placeholder="Python Django" className="form-input" required
+                   value={courseName} onChange={handleCourseNameChange}/>
           </div>
           <div>
             <label htmlFor="complexity" className="form-label">Daraja</label>
-            <select name="complexity" id="complexity" className="form-select" required>
+            <select name="complexity" id="complexity" className="form-select" required value={courseComplexity}
+                    onChange={handleCourseComplexityChange}>
               <option value="junior">Junior</option>
               <option value="middle">Middle</option>
               <option value="senior">Senior</option>
@@ -107,7 +160,9 @@ const AddCourse = () => {
           <div>
             <label htmlFor="description" className="form-label">Tavsif</label>
             <textarea name="description" id="description" cols="30" rows="5" placeholder="Kursni tavsifini kiriting"
-                      className="form-textarea" required></textarea>
+                      className="form-textarea" required onChange={handleCourseDescriptionChange}
+                      value={courseDescription}>
+            </textarea>
           </div>
           <div>
             <label htmlFor="banner_image" className="form-label">Banner rasmi</label>
@@ -123,7 +178,7 @@ const AddCourse = () => {
             </div>
           </div>
           <button type="submit" className="form-button">
-            <span className={!isLoading ? 'block' : 'hidden'}>Yaratish</span>
+            <span className={!isLoading ? 'block' : 'hidden'}>O`zgartirish</span>
             <div className={`loading ${isLoading ? 'block' : 'hidden'}`}>
               <ButtonLoadingAnimation/>
             </div>
@@ -135,4 +190,4 @@ const AddCourse = () => {
   );
 };
 
-export default AddCourse;
+export default CourseEdit;

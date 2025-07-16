@@ -28,3 +28,11 @@
 @utility course-view-description {
   @apply text-justify mx-10 md:mx-20 my-5 dark:text-amber-50 md:text-lg;
 }
+
+@utility edit-course-btn-container {
+  @apply absolute top-2 right-2;
+}
+
+@utility edit-course-btn {
+  @apply p-4 rounded-xl text-orange-400 hover:text-orange-500 active:text-orange-600;
+}

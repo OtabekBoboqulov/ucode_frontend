@@ -11,6 +11,7 @@ import CourseView from "./pages/CourseView/CourseView.jsx";
 import LessonView from "./pages/LessonView/LessonView.jsx";
 import LessonCreate from "./pages/LessonCreate/LessonCreate.jsx";
 import MyCourses from "./pages/MyCourses/MyCourses.jsx";
+import ProfileEdit from "./pages/auth/ProfileEdit.jsx";
 
 const router = createBrowserRouter([
     {path: "/", element: <App/>},
@@ -22,6 +23,7 @@ const router = createBrowserRouter([
     {path: "/courses/:id/lessons/:lessonId", element: <LessonView/>},
     {path: "/courses/:id/lessons/create", element: <LessonCreate/>},
     {path: "/courses/enrolled", element: <MyCourses/>},
+    {path: "/profile/edit", element: <ProfileEdit/>},
   ])
 ;
 

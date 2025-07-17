@@ -61,7 +61,8 @@ const AddCourse = () => {
           window.location.href = '/login';
         }
       }
-      window.location.href = '/';
+      const data = await response.json();
+      window.location.href = `/courses/${data.id}`;
     } catch (error) {
       console.error('Error during course creation:', error);
     }

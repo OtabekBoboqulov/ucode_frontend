@@ -46,7 +46,7 @@ const Header = () => {
   return (
     <div>
       <div className={`header ${scrolled ? 'shadow-md' : 'shadow-none'} ${!userData ? 'no-user-header' : ''}`}>
-        <Link to={"/"} className="h-1/3 md:h-1/2">
+        <Link to={"/"} className="h-1/3 md:h-3/4">
           <img src={logoLight} alt="Logo" className="h-full dark:hidden block"/>
           <img src={logoDark} alt="Logo" className="h-full dark:block hidden"/>
         </Link>

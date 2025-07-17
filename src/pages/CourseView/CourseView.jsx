@@ -181,7 +181,7 @@ const CourseView = () => {
         {message && (
           <PopupMessage message={message}/>
         )}
-        {userData.is_staff && (
+        {userData && userData.is_staff && (
           <div className="edit-course-btn-container">
             <Link to={`/courses/${id}/edit`} className="edit-course-btn">
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"

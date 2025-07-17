@@ -81,7 +81,7 @@ const CourseEdit = () => {
           window.location.href = '/login';
         }
       }
-      window.location.href = '/';
+      window.location.href = `/courses/${id}`;
     } catch (error) {
       console.error('Error during course creation:', error);
     }

@@ -112,8 +112,9 @@ const Header = () => {
             Dasturlash olamiga xush kelibsiz!
           </h1>
           <p className="header-message">
-            Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus alias cum, exercitationem iste itaque
-            laborum magni odit perferendis quas voluptas. Start today and earn your certificate!
+            <strong>Kod yozishni 0 dan boshlang!</strong><br/>
+            Biz bilan birga dasturlashni o'rganing — sodda, interaktiv va o'zbek tilida! Kurslar, amaliy topshiriqlar va
+            sertifikatlar sizni kutmoqda.
           </p>
           {!userData && (
             <Link to="/signup" className="header-btn">

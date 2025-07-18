@@ -3,8 +3,13 @@ import teacher from '../../assets/teacher.jpg';
 import './Intro.css';
 import {motion} from 'framer-motion';
 import {useInView} from 'react-intersection-observer';
+import {phrases} from "../../constants.jsx";
 
 const Intro = () => {
+  const getPhrase = () => {
+    return phrases[Math.floor(Math.random() * phrases.length)];
+  }
+
   const {ref, inView} = useInView({triggerOnce: true});
   return (
     <motion.div className="intro"
@@ -16,11 +21,7 @@ const Intro = () => {
       <div className="teacher-wrap">
         <img src={teacher} alt="Teacher" className="teacher-image"/>
       </div>
-      <div className="intro-text">Lorem ipsum dolor sit amet, consectetur adipisicing elit. A aspernatur at aut, autem
-        blanditiis cupiditate deleniti dolore eaque earum harum labore magnam minus neque obcaecati, quae, quam qui
-        repudiandae soluta tempore temporibus vero vitae voluptate. Commodi consequuntur eos eum temporibus? Alias
-        aliquid assumenda blanditiis consectetur esse harum id maxime nulla quae, reiciendis. Aliquid
-      </div>
+      <div className="intro-text">{getPhrase()}</div>
     </motion.div>
   );
 };

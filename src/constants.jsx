@@ -33,7 +33,7 @@ export const phrases = [
   ),
   (
     <div>
-      Debag - bu zimiston xonadagi pashhani ovlashdek, ayniqsa, bui pashshani xonaga o`zing kiritganingda. <br/>
+      Debag - bu zimiston xonadagi pashhani ovlashdek, ayniqsa, bu pashshani xonaga o`zing kiritganingda. <br/>
       (Brayan Kernigan - C tili hammuallifi)
     </div>
   )

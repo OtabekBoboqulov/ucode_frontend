@@ -4,8 +4,9 @@ import logoLight from '../../assets/logo_light.png';
 import logoDark from '../../assets/logo_dark.png';
 import headerBanner from '../../assets/header-banner.png';
 import {Link} from "react-router-dom";
-import {BASE_URL, MEDIA_BASE_URL} from "../../constants.jsx";
+import {BASE_URL, MEDIA_BASE_URL, phrases} from "../../constants.jsx";
 import LoadingAnimation from "../LoadingAnimation.jsx";
+import {useInView} from "react-intersection-observer";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -41,6 +42,10 @@ const Header = () => {
     setDropDown(false);
     setIsLoading(false);
     window.location.reload();
+  }
+
+  const getPhrase = () => {
+    return phrases[Math.floor(Math.random() * phrases.length)];
   }
 
   return (
@@ -112,9 +117,7 @@ const Header = () => {
             Dasturlash olamiga xush kelibsiz!
           </h1>
           <p className="header-message">
-            <strong>Kod yozishni 0 dan boshlang!</strong><br/>
-            Biz bilan birga dasturlashni o'rganing — sodda, interaktiv va o'zbek tilida! Kurslar, amaliy topshiriqlar va
-            sertifikatlar sizni kutmoqda.
+            {getPhrase()}
           </p>
           {!userData && (
             <Link to="/signup" className="header-btn">

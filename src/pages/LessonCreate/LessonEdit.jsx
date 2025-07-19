@@ -18,19 +18,19 @@ import MultipleChoiceQuestion from "../../components/MultipleChoiceQuestion/Mult
 import MultipleOptionsQuestion from "../../components/MultipleOptionsQuestion/MultipleOptionsQuestion.jsx";
 import CodingQuestion from "../../components/CodingQuestion/CodingQuestion.jsx";
 import Footer from "../../components/Footer/Footer.jsx";
-import {BASE_URL} from "../../constants.jsx";
+import {BASE_URL, MEDIA_BASE_URL} from "../../constants.jsx";
 import {refreshToken} from "../../utils/auth-utils.jsx";
 import Error from "../../components/Error/Error.jsx";
 import LoadingAnimation from "../../components/LoadingAnimation.jsx";
 
-const LessonCreate = () => {
-  const {id} = useParams();
+const LessonEdit = () => {
+  const {id, lessonId} = useParams();
   const {state} = useLocation();
   const navigate = useNavigate();
   const [lessonTitle, setLessonTitle] = useState('Yangi dars');
   const [lessonSerialNumber, setLessonSerialNumber] = useState(state?.serial_number || 1);
   const [maxScore, setMaxScore] = useState(0);
-  const [isLessonOpen, setIsLessonOpen] = useState(true );
+  const [isLessonOpen, setIsLessonOpen] = useState(false);
   const [isAddComponentOpen, setIsAddComponentOpen] = useState(false);
   const [lessonType, setLessonType] = useState('video');
   const [components, setComponents] = useState([]);
@@ -76,6 +76,7 @@ const LessonCreate = () => {
   };
 
   const closeLessonModal = () => setIsLessonOpen(false);
+  const openLessonModal = () => setIsLessonOpen(true);
   const openAddComponentModal = () => setIsAddComponentOpen(true);
   const closeAddComponentModal = () => setIsAddComponentOpen(false);
 
@@ -233,19 +234,73 @@ const LessonCreate = () => {
       submitData.append('lesson_materials', materialsFile);
     }
     submitData.append('components', JSON.stringify(components));
+    submitData.append('lessonId', lessonId);
     submitLesson(submitData);
+  };
+
+  const assignLessonData = (data) => {
+    setLessonTitle(data.title);
+    setLessonSerialNumber(data.serial_number);
+    setMaxScore(data.max_score);
+    setMaterialsSrc(`${MEDIA_BASE_URL}${data.lesson_materials}`)
+    const newComponents = [];
+    data.components.forEach((component, index) => {
+      const newComponent = {...component, ...component.data};
+      newComponents.push(newComponent);
+    })
+    setComponents([...components, ...newComponents]);
+  };
+
+  const getLessonData = async () => {
+    try {
+      const response = await fetch(`${BASE_URL}/api/lessons/${lessonId}/`, {
+        method: 'GET',
+        headers: {
+          'Accept': 'application/json',
+          'Authorization': `Bearer ${userData.access}`
+        }
+      });
+
+      if (response.status === 401) {
+        const refreshResult = await refreshToken();
+        if (refreshResult === 'success') {
+          const retryResponse = await fetch(`${BASE_URL}/api/lessons/${lessonId}/`, {
+            method: 'GET',
+            headers: {
+              'Accept': 'application/json',
+              'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loginData')).access}`
+            }
+          });
+          const data = await retryResponse.json();
+          assignLessonData(data);
+        } else {
+          localStorage.removeItem('loginData');
+          navigate('/login');
+        }
+      } else if (!response.ok) {
+        throw new Error(`Failed to fetch lesson data: ${response.status}`);
+      } else {
+        const data = await response.json();
+        console.log(data);
+        assignLessonData(data);
+      }
+    } catch (err) {
+      console.error('Error fetching lesson data:', err);
+    }
   };
 
   useEffect(() => {
     if (!userData || !userData.is_staff) {
       window.location.href = '/';
+    } else {
+      getLessonData();
     }
   }, []);
 
   return (
     <div>
       <div className='add-lesson-container'>
-        <div className="lesson-caption">
+        <div className="lesson-caption cursor-pointer" onClick={openLessonModal}>
           <Section title={`${lessonSerialNumber}. ${lessonTitle}`} textSize='md:text-4xl'
                    textSizeSm='text-lg'/>
         </div>
@@ -286,7 +341,7 @@ const LessonCreate = () => {
                    onChange={handleMaterialsChange}/>
             <div className="flex justify-end">
               <button className="lesson-create-btn">
-                Yaratish
+                Saqlash
               </button>
             </div>
           </form>
@@ -297,14 +352,12 @@ const LessonCreate = () => {
           className="modal-window"
           overlayClassName="modal-overlay"
           contentLabel="Create New Lesson"
-          shouldCloseOnOverlayClick={false}
-          shouldCloseOnEsc={false}
         >
-          <h2 className="modal-title">Yangi dars qo'shish</h2>
+          <h2 className="modal-title">Dars ma'lumotlarini o'zgartirish</h2>
           <form className="space-y-4" onSubmit={closeLessonModal}>
             <div>
               <label className="modal-label">Dars nomi</label>
-              <input type="text" name="title" className="modal-input" placeholder="Sarlavha"
+              <input type="text" name="title" className="modal-input" placeholder="Sarlavha" value={lessonTitle}
                      onChange={handleLessonTitleChange} required/>
             </div>
             <div>
@@ -492,4 +545,4 @@ const LessonCreate = () => {
   );
 };
 
-export default LessonCreate;
+export default LessonEdit;

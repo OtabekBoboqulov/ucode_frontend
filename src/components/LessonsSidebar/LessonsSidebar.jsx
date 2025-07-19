@@ -99,7 +99,6 @@ const LessonsSidebar = ({courseId}) => {
       throw new Error(`Failed to fetch course data: ${response.status}`);
     } else {
       const data = await response.json();
-      console.log(data);
       setMenuItemsFromData(data);
     }
   }

@@ -20,6 +20,7 @@
     "codemirror": "^6.0.2",
     "dompurify": "^3.2.6",
     "framer-motion": "^12.20.2",
+    "lucide-react": "^0.525.0",
     "react": "^19.1.0",
     "react-burger-menu": "^3.1.0",
     "react-dom": "^19.1.0",

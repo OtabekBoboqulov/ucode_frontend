@@ -38,3 +38,11 @@
 @utility link {
   @apply text-blue-500 hover:underline active:text-blue-600 font-bold;
 }
+
+@utility password-input {
+  @apply relative;
+}
+
+@utility toggle-password {
+  @apply absolute right-3 top-[50%] cursor-pointer transform -translate-y-1/2;
+}

@@ -1,8 +1,9 @@
-import React, {useEffect, useRef, useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {Link, useLocation, useNavigate} from "react-router-dom";
 import './auth.css';
 import Section from '../../components/Section/Section.jsx';
 import Error from "../../components/Error/Error.jsx";
+import {Eye, EyeOff} from 'lucide-react';
 import {BASE_URL} from "../../constants.jsx";
 import {isAuthorized} from "../../utils/auth-utils.jsx";
 import HomeButton from "../../components/HomeButton/HomeButton.jsx";
@@ -17,6 +18,11 @@ const Login = () => {
   });
   const [isLoading, setIsLoading] = useState(false);
   const [hasError, setHasError] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
+
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  }
 
   useEffect(() => {
     if (isAuthorized()) {
@@ -79,17 +85,27 @@ const Login = () => {
             value={formValues.username}
             onChange={handleInputChange}
           />
-          <input
-            type="password"
-            name="password"
-            id="password"
-            placeholder="Password"
-            className="text-input"
-            required
-            aria-label="Password"
-            value={formValues.password}
-            onChange={handleInputChange}
-          />
+          <div className="password-input">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              name="password"
+              id="password"
+              placeholder="Password"
+              className="text-input"
+              required
+              aria-label="Password"
+              value={formValues.password}
+              onChange={handleInputChange}
+            />
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
+              className="toggle-password"
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
+            >
+              {showPassword ? <EyeOff size={20}/> : <Eye size={20}/>}
+            </button>
+          </div>
           <button type="submit" className="auth-submit-btn">
             <span className={!isLoading ? 'block' : 'hidden'}>Kirish</span>
             <div className={`loading ${isLoading ? 'block' : 'hidden'}`}>

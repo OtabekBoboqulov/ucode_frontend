@@ -26,7 +26,7 @@ const ProgressBar = ({ progressValue }) => {
           className={`progress-bar-inner ${getBackgroundColor(width)}`}
           style={{ width: `${width}%` }}
         ></div>
-        <div className="my-progress-value">{progressValue}%</div>
+        <div className="my-progress-value">{progressValue.toFixed(2)}%</div>
       </div>
     </div>
   );

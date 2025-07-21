@@ -73,7 +73,8 @@ const MyCourseCard = ({courseData}) => {
               (courseData.time_since_creation.days && `${courseData.time_since_creation.days} kun oldin`) ||
               'Bugun'}
           </div>
-          <ProgressBar progressValue={courseData.user_courses.find(item => item.user === userData.id).progress}/>
+          <ProgressBar
+            progressValue={(courseData.user_courses.find(item => item.user === userData.id).progress) / courseData.total_score * 100}/>
           {error && (
             <Error error_message={error}/>
           )}

@@ -30,7 +30,7 @@ const LessonCreate = () => {
   const [lessonTitle, setLessonTitle] = useState('Yangi dars');
   const [lessonSerialNumber, setLessonSerialNumber] = useState(state?.serial_number || 1);
   const [maxScore, setMaxScore] = useState(0);
-  const [isLessonOpen, setIsLessonOpen] = useState(true );
+  const [isLessonOpen, setIsLessonOpen] = useState(true);
   const [isAddComponentOpen, setIsAddComponentOpen] = useState(false);
   const [lessonType, setLessonType] = useState('video');
   const [components, setComponents] = useState([]);
@@ -310,13 +310,12 @@ const LessonCreate = () => {
             <div>
               <label className="modal-label">Tartib raqami</label>
               <input type="number" name="serial_number" id="serial_number" className="modal-input"
-                     value={lessonSerialNumber} onChange={handleLessonSerialNumberChange}
-                     max={100 - (state?.assigned_score)} required/>
+                     value={lessonSerialNumber} onChange={handleLessonSerialNumberChange} required/>
             </div>
             <div>
-              <label className="modal-label">Maksimal ball ({100 - (state?.assigned_score)} balldan)</label>
-              <input type="number" name="max_score" id="max_score" className="modal-input"
-                     max={100 - (state?.assigned_score)} value={maxScore} onChange={handleMaxScoreChange} required/>
+              <label className="modal-label">Maksimal ball</label>
+              <input type="number" name="max_score" id="max_score" className="modal-input" value={maxScore}
+                     onChange={handleMaxScoreChange} required/>
             </div>
             <div className="modal-button-container">
               <button

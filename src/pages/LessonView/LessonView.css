@@ -5,7 +5,7 @@
 }
 
 @utility lesson-view {
-  @apply min-h-screen bg-[#BFCDE0] w-full dark:bg-[#223C5B] px-5 md:px-40 pt-5;
+  @apply min-h-screen bg-[#BFCDE0] w-full dark:bg-[#223C5B] px-5 md:px-40 py-5;
 }
 
 @utility lesson-materials {
@@ -20,4 +20,12 @@
 @utility next-lesson-btn {
   @apply p-4 rounded-full shadow-next-button bg-[#3B3355] dark:bg-[#091B31] text-white font-bold m-4
   hover:transform hover:scale-110 transition-transform duration-500;
+}
+
+@utility last-lesson-message {
+  @apply text-center text-gray-500 p-4 border-2 border-dashed border-gray-500;
+}
+
+@utility last-lesson-message-link {
+  @apply text-blue-500 underline hover:text-blue-600 active:text-blue-800;
 }

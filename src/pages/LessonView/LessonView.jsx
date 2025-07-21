@@ -192,6 +192,14 @@ const LessonView = () => {
               </svg>
             </Link>
           </div>
+        ) || (
+          <div className="last-lesson-message">
+            Bu so'nggi dars edi. Kurs yakunlangandan so'ng sertifikatni&nbsp;
+            <Link to="/courses/enrolled" className="last-lesson-message-link">
+              mening kurslarim
+            </Link>
+            &nbsp;bo'limidan olishingiz mumkin.
+          </div>
         )}
         {userData && userData.is_staff && (
           <div className="edit-course-btn-container">

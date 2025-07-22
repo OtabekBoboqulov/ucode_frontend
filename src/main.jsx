@@ -1,6 +1,7 @@
 import {StrictMode} from 'react'
 import {createRoot} from 'react-dom/client'
 import {createBrowserRouter, RouterProvider} from "react-router-dom";
+import {GoogleOAuthProvider} from '@react-oauth/google';
 import './index.css'
 import App from './App.jsx'
 import Signup from "./pages/auth/Signup.jsx";
@@ -31,6 +32,8 @@ const router = createBrowserRouter([
 
 createRoot(document.getElementById('root')).render(
   <StrictMode>
-    <RouterProvider router={router}/>
+    <GoogleOAuthProvider clientId={import.meta.env.VITE_GOOGLE_CLIENT_ID}>
+      <RouterProvider router={router}/>
+    </GoogleOAuthProvider>
   </StrictMode>,
 )

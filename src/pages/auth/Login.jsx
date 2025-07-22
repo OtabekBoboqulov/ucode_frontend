@@ -8,6 +8,7 @@ import {BASE_URL} from "../../constants.jsx";
 import {isAuthorized} from "../../utils/auth-utils.jsx";
 import HomeButton from "../../components/HomeButton/HomeButton.jsx";
 import ButtonLoadingAnimation from "../../components/ButtonLoadingAnimation/ButtonLoadingAnimation.jsx";
+import GoogleSignInButton from "../../components/GoogleSignInButton.jsx";
 
 const Login = () => {
   const {state} = useLocation();
@@ -112,6 +113,7 @@ const Login = () => {
               <ButtonLoadingAnimation/>
             </div>
           </button>
+          <GoogleSignInButton/>
           <div className="goto-login-signup">Akkauntingiz yo'qmi? <Link to={"/signup"} className="link">Ro'yxat
             o'tish</Link>
           </div>

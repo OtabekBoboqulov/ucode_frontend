@@ -46,3 +46,7 @@
 @utility toggle-password {
   @apply absolute right-3 top-[50%] cursor-pointer transform -translate-y-1/2;
 }
+
+@utility or {
+  @apply text-center text-white;
+}

@@ -9,6 +9,7 @@ import {isAuthorized} from "../../utils/auth-utils.jsx";
 import HomeButton from "../../components/HomeButton/HomeButton.jsx";
 import ButtonLoadingAnimation from "../../components/ButtonLoadingAnimation/ButtonLoadingAnimation.jsx";
 import {Eye, EyeOff} from "lucide-react";
+import GoogleSignInButton from "../../components/GoogleSignInButton.jsx";
 
 const Signup = () => {
   const [imageSrc, setImageSrc] = useState(default_profile_image);
@@ -241,6 +242,7 @@ const Signup = () => {
               <ButtonLoadingAnimation/>
             </div>
           </button>
+          <GoogleSignInButton/>
           <div className="goto-login-signup">Akkaunt bormi? <Link to={"/login"} className="link">Kirish</Link></div>
         </form>
       </div>

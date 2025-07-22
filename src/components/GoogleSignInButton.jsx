@@ -56,7 +56,7 @@ const GoogleSignInButton = () => {
   };
 
   return (
-    <div className="my-2">
+    <div className="my-2 flex justify-center">
       {isLoggedIn ? (
         <div>
           <p>Welcome, {user?.first_name}</p>

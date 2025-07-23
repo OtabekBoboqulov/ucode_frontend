@@ -1,6 +1,26 @@
 import audio_correct from "../assets/correct.mp3";
 import audio_incorrect from "../assets/incorrect.mp3";
 import {BASE_URL} from "../constants.jsx";
+import { javascript } from '@codemirror/lang-javascript';
+import { python } from '@codemirror/lang-python';
+import { cpp } from '@codemirror/lang-cpp';
+import { java } from '@codemirror/lang-java';
+
+export const getLanguageExtension = (language) => {
+  switch (language.toLowerCase()) {
+    case 'python':
+      return python();
+    case 'c':
+    case 'cpp':
+    case 'c++':
+      return cpp();
+    case 'java':
+      return java();
+    case 'javascript':
+    default:
+      return javascript();
+  }
+};
 
 const soundCorrect = new Audio(`../../..${audio_correct}`);
 const soundIncorrect = new Audio(`../../..${audio_incorrect}`);

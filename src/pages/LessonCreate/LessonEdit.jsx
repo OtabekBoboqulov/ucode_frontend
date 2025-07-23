@@ -7,6 +7,8 @@ import {useLocation, useNavigate, useParams} from "react-router-dom";
 import {useEditor, EditorContent} from '@tiptap/react';
 import StarterKit from '@tiptap/starter-kit';
 import Link from '@tiptap/extension-link'
+import CodeMirror from '@uiw/react-codemirror';
+import {dracula} from '@uiw/codemirror-theme-dracula';
 import video from "../../assets/video.png";
 import text from "../../assets/text.png";
 import mcq from "../../assets/mcq.png";
@@ -22,6 +24,7 @@ import {BASE_URL, MEDIA_BASE_URL} from "../../constants.jsx";
 import {refreshToken} from "../../utils/auth-utils.jsx";
 import Error from "../../components/Error/Error.jsx";
 import LoadingAnimation from "../../components/LoadingAnimation.jsx";
+import {getLanguageExtension} from "../../utils/lesson-utils.jsx";
 
 const LessonEdit = () => {
   const {id, lessonId} = useParams();
@@ -42,6 +45,44 @@ const LessonEdit = () => {
   const [materialsSrc, setMaterialsSrc] = useState(null);
   const [materialsFile, setMaterialsFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [code, setCode] = useState('');
+  const [language, setLanguage] = useState('python');
+  const [input, setInput] = useState('');
+  const [output, setOutput] = useState('');
+  const [tests, setTests] = useState([]);
+
+  const addNewTest = () => {
+    if (output !== '') {
+      const newTest = {
+        input: input,
+        output: output
+      };
+      setTests([...tests, newTest]);
+      setInput('');
+      setOutput('');
+    } else {
+      alert('Output bo`sh bo`lishi mumkin emas.');
+    }
+  };
+
+  const removeTest = (index) => {
+    setTests(tests.filter((test, i) => i !== index));
+  }
+
+  const handleInputChange = (e) => {
+    const {value} = e.target;
+    setInput(value);
+  }
+
+  const handleOutputChange = (e) => {
+    const {value} = e.target;
+    setOutput(value);
+  }
+
+  const handleLanguageChange = (e) => {
+    const value = e.target.value;
+    setLanguage(value);
+  };
 
   const editor = useEditor({
     extensions: [
@@ -161,6 +202,18 @@ const LessonEdit = () => {
         question: e.target.question.value,
         options: options,
       }
+    } else if (lessonType === 'coding') {
+      if (tests.length === 0) {
+        alert('Eng kamida 1 ta test bo`lishi kerak.');
+        return;
+      }
+      newComponent = {
+        type: lessonType,
+        question: e.target.question.value,
+        pre_written_code: code,
+        language: language,
+        tests: tests,
+      }
     }
     newComponent.max_score = e.target.max_score.value;
     newComponent.serial_number = e.target.serial_number.value;
@@ -170,6 +223,9 @@ const LessonEdit = () => {
     setComponentSerialNumber(componentSerialNumber + 1);
     setOptions([]);
     setLessonType('video');
+    setCode('');
+    setLanguage('python');
+    setTests([]);
     closeAddComponentModal();
   };
 
@@ -314,7 +370,7 @@ const LessonEdit = () => {
                 || component.type === 'moq' && (
                   <MultipleOptionsQuestion key={index} question_data={component} id={null}/>)
                 || component.type === 'coding' && (
-                  <CodingQuestion key={component.id} question_data={component.data} id={component.id}/>)
+                  <CodingQuestion key={index} question_data={component} id={null}/>)
                 || null
               }
               <button className="remove-component-btn" onClick={() => removeComponent(index)} type="button">
@@ -428,7 +484,7 @@ const LessonEdit = () => {
                 <div className="modal-mcq-container">
                   <div>
                     <label htmlFor="question" className="modal-label">Savol</label>
-                    <input type="text" name="question" id="question" className="modal-input"/>
+                    <input type="text" name="question" id="question" className="modal-input" required/>
                   </div>
                   <div>
                     <label className="modal-label">Variantlar</label>
@@ -473,7 +529,7 @@ const LessonEdit = () => {
                 <div className="modal-mcq-container">
                   <div>
                     <label htmlFor="question" className="modal-label">Savol</label>
-                    <input type="text" name="question" id="question" className="modal-input"/>
+                    <input type="text" name="question" id="question" className="modal-input" required/>
                   </div>
                   <div>
                     <label className="modal-label">Variantlar</label>
@@ -512,6 +568,90 @@ const LessonEdit = () => {
                     </div>
                   </div>
                 </div>
+              ) || lessonType === 'coding' && (
+                <div className="modal-mcq-container">
+                  <div>
+                    <label htmlFor="language" className="modal-label">Dasturlash tili</label>
+                    <select name="language" id="language" className="modal-input" required
+                            onChange={handleLanguageChange}>
+                      <option value="python" className="modal-option-item">Python</option>
+                      <option value="javascript" className="modal-option-item">JavaScript</option>
+                      <option value="java" className="modal-option-item">Java</option>
+                      <option value="c++" className="modal-option-item">C++</option>
+                      <option value="c" className="modal-option-item">C</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label htmlFor="question" className="modal-label">Savol</label>
+                    <textarea name="question" id="question" className="modal-textarea" required></textarea>
+                  </div>
+                  <div className="space-y-2">
+                    <label htmlFor="pre_written_code" className="modal-label">Boshlang'ich kod</label>
+                    <div className="editor-wrapper">
+                      <CodeMirror
+                        value={code}
+                        height="150px"
+                        extensions={[getLanguageExtension(language)]}
+                        theme={dracula}
+                        onChange={(value) => setCode(value)}
+                        className="editor"
+                        basicSetup={{
+                          lineNumbers: true,
+                          highlightActiveLine: true,
+                          bracketMatching: true,
+                          tabSize: 2,
+                          indentWithTab: true,
+                        }}
+                      />
+                    </div>
+                    <div className="tests-container">
+                      <div className="modal-label">Testlar</div>
+                      <table className="tests-table">
+                        <thead className="tests-table-header">
+                        <tr>
+                          <th>№</th>
+                          <th>input</th>
+                          <th>output</th>
+                        </tr>
+                        </thead>
+                        <tbody className="tests-table-body">
+                        {tests && tests.map((test, index) => {
+                          return (
+                            <tr key={index} className="tests-table-row">
+                              <td>{index + 1}</td>
+                              <td>{test.input}</td>
+                              <td>{test.output}</td>
+                              <div className="remove-test-container">
+                                <button onClick={() => removeTest(index)} className="remove-test-btn" type="button">
+                                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                       className="bi bi-trash3" viewBox="0 0 16 16">
+                                    <path
+                                      d="M6.5 1h3a.5.5 0 0 1 .5.5v1H6v-1a.5.5 0 0 1 .5-.5M11 2.5v-1A1.5 1.5 0 0 0 9.5 0h-3A1.5 1.5 0 0 0 5 1.5v1H1.5a.5.5 0 0 0 0 1h.538l.853 10.66A2 2 0 0 0 4.885 16h6.23a2 2 0 0 0 1.994-1.84l.853-10.66h.538a.5.5 0 0 0 0-1zm1.958 1-.846 10.58a1 1 0 0 1-.997.92h-6.23a1 1 0 0 1-.997-.92L3.042 3.5zm-7.487 1a.5.5 0 0 1 .528.47l.5 8.5a.5.5 0 0 1-.998.06L5 5.03a.5.5 0 0 1 .47-.53Zm5.058 0a.5.5 0 0 1 .47.53l-.5 8.5a.5.5 0 1 1-.998-.06l.5-8.5a.5.5 0 0 1 .528-.47M8 4.5a.5.5 0 0 1 .5.5v8.5a.5.5 0 0 1-1 0V5a.5.5 0 0 1 .5-.5"/>
+                                  </svg>
+                                </button>
+                              </div>
+                            </tr>
+                          )
+                        })}
+                        </tbody>
+                      </table>
+                    </div>
+                    <div className="new-test-container">
+                      <textarea name="test-input" id="test-input" placeholder="input" className="test-data"
+                                value={input} onChange={handleInputChange}></textarea>
+                      <textarea name="test-output" id="test-output" placeholder="output"
+                                className="test-data" value={output} onChange={handleOutputChange}></textarea>
+                      <button className="new-option-btn" onClick={addNewTest} type="button">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="currentColor"
+                             className="bi bi-check-lg"
+                             viewBox="0 0 16 16">
+                          <path
+                            d="M12.736 3.97a.733.733 0 0 1 1.047 0c.286.289.29.756.01 1.05L7.88 12.01a.733.733 0 0 1-1.065.02L3.217 8.384a.757.757 0 0 1 0-1.06.733.733 0 0 1 1.047 0l3.052 3.093 5.4-6.425z"/>
+                        </svg>
+                      </button>
+                    </div>
+                  </div>
+                </div>
               )}
             </div>
             <div>
@@ -528,7 +668,7 @@ const LessonEdit = () => {
                 type="submit"
                 className="modal-submit-btn"
               >
-                Submit
+                Yaratish
               </button>
             </div>
           </form>

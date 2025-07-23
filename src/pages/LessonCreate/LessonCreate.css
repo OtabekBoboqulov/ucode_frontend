@@ -15,7 +15,7 @@
 
 @utility modal-window {
   @apply bg-white dark:bg-[#091C31] dark:text-white p-6 rounded-lg shadow-lg md:w-[500px] mx-auto my-8
-  focus:outline-none;
+  focus:outline-none max-h-[90vh] overflow-y-auto;
 }
 
 @utility modal-title {
@@ -27,7 +27,11 @@
 }
 
 @utility modal-input {
-  @apply mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
+  @apply mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+}
+
+@utility modal-textarea {
+  @apply mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none h-20 resize-none;
 }
 
 @utility modal-button-container {
@@ -116,4 +120,36 @@
 
 @utility lesson-create-btn {
   @apply bg-green-500 text-white rounded-md p-2 cursor-pointer hover:bg-green-600 active:bg-green-800;
+}
+
+@utility new-test-container {
+  @apply flex justify-center items-center gap-2 my-2;
+}
+
+@utility test-data {
+  @apply resize-none border-[1px] border-amber-500 rounded-md p-2;
+}
+
+@utility tests-table {
+  @apply w-full my-2;
+}
+
+@utility tests-table-header {
+  @apply text-left text-gray-500 bg-[#BFCDE0] dark:bg-gray-800 dark:text-gray-300 p-2;
+}
+
+@utility tests-table-row {
+  @apply text-left odd:bg-gray-200 odd:dark:bg-[#223C5B] text-gray-700 dark:text-gray-300 p-2 relative;
+}
+
+@utility remove-test-container {
+  @apply absolute flex top-1/2 -translate-y-1/2 right-2;
+}
+
+@utility remove-test-btn {
+  @apply text-red-600 hover:text-red-700 active:text-red-800 cursor-pointer;
+}
+
+th, td {
+  @apply pl-2;
 }

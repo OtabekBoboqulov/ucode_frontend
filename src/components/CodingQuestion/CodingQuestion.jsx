@@ -1,10 +1,10 @@
 import React, {useEffect, useState} from 'react';
 import CodeMirror from '@uiw/react-codemirror';
-import { javascript } from '@codemirror/lang-javascript';
 import { dracula } from '@uiw/codemirror-theme-dracula';
 import './CodingQuestion.css';
 import {checkAnswer} from "../../utils/lesson-utils.jsx";
 import QuestionLoadingAnimation from "../QuestionLoadingAnimation/QuestionLoadingAnimation.jsx";
+import {getLanguageExtension} from "../../utils/lesson-utils.jsx";
 
 const CodingQuestion = ({question_data, id}) => {
   const [code, setCode] = useState('');
@@ -14,7 +14,6 @@ const CodingQuestion = ({question_data, id}) => {
   const [isLoading, setIsLoading] = useState(false);
 
   const handleCodeSubmit = () => {
-    console.log(code);
     setIsLoading(true);
     checkAnswer(code, id).then((is_correct) => {
       is_correct ? setIsDoneCorrect(true) : setTriesLeft(triesLeft - 1);
@@ -41,7 +40,7 @@ const CodingQuestion = ({question_data, id}) => {
         <CodeMirror
           value={code}
           height="400px"
-          extensions={[javascript()]}
+          extensions={[getLanguageExtension(question_data.language)]}
           theme={dracula}
           onChange={(value) => setCode(value)}
           className="editor"

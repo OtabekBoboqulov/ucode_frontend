@@ -423,9 +423,9 @@ const LessonEdit = () => {
                      max={100 - (state?.assigned_score)} required/>
             </div>
             <div>
-              <label className="modal-label">Maksimal ball ({100 - (state?.assigned_score)} balldan)</label>
+              <label className="modal-label">Maksimal ball</label>
               <input type="number" name="max_score" id="max_score" className="modal-input"
-                     max={100 - (state?.assigned_score)} value={maxScore} onChange={handleMaxScoreChange} required/>
+                     value={maxScore} onChange={handleMaxScoreChange} required/>
             </div>
             <div className="modal-button-container">
               <button

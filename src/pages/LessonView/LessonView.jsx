@@ -214,7 +214,7 @@ const LessonView = () => {
             </div>
           )}
         </div>
-        {!nextLesson && (
+        {(!nextLesson || nextLesson.length === 0) && (
           <div className="last-lesson-message">
             Bu so'nggi dars edi. Kurs yakunlangandan so'ng sertifikatni&nbsp;
             <Link to="/courses/enrolled" className="last-lesson-message-link">

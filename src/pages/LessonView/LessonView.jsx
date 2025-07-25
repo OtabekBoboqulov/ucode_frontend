@@ -97,7 +97,7 @@ const LessonView = () => {
             throw new Error(`Failed to fetch next lesson data: ${nextLessonResponse.status}`);
           }
           const nextLessonData = await nextLessonResponse.json();
-          setNextLesson(nextLessonData.id || {});
+          setNextLesson(nextLessonData.id || 0);
         } else {
           localStorage.removeItem('loginData');
           navigate('/login');
@@ -123,7 +123,7 @@ const LessonView = () => {
           throw new Error(`Failed to fetch next lesson data: ${nextLessonResponse.status}`);
         }
         const nextLessonData = await nextLessonResponse.json();
-        setNextLesson(nextLessonData.id || {});
+        setNextLesson(nextLessonData.id || 0);
       }
     } catch (err) {
       console.error('Error fetching lesson data:', err);

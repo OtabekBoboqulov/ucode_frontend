@@ -196,7 +196,7 @@ const LessonView = () => {
               <div className="tooltip-arrow"/>
             </div>
           </div>
-          {nextLesson && nextLesson > 0 && (
+          {nextLesson > 0 && (
             <div className="lesson-control-btn group">
               <button className='next-lesson-btn' onClick={() => {
                 navigate(`/courses/${id}/lessons/${nextLesson}`)
@@ -214,7 +214,7 @@ const LessonView = () => {
             </div>
           )}
         </div>
-        {(!nextLesson || nextLesson === 0) && (
+        {(nextLesson === 0) && (
           <div className="last-lesson-message">
             Bu so'nggi dars edi. Kurs yakunlangandan so'ng sertifikatni&nbsp;
             <Link to="/courses/enrolled" className="last-lesson-message-link">

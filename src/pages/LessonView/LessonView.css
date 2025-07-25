@@ -13,13 +13,33 @@
   active:bg-amber-800 text-sm md:text-lg;
 }
 
-@utility next-lesson {
-  @apply flex justify-end items-center;
+@utility lesson-control-btns {
+  @apply flex justify-center md:justify-end items-center;
+}
+
+@utility lesson-control-btn {
+  @apply relative;
 }
 
 @utility next-lesson-btn {
-  @apply p-4 rounded-full shadow-next-button bg-[#3B3355] dark:bg-[#091B31] text-white font-bold m-4
-  hover:transform hover:scale-110 transition-transform duration-500;
+  @apply p-4 rounded-full shadow-next-button bg-[#3B3355] dark:bg-[#091B31] text-white m-4
+  hover:transform hover:scale-110 transition-transform duration-500 cursor-pointer;
+}
+
+@utility restart-lesson-btn {
+  @apply p-4 rounded-full shadow-next-button bg-green-500 text-white m-4 hover:bg-green-600 active:bg-green-800
+  hover:transform hover:scale-110 transition-transform duration-500 cursor-pointer;
+}
+
+@utility tooltip {
+  @apply absolute -top-9 left-1/2 -translate-x-1/2 whitespace-nowrap p-2 px-4 text-white rounded-lg
+  shadow-xs bg-black/50 invisible group-hover:visible;
+}
+
+.tooltip-arrow {
+  @apply absolute left-1/2 -translate-x-1/2 w-[20px] h-[10px] bg-black/50 bottom-[-10px];
+
+  clip-path: polygon(50% 100%, 0 0, 100% 0);
 }
 
 @utility last-lesson-message {

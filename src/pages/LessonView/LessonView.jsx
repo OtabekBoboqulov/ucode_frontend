@@ -182,17 +182,39 @@ const LessonView = () => {
             </a>
           </div>
         )}
-        {nextLesson && nextLesson > 0 && (
-          <div className="next-lesson">
-            <Link className='next-lesson-btn' to={`/courses/${id}/lessons/${nextLesson}`}>
-              <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                   className="bi bi-arrow-right" viewBox="0 0 16 16">
-                <path fillRule="evenodd"
-                      d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+        <div className="lesson-control-btns">
+          <div className="lesson-control-btn group">
+            <button className='restart-lesson-btn' onClick={() => {window.location.reload()}}>
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                   stroke="currentColor" className="size-[18px]">
+                <path strokeLinecap="round" strokeLinejoin="round"
+                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
               </svg>
-            </Link>
+            </button>
+            <div className="tooltip">
+              Qaytadan boshlash
+              <div className="tooltip-arrow"/>
+            </div>
           </div>
-        ) || (
+          {nextLesson && nextLesson > 0 && (
+            <div className="lesson-control-btn group">
+              <button className='next-lesson-btn' onClick={() => {
+                navigate(`/courses/${id}/lessons/${nextLesson}`)
+              }}>
+                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
+                     className="bi bi-arrow-right" viewBox="0 0 16 16">
+                  <path fillRule="evenodd"
+                        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+                </svg>
+              </button>
+              <div className="tooltip">
+                Keyingi dars
+                <div className="tooltip-arrow"/>
+              </div>
+            </div>
+          )}
+        </div>
+        {!nextLesson && (
           <div className="last-lesson-message">
             Bu so'nggi dars edi. Kurs yakunlangandan so'ng sertifikatni&nbsp;
             <Link to="/courses/enrolled" className="last-lesson-message-link">

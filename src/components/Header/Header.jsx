@@ -58,7 +58,7 @@ const Header = () => {
         {!userData && (
           <div className="auth flex gap-2">
             <Link to={"/signup"} className="auth-btn">
-              Ro'yxatadan o'tish
+              Ro'yxatdan o'tish
             </Link>
             <Link to={"/login"} className="auth-btn">
               Kirish

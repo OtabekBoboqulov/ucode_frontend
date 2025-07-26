@@ -118,10 +118,16 @@ const ProfileEdit = () => {
 
   const handleProfileEditForm = (e) => {
     e.preventDefault();
+    const filterPattern = /[^a-zA-Z0-9\s'-.]/;
     const formData = new FormData();
     const formValues = Object.fromEntries(new FormData(e.target));
     if (!(formValues.username && formValues.first_name && formValues.last_name && formValues.email)) {
       setErrorMessage('Barcha ma\'lumotlarni to\'ldiring');
+      setHasError(true);
+      return;
+    }
+    if (/[^a-zA-Z0-9\s-.]/.test(formValues.username) || filterPattern.test(formValues.first_name) || filterPattern.test(formValues.last_name)) {
+      setErrorMessage('Username, First Name, Last Namelarda quyidagi belgilar bo\'lishi mumkin emas: !#@&*()_+{}|:"<>?');
       setHasError(true);
       return;
     }

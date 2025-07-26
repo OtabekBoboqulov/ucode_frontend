@@ -63,6 +63,12 @@ const Signup = () => {
         'Accept': 'application/json',
       }
     });
+    if (!result.ok) {
+      setHasError(true);
+      setErrorMessage('email yoki username ro\'yxatdan o\'tkazilgan');
+      setIsLoading(false);
+      return;
+    }
     const data = await result.json();
     navigate('/login', {
       state: {
@@ -105,6 +111,7 @@ const Signup = () => {
 
   const handleSignUpForm = (e) => {
     e.preventDefault();
+    const filterPattern = /[^a-zA-Z0-9\s'-.]/;
     const formData = new FormData();
     const formValues = Object.fromEntries(new FormData(e.target));
     if (formValues.password !== formValues['password-confirmation']) {
@@ -114,6 +121,11 @@ const Signup = () => {
     }
     if (!(formValues.username && formValues.first_name && formValues.last_name && formValues.email && formValues.password)) {
       setErrorMessage('Barcha ma\'lumotlarni to\'ldiring');
+      setHasError(true);
+      return;
+    }
+    if (/[^a-zA-Z0-9\s-.]/.test(formValues.username) || filterPattern.test(formValues.first_name) || filterPattern.test(formValues.last_name)) {
+      setErrorMessage('Username, First Name, Last Namelarda quyidagi belgilar bo\'lishi mumkin emas: !#@&*()_+{}|:"<>?');
       setHasError(true);
       return;
     }

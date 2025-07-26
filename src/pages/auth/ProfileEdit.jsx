@@ -65,7 +65,7 @@ const ProfileEdit = () => {
     userData.last_name = lastName;
     userData.email = email;
     if (image_url) {
-      image_url = image_url.replace(`${MEDIA_BASE_URL}image/upload/v1/`, '');
+      image_url = image_url.substring(image_url.indexOf('ucode'));
       userData.profile_image = image_url;
     }
     localStorage.setItem('loginData', JSON.stringify(userData));

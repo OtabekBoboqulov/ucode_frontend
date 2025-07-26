@@ -111,7 +111,7 @@ const Signup = () => {
 
   const handleSignUpForm = (e) => {
     e.preventDefault();
-    const filterPattern = /[^a-zA-Z0-9\s'-.]/;
+    const filterPattern = /[^a-zA-Z0-9\s'-._]/;
     const formData = new FormData();
     const formValues = Object.fromEntries(new FormData(e.target));
     if (formValues.password !== formValues['password-confirmation']) {
@@ -124,8 +124,8 @@ const Signup = () => {
       setHasError(true);
       return;
     }
-    if (/[^a-zA-Z0-9\s-.]/.test(formValues.username) || filterPattern.test(formValues.first_name) || filterPattern.test(formValues.last_name)) {
-      setErrorMessage('Username, First Name, Last Namelarda quyidagi belgilar bo\'lishi mumkin emas: !#@&*()_+{}|:"<>?');
+    if (/[^a-zA-Z0-9\s-._]/.test(formValues.username) || filterPattern.test(formValues.first_name) || filterPattern.test(formValues.last_name)) {
+      setErrorMessage('Username, First Name, Last Namelarda quyidagi belgilar bo\'lishi mumkin emas: !#@&*()+{}|:"<>?');
       setHasError(true);
       return;
     }

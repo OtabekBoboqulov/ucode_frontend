@@ -65,7 +65,7 @@ const ProfileEdit = () => {
     userData.last_name = lastName;
     userData.email = email;
     if (image_url) {
-      image_url = image_url.replace(MEDIA_BASE_URL, '');
+      image_url = image_url.replace(`${MEDIA_BASE_URL}image/upload/v1/`, '');
       userData.profile_image = image_url;
     }
     localStorage.setItem('loginData', JSON.stringify(userData));
@@ -95,7 +95,7 @@ const ProfileEdit = () => {
           });
 
           if (!retryResponse.ok) {
-            throw new Error(`Failed to edit profile data: ${retryResponse.status}`);
+            throw new Error(`Failed to edit profile data: ${retryResponse.message}`);
           }
           const retryData = await retryResponse.json();
           setNewValues(retryData.profile_image);
@@ -104,7 +104,11 @@ const ProfileEdit = () => {
           navigate('/login');
         }
       } else if (!result.ok) {
-        throw new Error(`Failed to edit profile data: ${response.status}`);
+        // throw new Error(`Failed to edit profile data: ${result.status}`);
+        setHasError(true);
+        setErrorMessage('email yoki username ro\'yxatdan o\'tkazilgan');
+        setIsLoading(false);
+        return;
       } else {
         const data = await result.json();
         setNewValues(data.profile_image);
@@ -118,7 +122,7 @@ const ProfileEdit = () => {
 
   const handleProfileEditForm = (e) => {
     e.preventDefault();
-    const filterPattern = /[^a-zA-Z0-9\s'-.]/;
+    const filterPattern = /[^a-zA-Z0-9\s'-._]/;
     const formData = new FormData();
     const formValues = Object.fromEntries(new FormData(e.target));
     if (!(formValues.username && formValues.first_name && formValues.last_name && formValues.email)) {
@@ -126,8 +130,8 @@ const ProfileEdit = () => {
       setHasError(true);
       return;
     }
-    if (/[^a-zA-Z0-9\s-.]/.test(formValues.username) || filterPattern.test(formValues.first_name) || filterPattern.test(formValues.last_name)) {
-      setErrorMessage('Username, First Name, Last Namelarda quyidagi belgilar bo\'lishi mumkin emas: !#@&*()_+{}|:"<>?');
+    if (/[^a-zA-Z0-9\s-._]/.test(formValues.username) || filterPattern.test(formValues.first_name) || filterPattern.test(formValues.last_name)) {
+      setErrorMessage('Username, First Name, Last Namelarda quyidagi belgilar bo\'lishi mumkin emas: !#@&*()+{}|:"<>?');
       setHasError(true);
       return;
     }

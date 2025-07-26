@@ -230,7 +230,7 @@ const ProfileEdit = () => {
               className="w-full h-full object-cover object-center"
             />
           </div>
-          <button type="submit" className="auth-submit-btn">
+          <button type="submit" className="auth-submit-btn" disabled={isLoading} aria-label="Edit profile">
             <span className={!isLoading ? 'block' : 'hidden'}>O`zgartirish</span>
             <div className={`loading ${isLoading ? 'block' : 'hidden'}`}>
               <ButtonLoadingAnimation/>

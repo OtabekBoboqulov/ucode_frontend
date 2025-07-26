@@ -107,7 +107,7 @@ const Login = () => {
               {showPassword ? <EyeOff size={20}/> : <Eye size={20}/>}
             </button>
           </div>
-          <button type="submit" className="auth-submit-btn">
+          <button type="submit" className="auth-submit-btn" disabled={isLoading} aria-label="Login">
             <span className={!isLoading ? 'block' : 'hidden'}>Kirish</span>
             <div className={`loading ${isLoading ? 'block' : 'hidden'}`}>
               <ButtonLoadingAnimation/>

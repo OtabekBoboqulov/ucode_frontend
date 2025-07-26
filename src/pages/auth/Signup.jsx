@@ -115,7 +115,7 @@ const Signup = () => {
     const formData = new FormData();
     const formValues = Object.fromEntries(new FormData(e.target));
     if (formValues.password !== formValues['password-confirmation']) {
-      setErrorMessage('Parolni tadiqlash muvaffqiyatsiz bajarildi');
+      setErrorMessage('Parolni tasdiqlash muvaffqiyatsiz bajarildi');
       setHasError(true);
       return;
     }
@@ -248,7 +248,7 @@ const Signup = () => {
               {showPasswordConfirmation ? <EyeOff size={20}/> : <Eye size={20}/>}
             </button>
           </div>
-          <button type="submit" className="auth-submit-btn">
+          <button type="submit" className="auth-submit-btn" disabled={isLoading} aria-label="Sign up">
             <span className={!isLoading ? 'block' : 'hidden'}>Ro'yxatdan o'tish</span>
             <div className={`loading ${isLoading ? 'block' : 'hidden'}`}>
               <ButtonLoadingAnimation/>

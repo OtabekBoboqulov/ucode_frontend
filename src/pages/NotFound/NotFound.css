@@ -1,0 +1,21 @@
+@import "tailwindcss";
+
+@utility not-found-container {
+  @apply min-h-screen relative overflow-hidden bg-white;
+}
+
+@utility thanos-video {
+  @apply w-full h-screen object-cover object-center z-50;
+}
+
+@utility not-found-text-container {
+  @apply text-center border w-[30%] h-screen;
+}
+
+@utility not-found-text {
+  @apply text-8xl font-bold text-white absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 z-50;
+}
+
+@utility dust-square {
+  @apply absolute bg-gray-900 z-40;
+}

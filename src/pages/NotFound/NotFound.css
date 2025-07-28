@@ -1,11 +1,11 @@
 @import "tailwindcss";
 
 @utility not-found-container {
-  @apply min-h-screen relative overflow-hidden bg-white;
+  @apply min-h-screen relative overflow-hidden bg-white flex justify-center items-center;
 }
 
 @utility thanos-video {
-  @apply w-full h-screen object-cover object-center z-50;
+  @apply w-full md:h-screen object-cover object-center z-50;
 }
 
 @utility not-found-text-container {

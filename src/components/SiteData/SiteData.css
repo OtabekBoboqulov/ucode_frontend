@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@utility site-data {
+  @apply flex justify-around gap-3 p-5 text-white mb-4 overflow-x-auto;
+}
+
+@utility site-data-card {
+  @apply text-center rounded-lg p-4 min-w-52 shadow-lg bg-gray-800/60;
+}
+
+@utility site-data-number {
+  @apply text-5xl font-bold;
+}
+
+@utility site-data-text {
+  @apply text-xl uppercase;
+}

@@ -3,7 +3,7 @@ import './MultipleChoiceQuestion.css';
 import {checkAnswer} from "../../utils/lesson-utils.jsx";
 import QuestionLoadingAnimation from "../QuestionLoadingAnimation/QuestionLoadingAnimation.jsx";
 
-const MultipleChoiceQuestions = ({question_data, id}) => {
+const MultipleChoiceQuestions = ({question_data, id, isVip}) => {
 
   const [isDoneCorrect, setIsDoneCorrect] = useState(false);
   const [isDoneIncorrect, setIsDoneIncorrect] = useState(false);
@@ -17,6 +17,7 @@ const MultipleChoiceQuestions = ({question_data, id}) => {
     setIsLoading(true);
     checkAnswer(value, id).then((is_correct) => {
       is_correct ? setIsDoneCorrect(true) : setTriesLeft(triesLeft - 1);
+      isVip && setTriesLeft(triesLeft + 1);
     }).then(() => setIsLoading(false));
   };
 
@@ -47,7 +48,7 @@ const MultipleChoiceQuestions = ({question_data, id}) => {
         </div>
       </form>
       <div className="tries-left">
-        {Array.from({length: triesLeft}).map((_, index) => (
+        {!isVip && Array.from({length: triesLeft}).map((_, index) => (
           <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
                className="bi bi-cup-hot-fill inline-block mr-2" viewBox="0 0 16 16">
             <path fillRule="evenodd"
@@ -55,7 +56,28 @@ const MultipleChoiceQuestions = ({question_data, id}) => {
             <path
               d="m4.4.8-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 3.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 3.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 3 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 4.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.253.382l-.018.025-.005.008-.002.002A.5.5 0 0 1 6.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 6.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 6 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 7.4.8m3 0-.003.004-.014.019a4 4 0 0 0-.204.31 2 2 0 0 0-.141.267c-.026.06-.034.092-.037.103v.004a.6.6 0 0 0 .091.248c.075.133.178.272.308.445l.01.012c.118.158.26.347.37.543.112.2.22.455.22.745 0 .188-.065.368-.119.494a3 3 0 0 1-.202.388 5 5 0 0 1-.252.382l-.019.025-.005.008-.002.002A.5.5 0 0 1 9.6 4.2l.003-.004.014-.019a4 4 0 0 0 .204-.31 2 2 0 0 0 .141-.267c.026-.06.034-.092.037-.103a.6.6 0 0 0-.09-.252A4 4 0 0 0 9.6 2.8l-.01-.012a5 5 0 0 1-.37-.543A1.53 1.53 0 0 1 9 1.5c0-.188.065-.368.119-.494.059-.138.134-.274.202-.388a6 6 0 0 1 .253-.382l.025-.035A.5.5 0 0 1 10.4.8"/>
           </svg>
-        ))}
+        )) || (
+          <div className="infinity-tries cosmic-gradient">
+            <svg xmlns="http://www.w3.org/2000/svg"
+                 width="30"
+                 height="30"
+                 className="drop-shadow-[0_0_10px_rgba(168,85,247,0.5)]"
+                 viewBox="0 0 16 16">
+              <defs>
+                <linearGradient id="cosmicGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+                  <stop offset="0%" stopColor="#f97316"/>
+                  <stop offset="20%" stopColor="#ec4899"/>
+                  <stop offset="40%" stopColor="#7c3aed"/>
+                  <stop offset="60%" stopColor="#a855f7"/>
+                  <stop offset="80%" stopColor="#ec4899"/>
+                  <stop offset="100%" stopColor="#f97316"/>
+                </linearGradient>
+              </defs>
+              <path fill="url(#cosmicGradient)"
+                    d="M5.68 5.792 7.345 7.75 5.681 9.708a2.75 2.75 0 1 1 0-3.916ZM8 6.978 6.416 5.113l-.014-.015a3.75 3.75 0 1 0 0 5.304l.014-.015L8 8.522l1.584 1.865.014.015a3.75 3.75 0 1 0 0-5.304l-.014.015zm.656.772 1.663-1.958a2.75 2.75 0 1 1 0 3.916z"/>
+            </svg>
+          </div>
+        )}
       </div>
       <div className={`question-layer ${isDoneCorrect ? 'block' : 'hidden'}`}></div>
       <div className={`question-layer question-layer-loading ${isLoading ? 'block' : 'hidden'}`}>

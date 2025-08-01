@@ -20,3 +20,20 @@
 @utility submit-question {
   @apply focus:outline-none;
 }
+
+@utility vip-required-layer {
+  @apply bg-white/60 dark:bg-gray-800/60 opacity-100 flex flex-col justify-center items-center text-orange-600
+  font-bold;
+}
+
+@utility vip-required-message {
+  @apply text-center mx-4 md:text-2xl text-lg;
+}
+
+@utility vip-required-btn {
+  @apply mt-6 py-3 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700
+  hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600
+  dark:hover:to-purple-600 text-white font-semibold rounded-lg transition-all duration-300 transform
+  hover:scale-101 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md hover:shadow-lg cursor-pointer
+  text-center md:text-xl;
+}

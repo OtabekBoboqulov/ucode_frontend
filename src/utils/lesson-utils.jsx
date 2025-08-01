@@ -53,3 +53,9 @@ export const checkAnswer = async (answer, id) => {
   playSound(data.is_correct);
   return data.is_correct;
 };
+
+export const isVip = (courseData) => {
+  const userData = JSON.parse(localStorage.getItem('loginData'));
+  const userCourse = courseData.user_courses.find((course) => course.user === userData.id);
+  return userCourse.is_vip;
+};

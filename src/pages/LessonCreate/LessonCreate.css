@@ -14,8 +14,8 @@
 }
 
 @utility modal-window {
-  @apply bg-white dark:bg-[#091C31] dark:text-white p-6 rounded-lg shadow-lg md:w-[500px] mx-auto my-8
-  focus:outline-none max-h-[90vh] overflow-y-auto;
+  @apply bg-white dark:bg-[#091C31] dark:text-white p-6 rounded-lg shadow-lg md:min-w-[500px] md:max-w-[80%]
+  mx-auto my-8 focus:outline-none max-h-[90vh] overflow-y-auto;
 }
 
 @utility modal-title {

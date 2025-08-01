@@ -11,6 +11,7 @@ import Footer from "../../components/Footer/Footer.jsx";
 import plus from "../../assets/plus.png";
 import Modal from "react-modal";
 import PopupMessage from "../../components/PopupMessage/PopupMessage.jsx";
+import {isVip} from "../../utils/lesson-utils.jsx";
 
 const CourseView = () => {
   const {id} = useParams();
@@ -22,6 +23,8 @@ const CourseView = () => {
   const [message, setMessage] = useState('');
   const [isDeleteAskOpen, setIsDeleteAskOpen] = useState(false)
   const [deleteLessonId, setDeleteLessonId] = useState(null);
+  const [isVipAskOpen, setIsVipAskOpen] = useState(true);
+  const [hasVip, setHasVip] = useState(true);
 
   let userData = JSON.parse(localStorage.getItem('loginData'));
 
@@ -33,6 +36,14 @@ const CourseView = () => {
     setDeleteLessonId(courseId);
     setIsDeleteAskOpen(true);
   }
+
+  const closeVipAskModal = () => {
+    setIsVipAskOpen(false);
+  };
+
+  const openVipAskModal = () => {
+    setIsVipAskOpen(true);
+  };
 
   const getCourseData = async () => {
     if (!isAuthorized()) {
@@ -80,6 +91,7 @@ const CourseView = () => {
           const retryData = await retryResponse.json();
           setCourseData(retryData.course || {});
           setLessonsData(retryData.lessons || []);
+          setHasVip(isVip(retryData.course));
         } else {
           localStorage.removeItem('loginData');
           navigate('/login');
@@ -90,6 +102,7 @@ const CourseView = () => {
         const data = await response.json();
         setCourseData(data.course || {});
         setLessonsData(data.lessons || []);
+        setHasVip(isVip(data.course));
       }
     } catch (err) {
       console.error('Error fetching course data:', err);
@@ -131,6 +144,66 @@ const CourseView = () => {
 
   return (
     <div>
+      {!hasVip && (
+        <Modal
+          isOpen={isVipAskOpen}
+          onRequestClose={closeVipAskModal}
+          className="modal-window"
+          overlayClassName="modal-overlay"
+          contentLabel="Delete Course"
+        >
+          <div className="plan-title">
+            To'xtovsiz o'qish uchun <span className="sudo-plan"
+                                          title="Sudo — bu tizimda maxsus ruxsat bilan bajariladigan
+buyruqlarni ishlatish imkonini beruvchi atama.
+Dasturchilar orasida yuqori darajadagi kirish
+belgisi sifatida ishlatiladi.">sudo</span> obunasini
+            sotib oling!
+          </div>
+          <div className="plan-cards-container">
+            <div className="plan-card">
+              <div className="plan-card-name">Tekin</div>
+              <div className="plan-card-subtitle">Tanishib chiqmoqchi bo'lganlar uchun</div>
+              <div className="plan-card-price">0 UZS</div>
+              <ul className="plan-card-features">
+                <li className="plan-card-feature">Videodarslar</li>
+                <li className="plan-card-feature">Dars materiallaridan to'liq foydalanish</li>
+                <li className="plan-card-feature">Test savollari</li>
+                <li className="plan-card-feature">Savollar uchun cheklangan urinishlar</li>
+                <li className="plan-card-feature locked-feature group">
+                  Dasturlash savollari
+                  <div className="tooltip">
+                    Faqat SUDO obunachilar uchun
+                    <div className="tooltip-arrow"/>
+                  </div>
+                </li>
+                <li className="plan-card-feature locked-feature group">
+                  Kurs yakunida sertifikar olish
+                  <div className="tooltip">
+                    Faqat SUDO obunachilar uchun
+                    <div className="tooltip-arrow"/>
+                  </div>
+                </li>
+              </ul>
+              <button className="plan-card-button" onClick={closeVipAskModal}>Davom etish</button>
+            </div>
+            <div className="plan-card">
+              <div className="plan-card-name">SUDO</div>
+              <div className="plan-card-subtitle">To'liq foydalanish va serrtifikat olish uchun</div>
+              <div className="plan-card-price">50,000 UZS</div>
+              <ul className="plan-card-features">
+                <li className="plan-card-feature">Videodarslar</li>
+                <li className="plan-card-feature">Dars materiallaridan to'liq foydalanish</li>
+                <li className="plan-card-feature">Test savollari</li>
+                <li className="plan-card-feature">Dasturlash savollari</li>
+                <li className="plan-card-feature">Savollar uchun cheksiz urinishlar</li>
+                <li className="plan-card-feature">Kurs yakunida sertifikar olish</li>
+              </ul>
+              <a href="https://t.me/otabek_boboqulov2" target="_blank" className="plan-card-button">Xarid qilish</a>
+            </div>
+          </div>
+        </Modal>
+      )}
       <div className="course-view">
         {isLoading ? (
           <LoadingAnimation/>
@@ -148,6 +221,13 @@ const CourseView = () => {
             <div className="course-view-description">
               {courseData.description}
             </div>
+          </div>
+        )}
+        {!hasVip && (
+          <div className="get-vip">
+            <button className="get-vip-btn" onClick={openVipAskModal}>
+              SUDO obunasini sotib oling!
+            </button>
           </div>
         )}
         <div className="lessonsGrid">

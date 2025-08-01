@@ -36,3 +36,98 @@
 @utility edit-course-btn {
   @apply p-4 rounded-xl text-orange-400 hover:text-orange-500 active:text-orange-600;
 }
+
+.plan-title {
+  @apply text-3xl font-bold text-center mb-8 text-gray-800 dark:text-gray-100;
+}
+
+.sudo-plan {
+  @apply dark:text-blue-400 font-extrabold bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent uppercase;
+}
+
+.plan-cards-container {
+  @apply flex flex-col md:flex-row gap-6 max-w-4xl mx-auto justify-center items-stretch;
+}
+
+.plan-card {
+  @apply bg-white dark:bg-gray-800 rounded-2xl shadow-lg dark:shadow-gray-900/30 p-6 border border-gray-200 dark:border-gray-700 flex-1 max-w-sm mx-auto md:mx-0 transition-all duration-300 hover:shadow-xl hover:scale-101 hover:border-blue-300 dark:hover:border-blue-500 flex flex-col;
+}
+
+.plan-card-name {
+  @apply text-2xl font-bold mb-2 text-gray-900 dark:text-white text-center;
+}
+
+.plan-card-subtitle {
+  @apply text-sm text-gray-600 dark:text-gray-400 mb-4 text-center leading-relaxed;
+}
+
+.plan-card-price {
+  @apply text-3xl font-bold text-center mb-6 text-blue-600 dark:text-blue-400 py-2;
+}
+
+.plan-card-features {
+  @apply list-none p-0 space-y-3 flex-grow;
+}
+
+.plan-card-feature {
+  @apply flex items-center text-gray-700 dark:text-gray-300 text-sm leading-relaxed;
+}
+
+.locked-feature {
+  @apply text-gray-400 relative;
+}
+
+.plan-card-feature::before {
+  content: "✓";
+  @apply text-green-500 dark:text-green-400 font-bold mr-3 text-base;
+}
+
+.locked-feature::before {
+  content: "🔒";
+  @apply text-green-500 dark:text-green-400 font-bold mr-3 text-base;
+}
+
+.plan-card-button {
+  @apply w-full mt-6 py-3 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600 dark:hover:to-purple-600 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md hover:shadow-lg cursor-pointer text-center;
+}
+
+.plan-card-button-free {
+  @apply w-full mt-6 py-3 px-6 bg-gray-600 hover:bg-gray-700 dark:bg-gray-700 dark:hover:bg-gray-600 text-white font-semibold rounded-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-gray-500 shadow-md hover:shadow-lg;
+}
+
+/* Special styling for SUDO plan */
+.plan-card:nth-child(2) {
+  @apply ring-2 ring-blue-500 dark:ring-blue-400 relative;
+}
+
+.plan-card:nth-child(2)::before {
+  content: "TO'LIQ";
+  @apply absolute -top-3 left-1/2 transform -translate-x-1/2 bg-blue-500 dark:bg-blue-600 text-white text-xs font-bold px-3 py-1 rounded-full;
+}
+
+.plan-card:nth-child(2) .plan-card-name {
+  @apply bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent;
+}
+
+.plan-card:nth-child(2) .plan-card-price {
+  @apply bg-gradient-to-r from-blue-600 to-purple-600 dark:from-blue-400 dark:to-purple-400 bg-clip-text text-transparent;
+}
+
+/* Responsive adjustments */
+@media (max-width: 768px) {
+  .plan-cards-container {
+    @apply px-4;
+  }
+
+  .plan-title {
+    @apply text-2xl px-4;
+  }
+}
+
+@utility get-vip {
+  @apply flex justify-center;
+}
+
+@utility get-vip-btn {
+  @apply inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-lg font-medium text-sm;
+}

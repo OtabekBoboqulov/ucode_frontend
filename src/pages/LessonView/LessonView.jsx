@@ -9,7 +9,6 @@ import Video from "../../components/Video/Video.jsx";
 import LoadingAnimation from "../../components/LoadingAnimation.jsx";
 import Section from "../../components/Section/Section.jsx";
 import Text from "../../components/Text/Text.jsx";
-import Footer from "../../components/Footer/Footer.jsx";
 import MultipleChoiceQuestion from "../../components/MultipleChoiceQuestion/MultipleChoiceQuestion.jsx";
 import MultipleOptionsQuestion from "../../components/MultipleOptionsQuestion/MultipleOptionsQuestion.jsx";
 import CodingQuestion from "../../components/CodingQuestion/CodingQuestion.jsx";
@@ -23,6 +22,7 @@ const LessonView = () => {
   const [isLoading, setIsLoading] = useState(true);
   const [error, setError] = useState(null);
   const [nextLesson, setNextLesson] = useState(null);
+  const [hasVip, setHasVip] = useState(false);
   let userData = JSON.parse(localStorage.getItem('loginData'));
 
   const startLesson = async (lessonId) => {
@@ -34,7 +34,6 @@ const LessonView = () => {
         'Authorization': `Bearer ${userData?.access}`,
       },
     });
-    const data = await response.json();
   }
 
   const getLessonData = async () => {
@@ -80,12 +79,13 @@ const LessonView = () => {
           }
 
           const retryData = await retryResponse.json();
-          setComponents(retryData.components || []);
-          setLessonData(retryData || {});
-          if (!retryData.user_lessons.find((item) => item.user === userData.id)) {
+          setComponents(retryData.lesson.components || []);
+          setLessonData(retryData.lesson || {});
+          setHasVip(retryData.is_vip);
+          if (!retryData.lesson.user_lessons.find((item) => item.user === userData.id)) {
             startLesson(retryData.id);
           }
-          const nextLessonResponse = await fetch(`${BASE_URL}/api/courses/${Number(id)}/next-lesson/${retryData.serial_number}`, {
+          const nextLessonResponse = await fetch(`${BASE_URL}/api/courses/${Number(id)}/next-lesson/${retryData.lesson.serial_number}`, {
             method: 'GET',
             headers: {
               'Content-Type': 'application/json',
@@ -106,12 +106,13 @@ const LessonView = () => {
         throw new Error(`Failed to fetch course data: ${response.status}`);
       } else {
         const data = await response.json();
-        setLessonData(data || {});
-        setComponents(data.components || []);
-        if (!data.user_lessons.find((item) => item.user === userData.id)) {
+        setLessonData(data.lesson || {});
+        setComponents(data.lesson.components || []);
+        setHasVip(data.is_vip);
+        if (!data.lesson.user_lessons.find((item) => item.user === userData.id)) {
           startLesson(data.id);
         }
-        const nextLessonResponse = await fetch(`${BASE_URL}/api/courses/${Number(id)}/next-lesson/${data.serial_number}`, {
+        const nextLessonResponse = await fetch(`${BASE_URL}/api/courses/${Number(id)}/next-lesson/${data.lesson.serial_number}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
@@ -159,11 +160,14 @@ const LessonView = () => {
           } else if (component.type === 'text') {
             return <Text key={component.id} content={component.data.content}/>;
           } else if (component.type === 'mcq') {
-            return <MultipleChoiceQuestion question_data={component.data} key={component.id} id={component.id}/>
+            return <MultipleChoiceQuestion question_data={component.data} key={component.id} id={component.id}
+                                           isVip={hasVip}/>
           } else if (component.type === 'moq') {
-            return <MultipleOptionsQuestion question_data={component.data} key={component.id} id={component.id}/>
+            return <MultipleOptionsQuestion question_data={component.data} key={component.id} id={component.id}
+                                            isVip={hasVip}/>
           } else if (component.type === 'coding') {
-            return <CodingQuestion question_data={component.data} key={component.id} id={component.id}/>
+            return <CodingQuestion question_data={component.data} key={component.id} id={component.id} isVip={hasVip}
+                                   courseId={id}/>
           }
           return null;
         })}
@@ -184,7 +188,9 @@ const LessonView = () => {
         )}
         <div className="lesson-control-btns">
           <div className="lesson-control-btn group">
-            <button className='restart-lesson-btn' onClick={() => {window.location.reload()}}>
+            <button className='restart-lesson-btn' onClick={() => {
+              window.location.reload()
+            }}>
               <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
                    stroke="currentColor" className="size-[18px]">
                 <path strokeLinecap="round" strokeLinejoin="round"

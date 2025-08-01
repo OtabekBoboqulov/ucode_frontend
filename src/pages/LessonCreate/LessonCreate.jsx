@@ -311,11 +311,11 @@ const LessonCreate = () => {
               {component.type === 'video' && (<Video key={index} videoUrl={component.video_url}/>)
                 || component.type === 'text' && (<Text key={index} content={component.content}/>)
                 || component.type === 'mcq' && (
-                  <MultipleChoiceQuestion key={index} question_data={component} id={null}/>)
+                  <MultipleChoiceQuestion key={index} question_data={component} id={null} isVip={true}/>)
                 || component.type === 'moq' && (
-                  <MultipleOptionsQuestion key={index} question_data={component} id={null}/>)
+                  <MultipleOptionsQuestion key={index} question_data={component} id={null} isVip={true}/>)
                 || component.type === 'coding' && (
-                  <CodingQuestion key={index} question_data={component} id={null}/>)
+                  <CodingQuestion key={index} question_data={component} id={null} isVip={true}/>)
                 || null
               }
               <button className="remove-component-btn" onClick={() => removeComponent(index)} type="button">

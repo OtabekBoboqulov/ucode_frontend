@@ -153,11 +153,11 @@ const CourseView = () => {
           contentLabel="Delete Course"
         >
           <div className="plan-title">
-            To'xtovsiz o'qish uchun <span className="sudo-plan"
+            To'xtovsiz o'qish uchun <a href="https://en.wikipedia.org/wiki/Sudo" className="sudo-plan" target="_blank"
                                           title="Sudo — bu tizimda maxsus ruxsat bilan bajariladigan
 buyruqlarni ishlatish imkonini beruvchi atama.
 Dasturchilar orasida yuqori darajadagi kirish
-belgisi sifatida ishlatiladi.">sudo</span> obunasini
+belgisi sifatida ishlatiladi.">sudo</a> obunasini
             sotib oling!
           </div>
           <div className="plan-cards-container">

@@ -7,14 +7,29 @@ import {Link} from "react-router-dom";
 import {useInView} from "react-intersection-observer";
 import Error from "../Error/Error.jsx";
 import ButtonLoadingAnimation from "../ButtonLoadingAnimation/ButtonLoadingAnimation.jsx";
+import Modal from "react-modal";
 
 const MyCourseCard = ({courseData}) => {
   const userData = JSON.parse(localStorage.getItem("loginData"));
   const {ref, inView} = useInView({triggerOnce: true});
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState(null);
+  const [isVipAskOpen, setIsVipAskOpen] = useState(false);
+  const hasVip = courseData.user_courses.find((user_course) => (user_course.user === userData.id)).is_vip;
+
+  const openVipAskModal = () => {
+    setIsVipAskOpen(true);
+  };
+
+  const closeVipAskModal = () => {
+    setIsVipAskOpen(false);
+  };
 
   const getCertificate = async () => {
+    if (!hasVip) {
+      openVipAskModal();
+      return;
+    }
     setIsLoading(true);
     setError(null);
 
@@ -93,6 +108,19 @@ const MyCourseCard = ({courseData}) => {
           </div>
         </div>
       </div>
+      <Modal
+        isOpen={isVipAskOpen}
+        onRequestClose={closeVipAskModal}
+        className="modal-window"
+        overlayClassName="modal-overlay"
+        contentLabel="Delete Course"
+      >
+        <h2 className="modal-title">Sertifikatni olish uchun SUDO obunasi talab etiladi</h2>
+        <div className="delete-btn-group">
+          <Link to={`/courses/${courseData.id}`} className="subscribe-to-course">Obuna bo'lish</Link>
+          <button className="cancel-delete" onClick={closeVipAskModal}>Bekor qilish</button>
+        </div>
+      </Modal>
     </motion.div>
   );
 };

@@ -38,5 +38,15 @@
 }
 
 @utility continue-btn {
-  @apply bg-blue-700 w-fit p-2 text-white font-bold rounded-lg cursor-pointer hover:bg-blue-800 active:bg-blue-900;
+  @apply bg-blue-700 w-fit p-2 text-white font-bold rounded-lg cursor-pointer hover:bg-blue-800
+  active:bg-blue-900;
 }
+
+@utility subscribe-to-course {
+  @apply py-3 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700
+  hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600
+  dark:hover:to-purple-600 text-white rounded-lg transition-all duration-300 transform
+  hover:scale-101 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md hover:shadow-lg cursor-pointer
+  text-center;
+}
+

@@ -139,12 +139,15 @@ const CourseView = () => {
   };
 
   useEffect(() => {
+    if (isStaff()) {
+      setIsVipAskOpen(false);
+    }
     getCourseData();
   }, [id]);
 
   return (
     <div>
-      {!hasVip && !isStaff() && (
+      {!hasVip && (
         <Modal
           isOpen={isVipAskOpen}
           onRequestClose={closeVipAskModal}

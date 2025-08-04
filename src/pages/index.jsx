@@ -172,7 +172,8 @@ const Index = () => {
             {courses.length > 0 ? (
               courses.filter((course) => {
                 return course.name.toLowerCase().includes(searchText.toLowerCase()) &&
-                  course.complexity.toLowerCase().includes(searchFilter.toLowerCase())
+                  course.complexity.toLowerCase().includes(searchFilter.toLowerCase()) &&
+                  (course.is_published || (isAuthorized() && isStaff()))
               }).map((course) => {
                 return (
                   <div className="relative">

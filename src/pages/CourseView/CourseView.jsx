@@ -144,7 +144,7 @@ const CourseView = () => {
 
   return (
     <div>
-      {!hasVip && (
+      {!hasVip && !isStaff() && (
         <Modal
           isOpen={isVipAskOpen}
           onRequestClose={closeVipAskModal}

@@ -25,7 +25,7 @@ const LessonView = () => {
   const [hasVip, setHasVip] = useState(false);
   let userData = JSON.parse(localStorage.getItem('loginData'));
 
-  const startLesson = async (lessonId) => {
+  const startLesson = async () => {
     const response = await fetch(`${BASE_URL}/api/lessons/${Number(lessonId)}/start/`, {
       method: 'POST',
       headers: {

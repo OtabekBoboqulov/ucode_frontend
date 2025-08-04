@@ -272,6 +272,12 @@ const CourseView = () => {
     getCourseData();
   }, [id]);
 
+  useEffect(() => {
+    if (courseData && !courseData.is_published && !isStaff()) {
+      navigate('/');
+    }
+  }, [courseData]);
+
   return (
     <div>
       {!hasVip && (

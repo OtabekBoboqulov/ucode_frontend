@@ -129,5 +129,22 @@
 }
 
 @utility get-vip-btn {
-  @apply inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-lg font-medium text-sm;
+  @apply inline-flex items-center gap-2 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700
+  hover:to-blue-800 text-white px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-lg
+  font-medium text-sm active:scale-98;
+}
+
+@utility publish-course {
+  @apply flex justify-center mt-2;
+}
+
+@utility publish-course-btn {
+  @apply inline-flex items-center bg-gradient-to-r from-amber-600 to-amber-700 hover:from-amber-700
+  hover:to-amber-800 text-white px-4 py-2 rounded-lg cursor-pointer transition-all duration-200 hover:shadow-lg
+  font-medium active:scale-98;
+}
+
+@utility confirm-publish-course {
+  @apply inline-flex items-center bg-green-500 hover:bg-green-700 active:bg-green-800 text-white px-4 py-2
+  rounded-lg cursor-pointer transition-all duration-200 hover:shadow-lg;
 }

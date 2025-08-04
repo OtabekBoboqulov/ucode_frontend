@@ -24,18 +24,36 @@ const CourseView = () => {
   const [isDeleteAskOpen, setIsDeleteAskOpen] = useState(false)
   const [deleteLessonId, setDeleteLessonId] = useState(null);
   const [isVipAskOpen, setIsVipAskOpen] = useState(true);
+  const [isCoursePublishOpen, setIsCoursePublishOpen] = useState(false);
+  const [isCourseUnpublishOpen, setIsCourseUnpublishOpen] = useState(false);
   const [hasVip, setHasVip] = useState(true);
 
   let userData = JSON.parse(localStorage.getItem('loginData'));
 
   const closeDeleteAskModal = () => {
     setIsDeleteAskOpen(false);
-  }
+  };
 
   const openDeleteAskModal = (courseId) => {
     setDeleteLessonId(courseId);
     setIsDeleteAskOpen(true);
-  }
+  };
+
+  const openCoursePublishModal = () => {
+    setIsCoursePublishOpen(true);
+  };
+
+  const closeCoursePublishModal = () => {
+    setIsCoursePublishOpen(false);
+  };
+
+  const openCourseUnpublishModal = () => {
+    setIsCourseUnpublishOpen(true);
+  };
+
+  const closeCourseUnpublishModal = () => {
+    setIsCourseUnpublishOpen(false);
+  };
 
   const closeVipAskModal = () => {
     setIsVipAskOpen(false);
@@ -74,7 +92,6 @@ const CourseView = () => {
       if (response.status === 401) {
         const refreshResult = await refreshToken();
         if (refreshResult === 'success') {
-          // Retry fetching course data
           const retryResponse = await fetch(`${BASE_URL}/api/courses/${Number(id)}/`, {
             method: 'GET',
             headers: {
@@ -133,6 +150,116 @@ const CourseView = () => {
       setTimeout(() => {
         setMessage('');
       }, 3000);
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const publishCourse = async () => {
+    try {
+      const publishBtn = document.querySelector('.confirm-publish-course');
+      publishBtn.disabled = true;
+      publishBtn.innerHTML = 'Yuborilmoqda...';
+      const response = await fetch(`${BASE_URL}/api/courses/publish/${Number(id)}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userData.access}`
+        }
+      });
+      if (response.status === 401) {
+        const refreshResult = await refreshToken();
+        if (refreshResult === 'success') {
+          const retryResponse = await fetch(`${BASE_URL}/api/courses/publish/${Number(id)}/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loginData'))?.access}`,
+            },
+          });
+
+          if (!retryResponse.ok) {
+            throw new Error(`Failed to publish course: ${retryResponse.status}`);
+          }
+          await getCourseData();
+          const retryData = await retryResponse.json();
+          closeCoursePublishModal();
+          setMessage(retryData.message);
+          setTimeout(() => {
+            setMessage('');
+          }, 3000);
+        } else {
+          localStorage.removeItem('loginData');
+          navigate('/login');
+        }
+      } else if (!response.ok) {
+        throw new Error(`Failed to publish course: ${response.status}`);
+      } else {
+        await getCourseData();
+        const data = await response.json();
+        closeCoursePublishModal();
+        setMessage(data.message);
+        setTimeout(() => {
+          setMessage('');
+        }, 3000);
+      }
+      publishBtn.disabled = false;
+      publishBtn.innerHTML = 'Ha';
+    } catch (e) {
+      console.error(e);
+    }
+  };
+
+  const unpublishCourse = async () => {
+    try {
+      const publishBtn = document.querySelector('.confirm-unpublish');
+      publishBtn.disabled = true;
+      publishBtn.innerHTML = 'Yuborilmoqda...';
+      const response = await fetch(`${BASE_URL}/api/courses/unpublish/${Number(id)}/`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${userData.access}`
+        }
+      });
+      if (response.status === 401) {
+        const refreshResult = await refreshToken();
+        if (refreshResult === 'success') {
+          const retryResponse = await fetch(`${BASE_URL}/api/courses/unpublish/${Number(id)}/`, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+              'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loginData'))?.access}`,
+            },
+          });
+
+          if (!retryResponse.ok) {
+            throw new Error(`Failed to unpublish course: ${retryResponse.status}`);
+          }
+          await getCourseData();
+          const retryData = await retryResponse.json();
+          closeCourseUnpublishModal();
+          setMessage(retryData.message);
+          setTimeout(() => {
+            setMessage('');
+          }, 3000);
+        } else {
+          localStorage.removeItem('loginData');
+          navigate('/login');
+        }
+      } else if (!response.ok) {
+        throw new Error(`Failed to unpublish course: ${response.status}`);
+      } else {
+        await getCourseData();
+        const data = await response.json();
+        closeCourseUnpublishModal();
+        setMessage(data.message);
+        setTimeout(() => {
+          setMessage('');
+        }, 3000);
+      }
+      publishBtn.disabled = false;
+      publishBtn.innerHTML = 'Ha';
     } catch (e) {
       console.error(e);
     }
@@ -261,6 +388,19 @@ belgisi sifatida ishlatiladi.">sudo</a> obunasini
             </Link>
           )}
         </div>
+        {isStaff() && (
+          <div className="publish-course">
+            {courseData && !courseData.is_published && (
+              <button className="publish-course-btn" onClick={openCoursePublishModal}>
+                Nashr etish
+              </button>
+            ) || (
+              <button className="publish-course-btn" onClick={openCourseUnpublishModal}>
+                Arxivlash
+              </button>
+            )}
+          </div>
+        )}
         {message && (
           <PopupMessage message={message}/>
         )}
@@ -287,6 +427,32 @@ belgisi sifatida ishlatiladi.">sudo</a> obunasini
         <div className="delete-btn-group">
           <button className="delete-course" onClick={deleteLesson}>Ha</button>
           <button className="cancel-delete" onClick={closeDeleteAskModal}>Bekor qilish</button>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={isCoursePublishOpen}
+        onRequestClose={closeCoursePublishModal}
+        className="modal-window"
+        overlayClassName="modal-overlay"
+        contentLabel="Delete Lesson"
+      >
+        <h2 className="modal-title">Kursni nashr etmoqchimisiz?</h2>
+        <div className="delete-btn-group">
+          <button className="confirm-publish-course" onClick={publishCourse}>Ha</button>
+          <button className="cancel-delete" onClick={closeCoursePublishModal}>Bekor qilish</button>
+        </div>
+      </Modal>
+      <Modal
+        isOpen={isCourseUnpublishOpen}
+        onRequestClose={closeCourseUnpublishModal}
+        className="modal-window"
+        overlayClassName="modal-overlay"
+        contentLabel="Delete Lesson"
+      >
+        <h2 className="modal-title">Kursni arxivlamoqchimisiz?</h2>
+        <div className="delete-btn-group">
+          <button className="delete-course confirm-unpublish" onClick={unpublishCourse}>Ha</button>
+          <button className="cancel-delete" onClick={closeCourseUnpublishModal}>Bekor qilish</button>
         </div>
       </Modal>
       <Footer/>

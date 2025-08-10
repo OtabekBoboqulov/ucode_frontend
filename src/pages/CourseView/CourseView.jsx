@@ -266,7 +266,7 @@ const CourseView = () => {
   };
 
   useEffect(() => {
-    if (isStaff()) {
+    if (isAuthorized() && isStaff()) {
       setIsVipAskOpen(false);
     }
     getCourseData();
@@ -394,7 +394,7 @@ belgisi sifatida ishlatiladi.">sudo</a> obunasini
             </Link>
           )}
         </div>
-        {isStaff() && (
+        {isAuthorized() && isStaff() && (
           <div className="publish-course">
             {courseData && !courseData.is_published && (
               <button className="publish-course-btn" onClick={openCoursePublishModal}>

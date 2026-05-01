@@ -1,155 +1,130 @@
 @import "tailwindcss";
 
-@theme {
-  --bg-light-modal: rgba(254, 252, 253, 0.5);
-  --bg-dark-modal: rgba(34, 60, 91, 0.5);
+.add-lesson-container {
+  min-height: 100vh;
+  padding: 2.5rem 0;
+  background-color: #020617;
 }
 
-@utility add-lesson-container {
-  @apply bg-[#BFCDE0] min-h-screen dark:bg-[#223C5B] px-40 pt-4;
+.modal-overlay {
+  @apply fixed inset-0 bg-slate-950/80 backdrop-blur-md flex items-center justify-center z-[100] p-4;
 }
 
-@utility modal-overlay {
-  @apply fixed inset-0 bg-[var(--bg-light-modal)] dark:bg-[var(--bg-dark-modal)] flex items-center justify-center;
+.modal-window {
+  @apply w-full max-w-4xl p-10 rounded-[2.5rem] shadow-2xl focus:outline-none max-h-[90vh] overflow-y-auto;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(15, 23, 42, 0.6);
+  color: white;
 }
 
-@utility modal-window {
-  @apply bg-white dark:bg-[#091C31] dark:text-white p-6 rounded-lg shadow-lg md:min-w-[500px] md:max-w-[80%]
-  mx-auto my-8 focus:outline-none max-h-[90vh] overflow-y-auto;
+.modal-title {
+  @apply text-3xl font-black mb-8 bg-gradient-to-br from-white to-slate-500 bg-clip-text text-transparent;
 }
 
-@utility modal-title {
-  @apply text-xl font-semibold mb-4;
+.modal-label {
+  @apply block text-sm font-black uppercase tracking-widest text-slate-500 mb-2 ml-1;
 }
 
-@utility modal-label {
-  @apply block text-sm font-medium text-gray-700 dark:text-gray-300;
+.modal-input, .modal-textarea {
+  @apply w-full px-6 py-4 border border-white/10 bg-white/5 rounded-2xl mb-6 transition-all placeholder:text-slate-500;
+  outline: none;
+  color: white;
 }
 
-@utility modal-input {
-  @apply mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+.modal-input:focus, .modal-textarea:focus {
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
 }
 
-@utility modal-textarea {
-  @apply mt-1 block w-full p-2 border border-gray-300 rounded-md focus:outline-none h-20 resize-none;
+.modal-button-container {
+  @apply flex justify-end gap-4 mt-8;
 }
 
-@utility modal-button-container {
-  @apply flex justify-end space-x-2;
+.modal-submit-btn {
+  @apply px-8 py-4 rounded-2xl font-bold transition-all cursor-pointer;
+  background-color: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
 }
 
-@utility modal-submit-btn {
-  @apply px-4 py-2 bg-blue-500 text-white rounded-md hover:bg-blue-600 cursor-pointer;
+.modal-submit-btn:hover {
+  transform: scale(1.05);
 }
 
-@utility add-element-btn {
-  @apply flex justify-center items-center gap-2 h-60 rounded-xl border-2 border-dashed bg-[var(--bg-light-modal)]
-  dark:bg-[#091C32] cursor-pointer;
+.modal-submit-btn:active {
+  transform: scale(0.95);
 }
 
-@utility add-element-icon {
-  @apply w-20;
+.add-element-btn {
+  @apply flex flex-col justify-center items-center gap-4 h-48 rounded-[2rem] border-2 border-dashed border-white/10 cursor-pointer transition-all mb-8;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(15, 23, 42, 0.6);
 }
 
-@utility modal-option-item {
-  @apply dark:text-[#091C32];
+.add-element-btn:hover {
+  border-color: rgba(59, 130, 246, 0.5);
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
-@utility toolbar {
-  @apply flex justify-center items-center gap-2 bg-gray-200 rounded-xl p-2 dark:bg-[#223C5B] mb-2;
+.add-element-icon {
+  @apply w-12 h-12 text-slate-500 transition-colors;
 }
 
-@utility toolbar-btn {
-  @apply p-2 rounded-lg min-w-10 cursor-pointer bg-gray-300 dark:bg-[#091C32];
+.add-element-btn:hover .add-element-icon {
+  color: #3b82f6;
 }
 
-@utility modal-editor-content {
-  @apply h-[150px] w-full border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500
-  overflow-y-auto;
+.toolbar {
+  @apply flex items-center gap-2 p-2 rounded-xl mb-4 border border-white/5;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(15, 23, 42, 0.6);
 }
 
-@utility modal-mcq-container {
-  @apply space-y-2;
+.toolbar-btn {
+  @apply p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer;
 }
 
-@utility new-option-container {
-  @apply flex justify-evenly items-center gap-2;
+.component {
+  @apply relative mb-12 p-8 rounded-[2rem] border border-white/10;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(15, 23, 42, 0.6);
 }
 
-@utility new-option-input {
-  @apply flex-1 mt-1 p-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500;
+.remove-component-btn {
+  @apply absolute -top-4 -right-4 bg-red-500 text-white rounded-full p-3 shadow-lg hover:scale-110 active:scale-90 transition-all cursor-pointer z-10;
 }
 
-@utility new-option-checkbox {
-  @apply h-8 w-8 text-blue-500 dark:text-blue-400 focus:ring-blue-500 dark:focus:ring-blue-400 rounded
-  border-gray-300 dark:border-gray-600
+.lesson-create-btn {
+  @apply w-full py-5 text-white rounded-2xl font-black uppercase tracking-widest transition-all cursor-pointer mb-20;
+  background-color: #22c55e;
+  box-shadow: 0 20px 25px -5px rgba(34, 197, 94, 0.2);
 }
 
-@utility new-option-btn {
-  @apply px-2 py-2 bg-green-500 text-white rounded-md hover:bg-green-600 cursor-pointer;
+.lesson-create-btn:hover {
+  background-color: #16a34a;
+  transform: scale(1.02);
 }
 
-@utility new-option-container {
-  @apply flex justify-evenly items-center gap-2;
+.lesson-create-btn:active {
+  transform: scale(0.95);
 }
 
-@utility new-option-text {
-  @apply flex-1 bg-red-600 text-white rounded-md p-2;
+.new-materials-input {
+  @apply px-6 py-3 rounded-xl font-bold transition-all cursor-pointer inline-block;
+  background-color: rgba(245, 158, 11, 0.1);
+  color: #f59e0b;
+  border: 1px solid rgba(245, 158, 11, 0.2);
 }
 
-@utility correct-option {
-  @apply bg-green-500;
-}
-
-@utility remove-option-btn {
-  @apply bg-red-600 text-white rounded-md p-2 cursor-pointer hover:bg-red-700 active:bg-red-800;
-}
-
-@utility component {
-  @apply relative;
-}
-
-@utility remove-component-btn {
-  @apply absolute top-2 right-2 bg-red-600 text-white rounded-full p-4 cursor-pointer hover:bg-red-700 active:bg-red-800;
-}
-
-@utility new-materials-input {
-  @apply mt-1 p-2 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 bg-amber-600 text-white border-none
-  cursor-pointer;
-}
-
-@utility lesson-create-btn {
-  @apply bg-green-500 text-white rounded-md p-2 cursor-pointer hover:bg-green-600 active:bg-green-800;
-}
-
-@utility new-test-container {
-  @apply flex justify-center items-center gap-2 my-2;
-}
-
-@utility test-data {
-  @apply resize-none border-[1px] border-amber-500 rounded-md p-2;
-}
-
-@utility tests-table {
-  @apply w-full my-2;
-}
-
-@utility tests-table-header {
-  @apply text-left text-gray-500 bg-[#BFCDE0] dark:bg-gray-800 dark:text-gray-300 p-2;
-}
-
-@utility tests-table-row {
-  @apply text-left odd:bg-gray-200 odd:dark:bg-[#223C5B] text-gray-700 dark:text-gray-300 p-2 relative;
-}
-
-@utility remove-test-container {
-  @apply absolute flex top-1/2 -translate-y-1/2 right-2;
-}
-
-@utility remove-test-btn {
-  @apply text-red-600 hover:text-red-700 active:text-red-800 cursor-pointer;
-}
-
-th, td {
-  @apply pl-2;
+.new-materials-input:hover {
+  background-color: #f59e0b;
+  color: #ffffff;
 }

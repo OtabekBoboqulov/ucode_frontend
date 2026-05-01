@@ -1,128 +1,99 @@
-import React, {useEffect, useState} from 'react';
-import {Link, useLocation, useNavigate} from "react-router-dom";
+import React, {useState} from 'react';
+import {Link, useNavigate} from 'react-router-dom';
+import {BASE_URL} from '../../constants.jsx';
+import Error from '../../components/Error/Error.jsx';
+import HomeButton from '../../components/HomeButton/HomeButton.jsx';
+import ButtonLoadingAnimation from '../../components/ButtonLoadingAnimation/ButtonLoadingAnimation.jsx';
 import './auth.css';
-import Section from '../../components/Section/Section.jsx';
-import Error from "../../components/Error/Error.jsx";
-import {Eye, EyeOff} from 'lucide-react';
-import {BASE_URL} from "../../constants.jsx";
-import {isAuthorized} from "../../utils/auth-utils.jsx";
-import HomeButton from "../../components/HomeButton/HomeButton.jsx";
-import ButtonLoadingAnimation from "../../components/ButtonLoadingAnimation/ButtonLoadingAnimation.jsx";
-import GoogleSignInButton from "../../components/GoogleSignInButton.jsx";
 
 const Login = () => {
-  const {state} = useLocation();
-  const navigate = useNavigate();
-  const [formValues, setFormValues] = useState({
-    username: state?.username || '',
-    password: '',
-  });
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
-  const [hasError, setHasError] = useState(false);
+  const [errorMessage, setErrorMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const navigate = useNavigate();
 
-  const togglePasswordVisibility = () => {
-    setShowPassword(!showPassword);
-  }
+  const handleLogin = async (e) => {
+    e.preventDefault();
+    setIsLoading(true);
+    setErrorMessage('');
 
-  useEffect(() => {
-    if (isAuthorized()) {
-      navigate('/');
-    }
-  }, []);
-
-  const login = async (loginData) => {
     try {
-      const response = await fetch(`${BASE_URL}/api/login/`, {
+      const response = await fetch(`${BASE_URL}/api/token/`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
           'Accept': 'application/json',
         },
-        body: JSON.stringify(loginData),
+        body: JSON.stringify({username, password}),
       });
-      const data = await response.json();
-      if (response.ok) {
-        localStorage.setItem('loginData', JSON.stringify(data));
-        navigate('/', {
-          state: {
-            message: 'Logged in successfully'
-          }
-        })
-      } else {
-        setHasError(true);
-        setIsLoading(false);
+
+      if (!response.ok) {
+        throw new Error('Login yoki parol noto\'g\'ri');
       }
+
+      const data = await response.json();
+      localStorage.setItem('loginData', JSON.stringify(data));
+      navigate('/');
     } catch (error) {
-      console.error('Error during login:', error);
+      setErrorMessage(error.message);
+    } finally {
+      setIsLoading(false);
     }
-  };
-
-  const handleInputChange = (e) => {
-    const {name, value} = e.target;
-    setFormValues({...formValues, [name]: value});
-  };
-
-  const handleLogInForm = (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    login(formValues);
   };
 
   return (
     <div className="auth-container">
       <div className="auth-form">
-        <Section title="Kirish" textSize='text-2xl'/>
-        {hasError && (<Error error_message="Username yoki parol noto'g'ri kiritilgan"/>)}
-        <form onSubmit={handleLogInForm}>
+        <h1 className="auth-title">Xush kelibsiz!</h1>
+        {errorMessage && <Error error_message={errorMessage} />}
+        <form onSubmit={handleLogin}>
           <input
             type="text"
-            name="username"
-            id="username"
             placeholder="Username"
             className="text-input"
+            value={username}
+            onChange={(e) => setUsername(e.target.value)}
             required
-            aria-label="Username"
-            value={formValues.username}
-            onChange={handleInputChange}
           />
-          <div className="password-input">
+          <div className="password-input-wrapper">
             <input
               type={showPassword ? 'text' : 'password'}
-              name="password"
-              id="password"
-              placeholder="Password"
+              placeholder="Parol"
               className="text-input"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
-              aria-label="Password"
-              value={formValues.password}
-              onChange={handleInputChange}
             />
-            <button
-              type="button"
-              onClick={togglePasswordVisibility}
+            <span
               className="toggle-password"
-              aria-label={showPassword ? 'Hide password' : 'Show password'}
+              onClick={() => setShowPassword(!showPassword)}
             >
-              {showPassword ? <EyeOff size={20}/> : <Eye size={20}/>}
-            </button>
+              {showPassword ? (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
+                </svg>
+              ) : (
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12.a3 3 0 11-6 0 3 3 0 016 0z" />
+                </svg>
+              )}
+            </span>
           </div>
-          <button type="submit" className="auth-submit-btn" disabled={isLoading} aria-label="Login">
-            <span className={!isLoading ? 'block' : 'hidden'}>Kirish</span>
-            <div className={`loading ${isLoading ? 'block' : 'hidden'}`}>
-              <ButtonLoadingAnimation/>
-            </div>
+          <button type="submit" className="auth-submit-btn" disabled={isLoading}>
+            {isLoading ? <ButtonLoadingAnimation /> : 'Kirish'}
           </button>
-          <GoogleSignInButton/>
-          <div className="goto-login-signup">Akkauntingiz yo'qmi? <Link to={"/signup"} className="link">Ro'yxat
-            o'tish</Link>
-          </div>
         </form>
+        <p className="goto-login-signup">
+          Hisobingiz yo'qmi?
+          <Link to="/signup" className="link">Ro'yxatdan o'tish</Link>
+        </p>
       </div>
-      <HomeButton/>
+      <HomeButton />
     </div>
-  )
-    ;
+  );
 };
 
 export default Login;

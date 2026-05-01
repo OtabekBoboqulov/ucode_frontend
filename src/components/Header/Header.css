@@ -1,90 +1,130 @@
 @import "tailwindcss";
 
-@theme {
-  --shadow-drop-down: -5px 5px 5px rgba(0, 0, 0, 0.1);
-  --shadow-drop-down-dark: -5px 5px 5px rgba(223, 223, 223, 0.1);
+.header {
+  @apply fixed top-0 left-0 right-0 h-20 z-50 flex items-center justify-between px-6 md:px-20 transition-all duration-300;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(15, 23, 42, 0.6);
 }
 
-@utility header {
-  @apply bg-[#FEFCFD] fixed top-0 left-0 right-0 md:h-20 h-30 shadow-[#5D5D81] flex items-center justify-between md:px-20
-  px-5 z-50 dark:bg-[#091C32] dark:shadow-[#333333] gap-2;
+.logo-container {
+  @apply flex items-center gap-2;
 }
 
-@utility no-user-header {
-  @apply flex-col md:flex-row gap-2 py-4 md:py-0;
+.auth-btn-group {
+  @apply flex items-center gap-4;
 }
 
-@utility auth-btn {
-  @apply uppercase cursor-pointer border-2 px-4 py-2 rounded-lg text-sm font-medium border-black hover:bg-black
-  hover:text-[#FEFCFD] transition-all duration-200 active:scale-95 dark:border-[#FEFCFD] dark:text-[#FEFCFD]
-  dark:hover:bg-[#FEFCFD] dark:hover:text-[#091C32];
+.auth-btn {
+  @apply px-6 py-2 rounded-xl text-sm font-bold transition-all duration-300 active:scale-95 border-2;
 }
 
-@utility user-data {
-  @apply flex items-center justify-center gap-4;
+.auth-btn-login {
+  @apply border-transparent hover:bg-white/10;
+  color: #f8fafc;
 }
 
-@utility username {
-  @apply font-bold dark:text-[#FEFCFD] text-xl hidden md:block cursor-pointer;
+.auth-btn-signup {
+  @apply shadow-lg;
+  background-color: #3b82f6;
+  color: #ffffff;
+  border-color: #3b82f6;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
 }
 
-@utility user-image {
-  @apply w-12 h-12 rounded-full overflow-hidden object-cover object-center cursor-pointer;
+.auth-btn-signup:hover {
+  background-color: #2563eb;
 }
 
-@utility drop-down {
-  @apply fixed top-30 md:top-20 right-0 bg-[#FEFCFD] z-50 shadow-drop-down text-right w-[80%] md:w-64 min-h-dvh
-  dark:bg-[#091C32] dark:shadow-drop-down-dark;
+.user-data {
+  @apply flex items-center gap-4 cursor-pointer hover:opacity-80 transition-opacity;
 }
 
-@utility drop-down-item {
-  @apply w-full py-4 pr-3 hover:bg-[#E8F1F2] cursor-pointer dark:hover:bg-[#5D5D81]
-  dark:text-[#FEFCFD];
+.username {
+  @apply font-bold text-lg hidden md:block;
+  color: #f8fafc;
 }
 
-@utility header-banner {
-  @apply mt-30 md:mt-20 flex flex-col-reverse md:flex-row justify-center items-center bg-[#FEFCFD] dark:bg-[#091C32] px-10 pb-10;
+.user-image {
+  @apply w-10 h-10 rounded-full border-2 object-cover;
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
-@utility header-banner-text {
-  @apply flex-1 pr-8;
+.drop-down {
+  @apply fixed top-20 right-0 w-64 shadow-2xl py-2 flex flex-col items-stretch z-50;
+  border-right: none;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-left: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(15, 23, 42, 0.9);
+  border-bottom-left-radius: 1rem;
 }
 
-@layer utilities {
-  .header-banner-image {
-    animation: custom-bounce 2s infinite ease-in-out;
-  }
+.drop-down-item {
+  @apply px-6 py-4 text-right font-medium transition-colors;
+  color: #f8fafc;
 }
 
-@keyframes custom-bounce {
-  0%, 100% {
-    transform: translateY(0);
-  }
-  50% {
-    transform: translateY(-15px);
-  }
+.drop-down-item:hover {
+  background-color: rgba(59, 130, 246, 0.1);
 }
 
-@utility header-banner-image {
-  @apply flex-1;
+/* Header Banner (Hero Section) */
+.header-banner {
+  @apply mt-20 min-h-[70vh] flex flex-col-reverse md:flex-row items-center justify-between px-10 md:px-20 relative overflow-hidden;
+  background-color: #020617;
 }
 
-@utility header-greeting {
-  @apply text-4xl font-bold text-gray-900 dark:text-white mb-4;
+.header-banner::before {
+  content: '';
+  @apply absolute inset-0 opacity-10 pointer-events-none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
-@utility header-message {
-  @apply text-lg text-gray-600 dark:text-gray-300 mb-6;
+.header-banner-text {
+  @apply flex-1 z-10 text-center md:text-left py-12;
 }
 
-@utility header-btn {
-  @apply inline-block bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition;
+.header-greeting {
+  @apply text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tight;
+  background: linear-gradient(to bottom right, #fff 50%, #94a3b8);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
 }
 
-@utility loading-overlay {
-  @apply absolute top-0 left-0 right-0 bottom-0 bg-gray-500 opacity-75 z-50 flex justify-center items-center;
+.header-message {
+  @apply text-xl mb-10 max-w-xl;
+  color: #94a3b8;
 }
 
-@utility header-banner-imagefile {
-  @apply w-full;
+.header-btn {
+  @apply inline-flex items-center gap-2 px-10 py-4 rounded-2xl font-bold text-lg transition-all;
+  background-color: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
+}
+
+.header-btn:hover {
+  transform: scale(1.05);
+  box-shadow: 0 20px 25px -5px rgba(59, 130, 246, 0.2);
+}
+
+.header-banner-image {
+  @apply flex-1 z-10 flex justify-center items-center;
+  animation: float 6s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-20px); }
+}
+
+.header-banner-imagefile {
+  @apply w-[80%] max-w-lg filter drop-shadow-2xl;
 }

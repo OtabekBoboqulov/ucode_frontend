@@ -140,68 +140,78 @@ const Index = () => {
     getCourses();
   }, []);
   return (
-    <div>
-      <div className="main">
-        <Header/>
-        <div className="container mx-auto pt-10">
-          <Intro/>
-          <SiteData/>
-          <Section title="Kurslar" textSize='text-4xl'/>
-          <div className="my-courses-toolbar">
-            <input type="text" placeholder="Kurslarni qidirish..." className="course-searchbar"
-                   onChange={handleSearchTextChange} value={searchText}/>
-            <div className="relative inline-block">
-              <select className="search-filter" onChange={handleSearchFilterChange} defaultValue={searchFilter}>
-                <option value="">Hammasi</option>
-                <option value="junior">Junior</option>
-                <option value="middle">Middle</option>
-                <option value="senior">Senior</option>
-              </select>
-              <div className="pointer-events-none absolute inset-y-0 right-3 flex items-center">
-                <svg
-                  className="h-4 w-4 text-gray-500"
-                  fill="none"
-                  stroke="currentColor"
-                  viewBox="0 0 24 24">
-                  <path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"/>
-                </svg>
-              </div>
-            </div>
+    <div className="bg-[#020617] min-h-screen">
+      <Header/>
+      <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10">
+        <Intro/>
+        <SiteData/>
+        <Section title="Kurslar" textSize='text-4xl'/>
+        <div className="flex flex-col md:flex-row gap-4 mb-12">
+          <input
+            type="text"
+            placeholder="Kurslarni qidirish..."
+            className="flex-grow px-6 py-4 rounded-2xl outline-none text-white focus:ring-2 focus:ring-blue-500/50"
+            style={{
+              backdropFilter: 'blur(20px)',
+              WebkitBackdropFilter: 'blur(20px)',
+              border: '1px solid rgba(255, 255, 255, 0.1)',
+              backgroundColor: 'rgba(15, 23, 42, 0.6)'
+            }}
+            onChange={handleSearchTextChange}
+            value={searchText}
+          />
+          <div className="relative">
+            <select
+              className="appearance-none px-10 py-4 rounded-2xl outline-none cursor-pointer text-white focus:ring-2 focus:ring-blue-500/50"
+              style={{
+                backdropFilter: 'blur(20px)',
+                WebkitBackdropFilter: 'blur(20px)',
+                border: '1px solid rgba(255, 255, 255, 0.1)',
+                backgroundColor: 'rgba(15, 23, 42, 0.6)'
+              }}
+              onChange={handleSearchFilterChange}
+              defaultValue={searchFilter}
+            >
+              <option value="">Barcha darajalar</option>
+              <option value="junior">Junior</option>
+              <option value="middle">Middle</option>
+              <option value="senior">Senior</option>
+            </select>
           </div>
-          <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-3 gap-12" id="courses">
-            {courses.length > 0 ? (
-              courses.filter((course) => {
-                return course.name.toLowerCase().includes(searchText.toLowerCase()) &&
-                  course.complexity.toLowerCase().includes(searchFilter.toLowerCase()) &&
-                  (course.is_published || (isAuthorized() && isStaff()))
-              }).map((course) => {
-                return (
-                  <div className="relative">
-                    <CourseCard course={course}
-                                btn_text={enrolledCourses.includes(course.id) ? 'Davom etish' : 'Boshlash'}
-                                key={course.id}/>
-                    {isAuthorized() && isStaff() && (
-                      <button className="delete-course-btn" onClick={() => openDeleteAskModal(course.id)}>
-                        <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                             stroke="currentColor" className="size-6">
-                          <path strokeLinecap="round" strokeLinejoin="round"
-                                d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
-                        </svg>
-                      </button>
-                    )}
-                  </div>
-                )
-              })
-            ) : ''}
-            {isAuthorized() && JSON.parse(localStorage.getItem('loginData'))?.is_staff && <CreateCourse/>}
-          </section>
-          {message && (
-            <PopupMessage message={message}/>
-          )}
-          {isLoading && (
-            <LoadingAnimation/>
-          )}
         </div>
+        <section className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8 pb-20" id="courses">
+          {courses.length > 0 ? (
+            courses.filter((course) => {
+              return course.name.toLowerCase().includes(searchText.toLowerCase()) &&
+                course.complexity.toLowerCase().includes(searchFilter.toLowerCase()) &&
+                (course.is_published || (isAuthorized() && isStaff()))
+            }).map((course) => {
+              return (
+                <div className="relative group" key={course.id}>
+                  <CourseCard course={course}
+                              btn_text={enrolledCourses.includes(course.id) ? 'Davom etish' : 'Boshlash'}
+                              key={course.id}/>
+                  {isAuthorized() && isStaff() && (
+                    <button className="absolute top-4 right-4 p-2 bg-red-500/10 text-red-500 rounded-xl opacity-0 group-hover:opacity-100 transition-opacity hover:bg-red-500 hover:text-white" onClick={() => openDeleteAskModal(course.id)}>
+                      <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
+                           stroke="currentColor" className="size-5">
+                        <path strokeLinecap="round" strokeLinejoin="round"
+                              d="m14.74 9-.346 9m-4.788 0L9.26 9m9.968-3.21c.342.052.682.107 1.022.166m-1.022-.165L18.16 19.673a2.25 2.25 0 0 1-2.244 2.077H8.084a2.25 2.25 0 0 1-2.244-2.077L4.772 5.79m14.456 0a48.108 48.108 0 0 0-3.478-.397m-12 .562c.34-.059.68-.114 1.022-.165m0 0a48.11 48.11 0 0 1 3.478-.397m7.5 0v-.916c0-1.18-.91-2.164-2.09-2.201a51.964 51.964 0 0 0-3.32 0c-1.18.037-2.09 1.022-2.09 2.201v.916m7.5 0a48.667 48.667 0 0 0-7.5 0"/>
+                      </svg>
+                    </button>
+                  )}
+                </div>
+              )
+            })
+          ) : ''}
+          {isAuthorized() && JSON.parse(localStorage.getItem('loginData'))?.is_staff && <CreateCourse/>}
+        </section>
+        {message && (
+          <PopupMessage message={message}/>
+        )}
+        {isLoading && (
+          <LoadingAnimation/>
+        )}
       </div>
       <Modal
         isOpen={isDeleteAskOpen}
@@ -211,9 +221,9 @@ const Index = () => {
         contentLabel="Delete Course"
       >
         <h2 className="modal-title">Kursni o'chirmoqchimisiz?</h2>
-        <div className="delete-btn-group">
-          <button className="delete-course" onClick={deleteCourse}>Ha</button>
-          <button className="cancel-delete" onClick={closeDeleteAskModal}>Bekor qilish</button>
+        <div className="flex justify-end gap-4 mt-6">
+          <button className="px-6 py-2 bg-red-500 text-white rounded-xl font-bold hover:bg-red-600 transition-colors" onClick={deleteCourse}>Ha</button>
+          <button className="px-6 py-2 bg-slate-700 text-white rounded-xl font-bold hover:bg-slate-600 transition-colors" onClick={closeDeleteAskModal}>Bekor qilish</button>
         </div>
       </Modal>
       <Footer/>

@@ -1,55 +1,160 @@
 @import "tailwindcss";
 
 .auth-container {
-  @apply min-h-screen flex justify-center items-center p-6 relative overflow-hidden;
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 1.5rem;
+  position: relative;
+  overflow: hidden;
   background-color: var(--color-background);
 }
 
 .auth-container::before {
   content: '';
-  @apply absolute inset-0 opacity-20 pointer-events-none;
-  background-image: radial-gradient(var(--color-primary) 1px, transparent 1px);
-  background-size: 32px 32px;
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  pointer-events: none;
+  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-size: 24px 24px;
 }
 
 .auth-form {
-  @apply w-full max-w-md flex flex-col backdrop-blur-2xl border border-white/10 rounded-[2.5rem] py-12 px-10 shadow-2xl relative z-10;
-  background-color: color-mix(in srgb, var(--color-card) 60%, transparent);
+  width: 100%;
+  max-width: 28rem;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+  z-index: 10;
+  padding: 3rem 2.5rem;
+  border-radius: 2.5rem;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(15, 23, 42, 0.6);
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+}
+
+.auth-title {
+  @apply text-3xl font-black text-center mb-8 bg-gradient-to-br from-white to-slate-500 bg-clip-text text-transparent;
 }
 
 .text-input {
-  @apply w-full px-6 py-4 border border-white/10 bg-white/5 rounded-2xl my-3 text-white transition-all focus:outline-none focus:ring-2 focus:ring-blue-500/50 focus:border-blue-500/50 placeholder:text-slate-500;
+  width: 100%;
+  padding: 1rem 1.5rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(255, 255, 255, 0.05);
+  border-radius: 1rem;
+  margin-top: 0.75rem;
+  margin-bottom: 0.75rem;
+  transition: all 0.3s;
+  outline: none;
+  color: var(--color-foreground);
+}
+
+.text-input:focus {
+  border-color: rgba(59, 130, 246, 0.5);
+  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.25);
+}
+
+.text-input::placeholder {
+  color: #64748b;
 }
 
 .image-input {
-  @apply absolute h-0 opacity-0;
+  position: absolute;
+  height: 0;
+  opacity: 0;
 }
 
 .image-preview {
-  @apply rounded-full overflow-hidden w-40 h-40 mx-auto my-6 cursor-pointer border-4 border-blue-500/30 transition-all hover:border-blue-500/60 hover:scale-105 shadow-xl;
+  border-radius: 9999px;
+  overflow: hidden;
+  width: 10rem;
+  height: 10rem;
+  margin-left: auto;
+  margin-right: auto;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  cursor: pointer;
+  border: 4px solid rgba(59, 130, 246, 0.3);
+  transition: all 0.3s;
+  box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+}
+
+.image-preview:hover {
+  border-color: rgba(59, 130, 246, 0.6);
+  transform: scale(1.05);
 }
 
 .auth-submit-btn {
-  @apply w-full h-14 bg-blue-600 text-white rounded-2xl my-6 uppercase font-bold tracking-widest transition-all hover:bg-blue-500 hover:scale-[1.02] active:scale-[0.98] shadow-lg shadow-blue-500/20 disabled:opacity-50 disabled:cursor-not-allowed;
+  width: 100%;
+  height: 3.5rem;
+  background-color: var(--color-primary);
+  color: var(--color-primary-foreground);
+  border-radius: 1rem;
+  margin-top: 1.5rem;
+  margin-bottom: 1.5rem;
+  text-transform: uppercase;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  transition: all 0.3s;
+  border: none;
+  cursor: pointer;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
+}
+
+.auth-submit-btn:hover:not(:disabled) {
+  opacity: 0.9;
+  transform: scale(1.02);
+}
+
+.auth-submit-btn:active:not(:disabled) {
+  transform: scale(0.98);
+}
+
+.auth-submit-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
 }
 
 .goto-login-signup {
-  @apply text-center text-slate-400 text-sm mt-4;
+  text-align: center;
+  color: #94a3b8;
+  font-size: 0.875rem;
+  margin-top: 1rem;
 }
 
 .link {
-  @apply text-blue-400 hover:text-blue-300 font-bold transition-colors ml-1;
+  color: var(--color-primary);
+  font-weight: 700;
+  transition: color 0.3s;
+  margin-left: 0.25rem;
+  text-decoration: none;
+}
+
+.link:hover {
+  opacity: 0.8;
 }
 
 .password-input-wrapper {
-  @apply relative w-full;
+  position: relative;
+  width: 100%;
 }
 
 .toggle-password {
-  @apply absolute right-4 top-1/2 -translate-y-1/2 cursor-pointer text-slate-500 hover:text-blue-400 transition-colors p-2;
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+  color: #64748b;
+  transition: color 0.3s;
+  padding: 0.5rem;
 }
 
-/* Specific adjustment for Profile Edit */
-.image-preview img {
-  @apply w-full h-full object-cover;
+.toggle-password:hover {
+  color: var(--color-primary);
 }

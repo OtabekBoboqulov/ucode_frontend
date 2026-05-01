@@ -26,7 +26,7 @@ const LessonView = () => {
   let userData = JSON.parse(localStorage.getItem('loginData'));
 
   const startLesson = async () => {
-    const response = await fetch(`${BASE_URL}/api/lessons/${Number(lessonId)}/start/`, {
+    await fetch(`${BASE_URL}/api/lessons/${Number(lessonId)}/start/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -47,9 +47,6 @@ const LessonView = () => {
 
     try {
       userData = JSON.parse(localStorage.getItem('loginData'));
-      const controller = new AbortController();
-      const timeoutId = setTimeout(() => controller.abort(), 10000);
-
       const response = await fetch(`${BASE_URL}/api/lessons/${Number(lessonId)}/`, {
         method: 'GET',
         headers: {
@@ -57,10 +54,7 @@ const LessonView = () => {
           'Accept': 'application/json',
           'Authorization': `Bearer ${userData?.access}`,
         },
-        signal: controller.signal,
       });
-
-      clearTimeout(timeoutId);
 
       if (response.status === 401) {
         const refreshResult = await refreshToken();
@@ -73,18 +67,10 @@ const LessonView = () => {
               'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loginData'))?.access}`,
             },
           });
-
-          if (!retryResponse.ok) {
-            throw new Error(`Failed to fetch lesson data: ${retryResponse.status}`);
-          }
-
           const retryData = await retryResponse.json();
           setComponents(retryData.lesson.components || []);
           setLessonData(retryData.lesson || {});
           setHasVip(retryData.is_vip);
-          if (!retryData.lesson.user_lessons.find((item) => item.user === userData.id)) {
-            startLesson(retryData.id);
-          }
           const nextLessonResponse = await fetch(`${BASE_URL}/api/courses/${Number(id)}/next-lesson/${retryData.lesson.serial_number}`, {
             method: 'GET',
             headers: {
@@ -93,42 +79,30 @@ const LessonView = () => {
               'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loginData'))?.access}`,
             },
           });
-          if (!nextLessonResponse.ok) {
-            throw new Error(`Failed to fetch next lesson data: ${nextLessonResponse.status}`);
-          }
           const nextLessonData = await nextLessonResponse.json();
           setNextLesson(nextLessonData.id || 0);
         } else {
           localStorage.removeItem('loginData');
           navigate('/login');
         }
-      } else if (!response.ok) {
-        throw new Error(`Failed to fetch course data: ${response.status}`);
       } else {
         const data = await response.json();
         setLessonData(data.lesson || {});
         setComponents(data.lesson.components || []);
         setHasVip(data.is_vip);
-        if (!data.lesson.user_lessons.find((item) => item.user === userData.id)) {
-          startLesson(data.id);
-        }
         const nextLessonResponse = await fetch(`${BASE_URL}/api/courses/${Number(id)}/next-lesson/${data.lesson.serial_number}`, {
           method: 'GET',
           headers: {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Authorization': `Bearer ${JSON.parse(localStorage.getItem('loginData'))?.access}`,
+            'Authorization': `Bearer ${userData?.access}`,
           },
         });
-        if (!nextLessonResponse.ok) {
-          throw new Error(`Failed to fetch next lesson data: ${nextLessonResponse.status}`);
-        }
         const nextLessonData = await nextLessonResponse.json();
         setNextLesson(nextLessonData.id || 0);
       }
     } catch (err) {
-      console.error('Error fetching lesson data:', err);
-      setError(err.message || 'An error occurred while fetching lesson data');
+      setError(err.message);
     } finally {
       setIsLoading(false);
     }
@@ -139,109 +113,93 @@ const LessonView = () => {
   }, [lessonId]);
 
   return (
-    <div className="bg-[#BFCDE0] dark:bg-[#223C5B]" id="outer-container">
-      {error ? (
-        <Error error_message={error}/>
-      ) : ''}
-      {isLoading ? (
-        <LoadingAnimation/>
-      ) : ''}
+    <div className="bg-background min-h-screen" id="outer-container">
       <LessonsSidebar courseId={id}/>
       <div className="lesson-view" id="page-wrap">
-        {lessonData.title && (
-          <div className="lesson-caption">
-            <Section title={`${lessonData.serial_number}. ${lessonData.title}`} textSize='md:text-4xl'
-                     textSizeSm='text-lg'/>
-          </div>
-        )}
-        {components && components.map((component) => {
-          if (component.type === 'video') {
-            return <Video key={component.id} videoUrl={component.data.video_url}/>;
-          } else if (component.type === 'text') {
-            return <Text key={component.id} content={component.data.content}/>;
-          } else if (component.type === 'mcq') {
-            return <MultipleChoiceQuestion question_data={component.data} key={component.id} id={component.id}
-                                           isVip={hasVip}/>
-          } else if (component.type === 'moq') {
-            return <MultipleOptionsQuestion question_data={component.data} key={component.id} id={component.id}
-                                            isVip={hasVip}/>
-          } else if (component.type === 'coding') {
-            return <CodingQuestion question_data={component.data} key={component.id} id={component.id} isVip={hasVip}
-                                   courseId={id}/>
-          }
-          return null;
-        })}
-        {lessonData.lesson_materials && (
-          <div className="lesson-materials">
-            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
-                 className="bi bi-file-earmark-zip inline-block" viewBox="0 0 16 16">
-              <path
-                d="M5 7.5a1 1 0 0 1 1-1h1a1 1 0 0 1 1 1v.938l.4 1.599a1 1 0 0 1-.416 1.074l-.93.62a1 1 0 0 1-1.11 0l-.929-.62a1 1 0 0 1-.415-1.074L5 8.438zm2 0H6v.938a1 1 0 0 1-.03.243l-.4 1.598.93.62.929-.62-.4-1.598A1 1 0 0 1 7 8.438z"/>
-              <path
-                d="M14 4.5V14a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V2a2 2 0 0 1 2-2h5.5zm-3 0A1.5 1.5 0 0 1 9.5 3V1h-2v1h-1v1h1v1h-1v1h1v1H6V5H5V4h1V3H5V2h1V1H4a1 1 0 0 0-1 1v12a1 1 0 0 0 1 1h8a1 1 0 0 0 1-1V4.5z"/>
-            </svg>
-            &nbsp;
-            <a href={`${MEDIA_BASE_URL}${lessonData.lesson_materials}`} target='_blank'>
-              Dars materiallari
-            </a>
-          </div>
-        )}
-        <div className="lesson-control-btns">
-          <div className="lesson-control-btn group">
-            <button className='restart-lesson-btn' onClick={() => {
-              window.location.reload()
-            }}>
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                   stroke="currentColor" className="size-[18px]">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99"/>
-              </svg>
-            </button>
-            <div className="tooltip">
-              Qaytadan boshlash
-              <div className="tooltip-arrow"/>
+        <div className="max-w-5xl mx-auto">
+          {lessonData.title && (
+            <div className="mb-12">
+              <h1 className="text-4xl md:text-5xl font-black text-white mb-4">
+                <span className="text-primary mr-4">{lessonData.serial_number}.</span>
+                {lessonData.title}
+              </h1>
+              <div className="h-1 w-20 bg-primary rounded-full"></div>
+            </div>
+          )}
+
+          <div className="lesson-materials-container">
+            <div className="terminal-header">
+              <div className="terminal-controls">
+                <div className="terminal-dot dot-red"></div>
+                <div className="terminal-dot dot-yellow"></div>
+                <div className="terminal-dot dot-green"></div>
+              </div>
+              <div className="terminal-title">lesson_content.md</div>
+              <div className="w-12"></div>
+            </div>
+
+            <div className="lesson-content-area">
+              {components && components.map((component) => {
+                if (component.type === 'video') {
+                  return <Video key={component.id} videoUrl={component.data.video_url}/>;
+                } else if (component.type === 'text') {
+                  return <Text key={component.id} content={component.data.content}/>;
+                } else if (component.type === 'mcq') {
+                  return <MultipleChoiceQuestion question_data={component.data} key={component.id} id={component.id} isVip={hasVip}/>
+                } else if (component.type === 'moq') {
+                  return <MultipleOptionsQuestion question_data={component.data} key={component.id} id={component.id} isVip={hasVip}/>
+                } else if (component.type === 'coding') {
+                  return <CodingQuestion question_data={component.data} key={component.id} id={component.id} isVip={hasVip} courseId={id}/>
+                }
+                return null;
+              })}
+
+              {lessonData.lesson_materials && (
+                <div className="mt-12 pt-12 border-t border-white/5">
+                  <a href={`${MEDIA_BASE_URL}${lessonData.lesson_materials}`} target='_blank' className="lesson-materials">
+                    <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={2} stroke="currentColor" className="w-5 h-5">
+                      <path strokeLinecap="round" strokeLinejoin="round" d="M3 16.5v2.25A2.25 2.25 0 005.25 21h13.5A2.25 2.25 0 0021 18.75V16.5M16.5 12L12 16.5m0 0L7.5 12m4.5 4.5V3" />
+                    </svg>
+                    Dars materiallarini yuklab olish
+                  </a>
+                </div>
+              )}
             </div>
           </div>
-          {nextLesson > 0 && (
-            <div className="lesson-control-btn group">
-              <button className='next-lesson-btn' onClick={() => {
-                navigate(`/courses/${id}/lessons/${nextLesson}`)
-              }}>
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" fill="currentColor"
-                     className="bi bi-arrow-right" viewBox="0 0 16 16">
-                  <path fillRule="evenodd"
-                        d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8"/>
+
+          <div className="lesson-control-btns">
+            <div className="relative group">
+              <button className='restart-lesson-btn' onClick={() => window.location.reload()}>
+                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+                  <path strokeLinecap="round" strokeLinejoin="round" d="M16.023 9.348h4.992v-.001M2.985 19.644v-4.992m0 0h4.992m-4.993 0 3.181 3.183a8.25 8.25 0 0 0 13.803-3.7M4.031 9.865a8.25 8.25 0 0 1 13.803-3.7l3.181 3.182m0-4.991v4.99" />
                 </svg>
               </button>
-              <div className="tooltip">
-                Keyingi dars
-                <div className="tooltip-arrow"/>
+              <div className="tooltip">Qaytadan boshlash</div>
+            </div>
+
+            {nextLesson > 0 && (
+              <div className="relative group">
+                <button className='next-lesson-btn' onClick={() => navigate(`/courses/${id}/lessons/${nextLesson}`)}>
+                  <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="2" stroke="currentColor" className="w-6 h-6">
+                    <path strokeLinecap="round" strokeLinejoin="round" d="M13.5 4.5L21 12m0 0l-7.5 7.5M21 12H3" />
+                  </svg>
+                </button>
+                <div className="tooltip">Keyingi dars</div>
               </div>
+            )}
+          </div>
+
+          {nextLesson === 0 && (
+            <div className="last-lesson-message mt-12">
+              Tabriklaymiz! Bu kursdagi so'nggi dars edi. Sertifikatingizni&nbsp;
+              <Link to="/courses/enrolled" className="last-lesson-message-link">Mening kurslarim</Link>
+              &nbsp;bo'limidan yuklab olishingiz mumkin.
             </div>
           )}
         </div>
-        {(nextLesson === 0) && (
-          <div className="last-lesson-message">
-            Bu so'nggi dars edi. Kurs yakunlangandan so'ng sertifikatni&nbsp;
-            <Link to="/courses/enrolled" className="last-lesson-message-link">
-              mening kurslarim
-            </Link>
-            &nbsp;bo'limidan olishingiz mumkin.
-          </div>
-        )}
-        {userData && userData.is_staff && (
-          <div className="edit-course-btn-container">
-            <Link to={`/courses/${id}/lessons/${lessonId}/edit`} className="edit-course-btn">
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5"
-                   stroke="currentColor" className="size-6 inline-block">
-                <path strokeLinecap="round" strokeLinejoin="round"
-                      d="m16.862 4.487 1.687-1.688a1.875 1.875 0 1 1 2.652 2.652L10.582 16.07a4.5 4.5 0 0 1-1.897 1.13L6 18l.8-2.685a4.5 4.5 0 0 1 1.13-1.897l8.932-8.931Zm0 0L19.5 7.125M18 14v4.75A2.25 2.25 0 0 1 15.75 21H5.25A2.25 2.25 0 0 1 3 18.75V8.25A2.25 2.25 0 0 1 5.25 6H10"/>
-              </svg>
-            </Link>
-          </div>
-        )}
       </div>
       <HomeButton/>
+      {isLoading && <LoadingAnimation />}
     </div>
   );
 };

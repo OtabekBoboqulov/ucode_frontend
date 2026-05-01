@@ -1,56 +1,69 @@
 @import "tailwindcss";
 
-@theme {
-  --course-card-bg-light: rgba(254, 252, 253, 0.5);
-  --course-card-bg-dark: rgba(0, 0, 0, 0.5);
-  --shadow-light: 0 0 10px rgba(0, 0, 0, 0.25);
-  --shadow-dark: 0 0 10px rgba(100, 100, 100, 0.5);
+.course-card {
+  @apply overflow-hidden transition-all duration-500;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  background-color: rgba(15, 23, 42, 0.6);
+  border-radius: 2rem;
+  box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
 }
 
-@utility course-card {
-  @apply relative rounded-xl overflow-hidden dark:text-amber-50 shadow-lg;
+.course-card:hover {
+  transform: translateY(-0.5rem);
 }
 
-@utility course-title {
-  @apply flex items-center p-2 font-bold justify-between text-2xl mr-2;
+.banner_image {
+  @apply w-full h-56 object-cover transition-transform duration-700;
 }
 
-@utility course-complexity {
-  @apply font-bold text-lg capitalize;
+.course-card:hover .banner_image {
+  transform: scale(1.1);
 }
 
-@utility junior {
-  @apply text-green-600 dark:text-green-400 ;
+.course-content {
+  @apply p-6;
 }
 
-@utility middle {
-  @apply text-orange-600 dark:text-orange-400;
+.course-title {
+  @apply text-2xl font-black mb-3 text-white line-clamp-1;
 }
 
-@utility senior {
-  @apply text-red-600 dark:text-red-400;
+.course-complexity {
+  @apply text-xs font-black uppercase tracking-widest px-3 py-1 rounded-full border mb-4 inline-block;
 }
 
-@utility course-description {
-  @apply px-2 text-justify;
+.junior {
+  @apply border-green-500/30 text-green-400 bg-green-500/5;
 }
 
-@utility start-course {
-  @apply my-2 mx-auto flex items-center justify-center h-12 w-[90%] bg-blue-700 text-white text-xl uppercase font-bold
-  hover:bg-blue-600 active:bg-blue-500 rounded-xl;
+.middle {
+  @apply border-orange-500/30 text-orange-400 bg-orange-500/5;
 }
 
-@utility course-data {
-  @apply absolute bottom-0 left-0 right-0 p-2 bg-[var(--course-card-bg-light)] dark:bg-[var(--course-card-bg-dark)]
-  md:translate-y-full transition-transform duration-500 ease-in-out;
+.senior {
+  @apply border-red-500/30 text-red-400 bg-red-500/5;
 }
 
-@utility banner_image {
-  @apply w-full h-60 object-cover object-center;
+.course-description {
+  @apply text-sm line-clamp-2 mb-6 leading-relaxed;
+  color: #94a3b8;
 }
 
-@layer utilities {
-  .course-card:hover .course-data {
-    @apply translate-y-0 block;
-  }
+.start-course {
+  @apply w-full py-4 rounded-2xl font-bold uppercase tracking-wider transition-all shadow-lg;
+  background-color: #3b82f6;
+  color: #ffffff;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
+  cursor: pointer;
+}
+
+.start-course:hover {
+  background-color: #2563eb;
+  transform: scale(1.02);
+}
+
+.start-course:active {
+  transform: scale(0.95);
 }

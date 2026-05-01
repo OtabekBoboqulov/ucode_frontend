@@ -1,53 +1,43 @@
 @import "tailwindcss";
 
-@utility footer {
-  @apply bg-[#FEFCFD] dark:bg-[#091C32];
+.footer {
+  background-color: #020617;
+  border-top: 1px solid rgba(255, 255, 255, 0.05);
+  padding-top: 5rem;
+  padding-bottom: 2.5rem;
 }
 
-@utility footer-container {
-  @apply container mx-auto p-0 md:p-8 xl:px-0;
+.footer-container {
+  @apply max-w-7xl mx-auto px-6 md:px-12;
 }
 
-@utility footer-inner-container {
-  @apply mx-auto max-w-7xl px-6 pb-10 pt-16;
+.footer-main {
+  @apply grid grid-cols-1 lg:grid-cols-2 gap-12 mb-16;
 }
 
-@utility footer-main {
-  @apply xl:grid xl:grid-cols-3 xl:gap-8;
+.footer-message {
+  @apply text-lg mt-4 leading-relaxed max-w-sm;
+  color: #94a3b8;
 }
 
-@utility footer-logo-container {
-  @apply flex items-center space-x-2 text-2xl font-medium;
+.footer-nav {
+  @apply grid grid-cols-2 gap-8;
 }
 
-@utility footer-message {
-  @apply max-w-md pr-16 text-gray-900 dark:text-gray-200;
+.footer-nav-section-title {
+  @apply text-white font-bold mb-6 text-lg;
 }
 
-@utility footer-social-icons {
-  @apply text-gray-900 hover:text-gray-950 dark:text-gray-200 dark:hover:text-gray-300;
+.footer-nav-link {
+  @apply block transition-colors mb-4;
+  color: #94a3b8;
 }
 
-@utility footer-nav {
-  @apply mt-16 grid grid-cols-2 gap-8 xl:col-span-2 xl:mt-0;
+.footer-nav-link:hover {
+  color: #3b82f6;
 }
 
-@utility footer-nav-section {
-  @apply md:grid md:grid-cols-2 md:gap-8;
-}
-
-@utility footer-nav-section-title {
-  @apply font-semibold leading-6 text-black dark:text-white;
-}
-
-@utility footer-nav-link {
-  @apply leading-6 text-gray-600 hover:text-gray-800 dark:text-gray-300 dark:hover:text-gray-50;
-}
-
-@utility footer-bottom {
-  @apply mt-16 border-t dark:border-gray-400/30 pt-8 sm:mt-20 lg:mt-24;
-}
-
-@utility copyright {
-  @apply text-center text-black dark:text-white;
+.footer-bottom {
+  @apply border-t border-white/5 pt-8 text-center text-sm;
+  color: #475569;
 }

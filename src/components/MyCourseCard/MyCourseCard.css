@@ -1,12 +1,20 @@
 @import "tailwindcss";
 
 @utility my-course-card {
-  @apply flex flex-col md:flex-row items-stretch rounded-xl overflow-hidden bg-[#FEFCFD] w-full mb-4 shadow-xl
-  hover:transform hover:scale-101 transition-all duration-200 dark:bg-[#091C32] dark:text-white;
+  @apply flex flex-col md:flex-row items-stretch rounded-[2rem] overflow-hidden w-full mb-8 shadow-xl
+  transition-all duration-300 border border-white/10;
+  background-color: rgba(15, 23, 42, 0.6);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  color: white;
+}
+
+.my-course-card:hover {
+  @apply scale-[1.01] shadow-2xl border-blue-500/30 bg-white/10;
 }
 
 @utility my-course-banner {
-  @apply md:w-[300px];
+  @apply md:w-[350px] shrink-0;
 }
 
 @utility my-course-banner-img {
@@ -14,39 +22,45 @@
 }
 
 @utility my-course-data {
-  @apply flex-1 p-4 flex flex-col gap-2;
+  @apply flex-1 p-8 flex flex-col gap-4;
 }
 
 @utility my-course-name {
-  @apply text-2xl font-bold leading-tight;
+  @apply text-3xl font-black leading-tight bg-gradient-to-br from-white to-slate-400 bg-clip-text text-transparent;
 }
 
 @utility my-course-complexity {
-  @apply bg-gray-200 dark:bg-gray-700 px-2 py-0.5 rounded-full text-xs font-semibold w-fit capitalize;
+  @apply bg-blue-500/10 text-blue-400 px-4 py-1 rounded-full text-xs font-black uppercase tracking-widest w-fit;
 }
 
 @utility my-course-description {
-  @apply leading-tight text-gray-500 dark:text-gray-300;
+  @apply leading-relaxed text-slate-400 text-lg;
 }
 
 @utility my-course-created-at {
-  @apply text-gray-500 dark:text-gray-300 leading-tight text-sm;
+  @apply text-slate-500 font-bold text-sm uppercase tracking-wider;
 }
 
 @utility continue-btn-container {
-  @apply flex justify-end px-4;
+  @apply flex justify-end mt-4;
 }
 
 @utility continue-btn {
-  @apply bg-blue-700 w-fit p-2 text-white font-bold rounded-lg cursor-pointer hover:bg-blue-800
-  active:bg-blue-900;
+  @apply bg-blue-600 px-8 py-4 text-white font-black rounded-2xl cursor-pointer transition-all uppercase tracking-widest;
+  box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.3);
+}
+
+.continue-btn:hover {
+  @apply bg-blue-500 scale-105;
+}
+
+.continue-btn:active {
+  @apply scale-95;
 }
 
 @utility subscribe-to-course {
-  @apply py-3 px-6 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700
-  hover:to-purple-700 dark:from-blue-500 dark:to-purple-500 dark:hover:from-blue-600
-  dark:hover:to-purple-600 text-white rounded-lg transition-all duration-300 transform
-  hover:scale-101 focus:outline-none focus:ring-2 focus:ring-blue-500 shadow-md hover:shadow-lg cursor-pointer
+  @apply py-4 px-8 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700
+  hover:to-purple-700 text-white rounded-2xl transition-all duration-300 transform
+  hover:scale-105 font-black uppercase tracking-widest shadow-lg cursor-pointer
   text-center;
 }
-

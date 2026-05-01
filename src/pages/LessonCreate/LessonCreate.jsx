@@ -329,11 +329,14 @@ const LessonCreate = () => {
           )
         })}
         <div className="add-element-btn" onClick={openAddComponentModal}>
-          <img src={video} alt="video-icon" className="add-element-icon"/>
-          <img src={text} alt="text-icon" className="add-element-icon"/>
-          <img src={mcq} alt="mcq-icon" className="add-element-icon"/>
-          <img src={moq} alt="moq-icon" className="add-element-icon"/>
-          <img src={coding} alt="coding-icon" className="add-element-icon"/>
+          <div className="add-element-icons-container">
+            <img src={video} alt="video-icon" className="add-element-icon"/>
+            <img src={text} alt="text-icon" className="add-element-icon"/>
+            <img src={mcq} alt="mcq-icon" className="add-element-icon"/>
+            <img src={moq} alt="moq-icon" className="add-element-icon"/>
+            <img src={coding} alt="coding-icon" className="add-element-icon"/>
+          </div>
+          <span className="add-element-text">Yangi element qo'shish</span>
         </div>
         <div className="mt-2 dark:text-white">
           <form onSubmit={handleLessonCreate}>

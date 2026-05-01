@@ -1,35 +1,31 @@
 @import "tailwindcss";
 
 .my-courses-toolbar {
-  @apply mb-12 flex flex-col md:flex-row gap-6 items-stretch;
+  @apply mb-12 flex flex-col md:flex-row gap-6 items-center bg-white/5 p-6 rounded-[2rem] border border-white/10;
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
 }
 
 .course-searchbar {
-  @apply flex-grow px-8 py-4 rounded-2xl placeholder:text-slate-500;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(15, 23, 42, 0.6);
+  @apply flex-grow px-8 py-4 rounded-2xl bg-white/5 border border-white/10 placeholder:text-slate-500 transition-all;
   outline: none;
   color: white;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .course-searchbar:focus {
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  @apply border-blue-500/50 ring-2 ring-blue-500/20;
 }
 
 .search-filter {
-  @apply appearance-none px-8 py-4 rounded-2xl cursor-pointer min-w-[200px];
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(15, 23, 42, 0.6);
+  @apply appearance-none px-8 py-4 rounded-2xl cursor-pointer min-w-[200px] bg-white/5 border border-white/10 transition-all;
   outline: none;
   color: white;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .search-filter:focus {
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.5);
+  @apply border-blue-500/50 ring-2 ring-blue-500/20;
 }
 
 .courses-view {

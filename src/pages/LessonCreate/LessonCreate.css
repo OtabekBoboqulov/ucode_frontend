@@ -4,6 +4,7 @@
   min-height: 100vh;
   padding: 2.5rem 0;
   background-color: #020617;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .modal-overlay {
@@ -12,10 +13,10 @@
 
 .modal-window {
   @apply w-full max-w-4xl p-10 rounded-[2.5rem] shadow-2xl focus:outline-none max-h-[90vh] overflow-y-auto;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(15, 23, 42, 0.6);
+  background-color: rgba(15, 23, 42, 0.8);
   color: white;
 }
 
@@ -31,6 +32,7 @@
   @apply w-full px-6 py-4 border border-white/10 bg-white/5 rounded-2xl mb-6 transition-all placeholder:text-slate-500;
   outline: none;
   color: white;
+  font-family: 'Plus Jakarta Sans', sans-serif;
 }
 
 .modal-input:focus, .modal-textarea:focus {
@@ -43,7 +45,7 @@
 }
 
 .modal-submit-btn {
-  @apply px-8 py-4 rounded-2xl font-bold transition-all cursor-pointer;
+  @apply px-8 py-4 rounded-2xl font-black transition-all cursor-pointer uppercase tracking-widest;
   background-color: #3b82f6;
   color: #ffffff;
   box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
@@ -51,6 +53,7 @@
 
 .modal-submit-btn:hover {
   transform: scale(1.05);
+  background-color: #2563eb;
 }
 
 .modal-submit-btn:active {
@@ -58,67 +61,74 @@
 }
 
 .add-element-btn {
-  @apply flex flex-col justify-center items-center gap-4 h-48 rounded-[2rem] border-2 border-dashed border-white/10 cursor-pointer transition-all mb-8;
+  @apply flex flex-col justify-center items-center gap-6 py-12 rounded-[2.5rem] border-2 border-dashed border-white/10 cursor-pointer transition-all mb-12 mx-auto max-w-4xl;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(15, 23, 42, 0.6);
+  background-color: rgba(15, 23, 42, 0.4);
 }
 
 .add-element-btn:hover {
-  border-color: rgba(59, 130, 246, 0.5);
-  background-color: rgba(255, 255, 255, 0.05);
+  @apply border-blue-500/50 bg-white/5;
+}
+
+.add-element-icons-container {
+  @apply flex gap-8;
 }
 
 .add-element-icon {
-  @apply w-12 h-12 text-slate-500 transition-colors;
+  @apply w-12 h-12 opacity-30 transition-all duration-300;
 }
 
 .add-element-btn:hover .add-element-icon {
-  color: #3b82f6;
+  @apply opacity-100 scale-110;
+}
+
+.add-element-text {
+  @apply text-slate-500 font-black uppercase tracking-widest text-sm transition-colors;
+}
+
+.add-element-btn:hover .add-element-text {
+  @apply text-blue-400;
 }
 
 .toolbar {
-  @apply flex items-center gap-2 p-2 rounded-xl mb-4 border border-white/5;
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(15, 23, 42, 0.6);
+  @apply flex items-center gap-2 p-2 rounded-xl mb-4 border border-white/10;
+  background-color: rgba(255, 255, 255, 0.05);
 }
 
 .toolbar-btn {
-  @apply p-2 rounded-lg bg-white/5 hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer;
+  @apply p-2 rounded-lg hover:bg-white/10 text-slate-400 hover:text-white transition-all cursor-pointer;
 }
 
 .component {
-  @apply relative mb-12 p-8 rounded-[2rem] border border-white/10;
+  @apply relative mb-12 p-8 rounded-[2.5rem] border border-white/10 mx-auto max-w-4xl;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
   background-color: rgba(15, 23, 42, 0.6);
 }
 
 .remove-component-btn {
-  @apply absolute -top-4 -right-4 bg-red-500 text-white rounded-full p-3 shadow-lg hover:scale-110 active:scale-90 transition-all cursor-pointer z-10;
+  @apply absolute -top-4 -right-4 bg-red-500/80 backdrop-blur-md text-white rounded-full p-3 shadow-lg hover:bg-red-500 hover:scale-110 active:scale-90 transition-all cursor-pointer z-10;
 }
 
 .lesson-create-btn {
-  @apply w-full py-5 text-white rounded-2xl font-black uppercase tracking-widest transition-all cursor-pointer mb-20;
+  @apply w-full py-6 text-white rounded-2xl font-black uppercase tracking-widest transition-all cursor-pointer mb-20;
   background-color: #22c55e;
   box-shadow: 0 20px 25px -5px rgba(34, 197, 94, 0.2);
 }
 
 .lesson-create-btn:hover {
   background-color: #16a34a;
-  transform: scale(1.02);
+  transform: translateY(-2px);
+  box-shadow: 0 25px 30px -5px rgba(34, 197, 94, 0.3);
 }
 
 .lesson-create-btn:active {
-  transform: scale(0.95);
+  transform: translateY(0);
 }
 
 .new-materials-input {
-  @apply px-6 py-3 rounded-xl font-bold transition-all cursor-pointer inline-block;
+  @apply px-6 py-4 rounded-2xl font-black transition-all cursor-pointer inline-block uppercase tracking-widest text-xs;
   background-color: rgba(245, 158, 11, 0.1);
   color: #f59e0b;
   border: 1px solid rgba(245, 158, 11, 0.2);

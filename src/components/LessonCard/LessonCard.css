@@ -2,31 +2,38 @@
 
 @theme {
   --bg-lesson-light: rgba(254, 252, 253, 0.6);
-  --bg-lesson-dark: rgba(9, 28, 50, 0.6);
+  --bg-lesson-dark: rgba(15, 23, 42, 0.6);
 }
 
 @utility lessonCard {
-  @apply bg-[var(--bg-lesson-light)] min-h-30 flex flex-col justify-center items-center rounded-xl p-2 shadow-md text-[#5D5D81] cursor-pointer
-  dark:bg-[var(--bg-lesson-dark)] dark:text-[#FEFCFD] hover:shadow-2xl relative;
+  @apply flex items-center justify-between rounded-2xl p-6 shadow-md text-slate-700 cursor-pointer
+  transition-all duration-300 relative border border-white/10;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+  background-color: var(--bg-lesson-dark);
+  color: white;
+}
+
+.lessonCard:hover {
+  @apply bg-white/10 scale-[1.01] shadow-xl border-blue-500/50;
+}
+
+@utility lesson-left {
+  @apply flex items-center gap-6;
 }
 
 @utility lessonNumber {
-  @apply text-6xl font-bold w-full text-center;
+  @apply text-2xl font-black text-blue-500 w-12 h-12 flex items-center justify-center bg-blue-500/10 rounded-xl;
 }
 
 @utility lessonTitle {
-  @apply text-xl font-bold text-center lg:hidden px-3;
-}
-
-@layer utilities {
-  .lessonCard:hover .lessonTitle {
-    @apply block;
-  }
-  .lessonCard:hover .lessonNumber {
-     @apply lg:hidden;
-   }
+  @apply text-xl font-bold;
 }
 
 @utility isCompleted {
-  @apply text-green-600 absolute bottom-3 right-4;
+  @apply text-green-500 flex items-center gap-2 font-black;
+}
+
+@utility lesson-score {
+  @apply text-slate-400 font-bold;
 }

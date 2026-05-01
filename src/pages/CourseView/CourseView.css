@@ -13,12 +13,18 @@
 }
 
 @utility lessonsGrid {
-  @apply grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-4 mx-10 md:mx-20 my-5 mb-0;
+  @apply flex flex-col gap-4 mx-10 md:mx-20 my-5 mb-0;
 }
 
 @utility create-lesson {
-  @apply flex justify-center items-center border-dashed border-2 border-gray-500 dark:border-gray-200 rounded-xl
-  p-4 h-30 bg-[#E8F1F2] dark:bg-[#091C32] cursor-pointer;
+  @apply flex justify-center items-center border-dashed border-2 border-slate-700 rounded-2xl
+  p-6 bg-white/5 cursor-pointer transition-all duration-300;
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+.create-lesson:hover {
+  @apply border-blue-500/50 bg-white/10 scale-[1.01];
 }
 
 @utility plus-lesson-image {

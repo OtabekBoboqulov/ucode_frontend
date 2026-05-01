@@ -41,8 +41,9 @@ const Login = () => {
         },
         body: JSON.stringify(loginData),
       });
-      const data = await response.json();
+
       if (response.ok) {
+        const data = await response.json();
         localStorage.setItem('loginData', JSON.stringify(data));
         navigate('/', {
           state: {
@@ -55,6 +56,8 @@ const Login = () => {
       }
     } catch (error) {
       console.error('Error during login:', error);
+      setHasError(true);
+      setIsLoading(false);
     }
   };
 
@@ -66,15 +69,16 @@ const Login = () => {
   const handleLogInForm = (e) => {
     e.preventDefault();
     setIsLoading(true);
+    setHasError(false);
     login(formValues);
   };
 
   return (
     <div className="auth-container">
       <div className="auth-form">
-        <Section title="Kirish" textSize='text-2xl'/>
+        <Section title="Kirish" textSize='text-3xl'/>
         {hasError && (<Error error_message="Username yoki parol noto'g'ri kiritilgan"/>)}
-        <form onSubmit={handleLogInForm}>
+        <form onSubmit={handleLogInForm} className="w-full">
           <input
             type="text"
             name="username"
@@ -86,12 +90,12 @@ const Login = () => {
             value={formValues.username}
             onChange={handleInputChange}
           />
-          <div className="password-input">
+          <div className="password-input-wrapper">
             <input
               type={showPassword ? 'text' : 'password'}
               name="password"
               id="password"
-              placeholder="Password"
+              placeholder="Parol"
               className="text-input"
               required
               aria-label="Password"
@@ -109,13 +113,15 @@ const Login = () => {
           </div>
           <button type="submit" className="auth-submit-btn" disabled={isLoading} aria-label="Login">
             <span className={!isLoading ? 'block' : 'hidden'}>Kirish</span>
-            <div className={`loading ${isLoading ? 'block' : 'hidden'}`}>
+            <div className={`loading ${isLoading ? 'block' : 'hidden'} flex justify-center`}>
               <ButtonLoadingAnimation/>
             </div>
           </button>
-          <GoogleSignInButton/>
-          <div className="goto-login-signup">Akkauntingiz yo'qmi? <Link to={"/signup"} className="link">Ro'yxat
-            o'tish</Link>
+          <div className="my-4">
+            <GoogleSignInButton/>
+          </div>
+          <div className="goto-login-signup">
+            Akkauntingiz yo'qmi? <Link to={"/signup"} className="link">Ro'yxatdan o'tish</Link>
           </div>
         </form>
       </div>

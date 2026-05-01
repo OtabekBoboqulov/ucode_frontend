@@ -56,26 +56,32 @@ const Signup = () => {
   };
 
   const signUp = async (formData) => {
-    const result = await fetch(`${BASE_URL}/api/signup/`, {
-      method: 'POST',
-      body: formData,
-      headers: {
-        'Accept': 'application/json',
+    try {
+      const result = await fetch(`${BASE_URL}/api/signup/`, {
+        method: 'POST',
+        body: formData,
+        headers: {
+          'Accept': 'application/json',
+        }
+      });
+      if (!result.ok) {
+        setHasError(true);
+        setErrorMessage('email yoki username ro\'yxatdan o\'tkazilgan');
+        setIsLoading(false);
+        return;
       }
-    });
-    if (!result.ok) {
+      const data = await result.json();
+      navigate('/login', {
+        state: {
+          message: 'Signed up successfully',
+          username: data.username,
+        }
+      });
+    } catch (e) {
       setHasError(true);
-      setErrorMessage('email yoki username ro\'yxatdan o\'tkazilgan');
+      setErrorMessage('Xatolik yuz berdi. Iltimos qaytadan urining.');
       setIsLoading(false);
-      return;
     }
-    const data = await result.json();
-    navigate('/login', {
-      state: {
-        message: 'Signed up successfully',
-        username: data.username,
-      }
-    });
   };
 
   const isPasswordValid = (password) => {
@@ -86,27 +92,30 @@ const Signup = () => {
     const hasMinLength = password.length >= 8;
     const hasValidChars = /^[A-Za-z\d@$!%*?&]*$/.test(password);
 
+    let errors = [];
+
     if (!hasValidChars) {
-      setHasError(true);
-      setErrorMessage(prev => prev + 'Parolda taqiqlangan belgi ishlatilgan. ');
+      errors.push('Parolda taqiqlangan belgi ishlatilgan.');
     }
     if (!hasLowercase) {
-      setHasError(true);
-      setErrorMessage(prev => prev + 'Parolda kichik harf bo\'lishi kerak. ');
+      errors.push('Parolda kichik harf bo\'lishi kerak.');
     }
     if (!hasUppercase) {
-      setHasError(true);
-      setErrorMessage(prev => prev + 'Parolda katta harf bo\'lishi kerak. ');
+      errors.push('Parolda katta harf bo\'lishi kerak.');
     }
     if (!hasDigit) {
-      setHasError(true);
-      setErrorMessage(prev => prev + 'Parolda raqam bo\'lishi kerak. ');
+      errors.push('Parolda raqam bo\'lishi kerak.');
     }
     if (!hasMinLength) {
-      setHasError(true);
-      setErrorMessage(prev => prev + 'Parolda 8 ta belgi bo\'lishi kerak. ');
+      errors.push('Parolda 8 ta belgi bo\'lishi kerak.');
     }
-    return hasValidChars && hasLowercase && hasUppercase && hasDigit && hasMinLength;
+
+    if (errors.length > 0) {
+      setHasError(true);
+      setErrorMessage(errors.join(' '));
+      return false;
+    }
+    return true;
   }
 
   const handleSignUpForm = (e) => {
@@ -149,9 +158,9 @@ const Signup = () => {
   return (
     <div className="auth-container">
       <div className="auth-form">
-        <Section title="Ro'yxatdan o'tish" textSize='text-2xl'/>
+        <Section title="Ro'yxatdan o'tish" textSize='text-3xl'/>
         {hasError && (<Error error_message={errorMessage}/>)}
-        <form onSubmit={handleSignUpForm}>
+        <form onSubmit={handleSignUpForm} className="w-full">
           <input
             type="text"
             name="username"
@@ -210,12 +219,12 @@ const Signup = () => {
               className="w-full h-full object-cover object-center"
             />
           </div>
-          <div className="password-input">
+          <div className="password-input-wrapper">
             <input
               type={showPassword ? 'text' : 'password'}
               name="password"
               id="password"
-              placeholder="Password"
+              placeholder="Parol"
               className="text-input"
               required
               aria-label="Password"
@@ -229,12 +238,12 @@ const Signup = () => {
               {showPassword ? <EyeOff size={20}/> : <Eye size={20}/>}
             </button>
           </div>
-          <div className="password-input">
+          <div className="password-input-wrapper">
             <input
               type={showPasswordConfirmation ? 'text' : 'password'}
               name="password-confirmation"
               id="password-confirmation"
-              placeholder="Password Confirmation"
+              placeholder="Parolni tasdiqlash"
               className="text-input"
               required
               aria-label="Password Confirmation"
@@ -250,11 +259,13 @@ const Signup = () => {
           </div>
           <button type="submit" className="auth-submit-btn" disabled={isLoading} aria-label="Sign up">
             <span className={!isLoading ? 'block' : 'hidden'}>Ro'yxatdan o'tish</span>
-            <div className={`loading ${isLoading ? 'block' : 'hidden'}`}>
+            <div className={`loading ${isLoading ? 'block' : 'hidden'} flex justify-center`}>
               <ButtonLoadingAnimation/>
             </div>
           </button>
-          <GoogleSignInButton/>
+          <div className="my-4">
+            <GoogleSignInButton/>
+          </div>
           <div className="goto-login-signup">Akkaunt bormi? <Link to={"/login"} className="link">Kirish</Link></div>
         </form>
       </div>

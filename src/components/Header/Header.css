@@ -7,8 +7,9 @@
   border-right: none;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(15, 23, 42, 0.6);
+  border-bottom: 1px solid var(--border);
+  background-color: var(--background);
+  opacity: 0.8;
 }
 
 .logo-container {
@@ -24,15 +25,19 @@
 }
 
 .auth-btn-login {
-  @apply border-transparent hover:bg-white/10;
-  color: #f8fafc;
+  @apply border-transparent;
+  color: var(--foreground);
+}
+
+.auth-btn-login:hover {
+  background-color: color-mix(in srgb, var(--foreground) 10%, transparent);
 }
 
 .auth-btn-signup {
   @apply shadow-lg;
-  background-color: #3b82f6;
-  color: #ffffff;
-  border-color: #3b82f6;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
+  border-color: var(--primary);
   box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
 }
 
@@ -46,7 +51,7 @@
 
 .username {
   @apply font-bold text-lg hidden md:block;
-  color: #f8fafc;
+  color: var(--foreground);
 }
 
 .user-image {
@@ -59,15 +64,16 @@
   border-right: none;
   backdrop-filter: blur(20px);
   -webkit-backdrop-filter: blur(20px);
-  border-left: 1px solid rgba(255, 255, 255, 0.1);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background-color: rgba(15, 23, 42, 0.9);
+  border-left: 1px solid var(--border);
+  border-bottom: 1px solid var(--border);
+  background-color: var(--background);
+  opacity: 0.9;
   border-bottom-left-radius: 1rem;
 }
 
 .drop-down-item {
   @apply px-6 py-4 text-right font-medium transition-colors;
-  color: #f8fafc;
+  color: var(--foreground);
 }
 
 .drop-down-item:hover {
@@ -77,13 +83,13 @@
 /* Header Banner (Hero Section) */
 .header-banner {
   @apply mt-20 min-h-[70vh] flex flex-col-reverse md:flex-row items-center justify-between px-10 md:px-20 relative overflow-hidden;
-  background-color: #020617;
+  background-color: var(--background);
 }
 
 .header-banner::before {
   content: '';
   @apply absolute inset-0 opacity-10 pointer-events-none;
-  background-image: radial-gradient(rgba(255, 255, 255, 0.1) 1px, transparent 1px);
+  background-image: radial-gradient(var(--foreground) 1px, transparent 1px);
   background-size: 24px 24px;
 }
 
@@ -93,20 +99,20 @@
 
 .header-greeting {
   @apply text-5xl md:text-7xl font-black mb-6 leading-tight tracking-tight;
-  background: linear-gradient(to bottom right, #fff 50%, #94a3b8);
+  background: linear-gradient(to bottom right, var(--foreground) 50%, var(--muted-foreground));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
 }
 
 .header-message {
   @apply text-xl mb-10 max-w-xl;
-  color: #94a3b8;
+  color: var(--muted-foreground);
 }
 
 .header-btn {
   @apply inline-flex items-center gap-2 px-10 py-4 rounded-2xl font-bold text-lg transition-all;
-  background-color: #3b82f6;
-  color: #ffffff;
+  background-color: var(--primary);
+  color: var(--primary-foreground);
   box-shadow: 0 10px 15px -3px rgba(59, 130, 246, 0.2);
 }
 

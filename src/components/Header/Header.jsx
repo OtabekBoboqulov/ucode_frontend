@@ -6,6 +6,7 @@ import headerBanner from '../../assets/header-banner.png';
 import {Link} from "react-router-dom";
 import {BASE_URL, MEDIA_BASE_URL, phrases} from "../../constants.jsx";
 import LoadingAnimation from "../LoadingAnimation.jsx";
+import ThemeToggle from "../ThemeToggle/ThemeToggle.jsx";
 
 const Header = () => {
   const [scrolled, setScrolled] = useState(false);
@@ -49,10 +50,13 @@ const Header = () => {
 
   return (
     <div>
-      <div className={`header ${scrolled ? 'backdrop-blur-2xl bg-slate-950/80 shadow-2xl' : ''}`}>
+      <div className={`header ${scrolled ? 'backdrop-blur-2xl bg-background/80 shadow-2xl' : ''}`}>
         <Link to={"/"} className="h-10">
-          <img src={logoDark} alt="Logo" className="h-full block"/>
+          <img src={logoDark} alt="Logo" className="h-full block dark:block hidden"/>
+          <img src={logoLight} alt="Logo" className="h-full dark:hidden block"/>
         </Link>
+        <div className="flex items-center gap-4">
+        <ThemeToggle />
         {!userData ? (
           <div className="auth-btn-group">
             <Link to={"/login"} className="auth-btn auth-btn-login">
@@ -84,6 +88,7 @@ const Header = () => {
             </div>
           </div>
         )}
+        </div>
       </div>
       <div className="header-banner">
         <div className="header-banner-text">

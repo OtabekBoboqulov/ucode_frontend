@@ -140,7 +140,7 @@ const Index = () => {
     getCourses();
   }, []);
   return (
-    <div className="bg-[#020617] min-h-screen">
+    <div className="bg-background min-h-screen">
       <Header/>
       <div className="max-w-7xl mx-auto px-6 md:px-12 pt-10">
         <Intro/>
@@ -150,24 +150,20 @@ const Index = () => {
           <input
             type="text"
             placeholder="Kurslarni qidirish..."
-            className="flex-grow px-6 py-4 rounded-2xl outline-none text-white focus:ring-2 focus:ring-blue-500/50"
+            className="flex-grow px-6 py-4 rounded-2xl outline-none text-foreground focus:ring-2 focus:ring-blue-500/50 bg-card/60 border border-border"
             style={{
               backdropFilter: 'blur(20px)',
               WebkitBackdropFilter: 'blur(20px)',
-              border: '1px solid rgba(255, 255, 255, 0.1)',
-              backgroundColor: 'rgba(15, 23, 42, 0.6)'
             }}
             onChange={handleSearchTextChange}
             value={searchText}
           />
           <div className="relative">
             <select
-              className="appearance-none px-10 py-4 rounded-2xl outline-none cursor-pointer text-white focus:ring-2 focus:ring-blue-500/50"
+              className="appearance-none px-10 py-4 rounded-2xl outline-none cursor-pointer text-foreground focus:ring-2 focus:ring-blue-500/50 bg-card/60 border border-border"
               style={{
                 backdropFilter: 'blur(20px)',
                 WebkitBackdropFilter: 'blur(20px)',
-                border: '1px solid rgba(255, 255, 255, 0.1)',
-                backgroundColor: 'rgba(15, 23, 42, 0.6)'
               }}
               onChange={handleSearchFilterChange}
               defaultValue={searchFilter}

@@ -1,105 +1,275 @@
-import React, {useState} from 'react';
-import {Link, useNavigate} from 'react-router-dom';
-import {BASE_URL} from '../../constants.jsx';
-import Error from '../../components/Error/Error.jsx';
-import HomeButton from '../../components/HomeButton/HomeButton.jsx';
-import ButtonLoadingAnimation from '../../components/ButtonLoadingAnimation/ButtonLoadingAnimation.jsx';
+import React, {useEffect, useRef, useState} from 'react';
+import {Link, useNavigate} from "react-router-dom";
 import './auth.css';
+import Section from '../../components/Section/Section.jsx';
+import default_profile_image from '../../assets/default_profile_image.jpg';
+import {BASE_URL} from "../../constants.jsx";
+import Error from "../../components/Error/Error.jsx";
+import {isAuthorized} from "../../utils/auth-utils.jsx";
+import HomeButton from "../../components/HomeButton/HomeButton.jsx";
+import ButtonLoadingAnimation from "../../components/ButtonLoadingAnimation/ButtonLoadingAnimation.jsx";
+import {Eye, EyeOff} from "lucide-react";
+import GoogleSignInButton from "../../components/GoogleSignInButton.jsx";
 
 const Signup = () => {
-  const [username, setUsername] = useState('');
-  const [password, setPassword] = useState('');
-  const [email, setEmail] = useState('');
+  const [imageSrc, setImageSrc] = useState(default_profile_image);
+  const [imageFile, setImageFile] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
+  const [hasError, setHasError] = useState(false);
+  const fileInputRef = useRef(null);
+  const navigate = useNavigate();
   const [errorMessage, setErrorMessage] = useState('');
   const [showPassword, setShowPassword] = useState(false);
-  const navigate = useNavigate();
+  const [showPasswordConfirmation, setShowPasswordConfirmation] = useState(false);
 
-  const handleSignup = async (e) => {
-    e.preventDefault();
-    setIsLoading(true);
-    setErrorMessage('');
+  const togglePasswordVisibility = () => {
+    setShowPassword(!showPassword);
+  };
 
+  const togglePasswordConfirmationVisibility = () => {
+    setShowPasswordConfirmation(!showPasswordConfirmation);
+  }
+
+  useEffect(() => {
+    if (isAuthorized()) {
+      navigate('/');
+    }
+  }, []);
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file && file.type.startsWith('image/')) {
+      setImageFile(file);
+      const reader = new FileReader();
+      reader.onload = () => {
+        setImageSrc(reader.result);
+      };
+      reader.readAsDataURL(file);
+    } else {
+      setHasError(true);
+      setErrorMessage('Rasm formatidagi faylni yuklang')
+    }
+  };
+
+  const handleContainerClick = () => {
+    fileInputRef.current.click();
+  };
+
+  const signUp = async (formData) => {
     try {
-      const response = await fetch(`${BASE_URL}/api/register/`, {
+      const result = await fetch(`${BASE_URL}/api/signup/`, {
         method: 'POST',
+        body: formData,
         headers: {
-          'Content-Type': 'application/json',
           'Accept': 'application/json',
-        },
-        body: JSON.stringify({username, password, email}),
+        }
       });
-
-      if (!response.ok) {
-        const data = await response.json();
-        throw new Error(data.message || 'Xatolik yuz berdi');
+      if (!result.ok) {
+        setHasError(true);
+        setErrorMessage('email yoki username ro\'yxatdan o\'tkazilgan');
+        setIsLoading(false);
+        return;
       }
-
-      navigate('/login');
-    } catch (error) {
-      setErrorMessage(error.message);
-    } finally {
+      const data = await result.json();
+      navigate('/login', {
+        state: {
+          message: 'Signed up successfully',
+          username: data.username,
+        }
+      });
+    } catch (e) {
+      setHasError(true);
+      setErrorMessage('Xatolik yuz berdi. Iltimos qaytadan urining.');
       setIsLoading(false);
     }
+  };
+
+  const isPasswordValid = (password) => {
+    setErrorMessage('');
+    const hasLowercase = /[a-z]/.test(password);
+    const hasUppercase = /[A-Z]/.test(password);
+    const hasDigit = /\d/.test(password);
+    const hasMinLength = password.length >= 8;
+    const hasValidChars = /^[A-Za-z\d@$!%*?&]*$/.test(password);
+
+    let errors = [];
+
+    if (!hasValidChars) {
+      errors.push('Parolda taqiqlangan belgi ishlatilgan.');
+    }
+    if (!hasLowercase) {
+      errors.push('Parolda kichik harf bo\'lishi kerak.');
+    }
+    if (!hasUppercase) {
+      errors.push('Parolda katta harf bo\'lishi kerak.');
+    }
+    if (!hasDigit) {
+      errors.push('Parolda raqam bo\'lishi kerak.');
+    }
+    if (!hasMinLength) {
+      errors.push('Parolda 8 ta belgi bo\'lishi kerak.');
+    }
+
+    if (errors.length > 0) {
+      setHasError(true);
+      setErrorMessage(errors.join(' '));
+      return false;
+    }
+    return true;
+  }
+
+  const handleSignUpForm = (e) => {
+    e.preventDefault();
+    const filterPattern = /[^a-zA-Z0-9\s'-._]/;
+    const formData = new FormData();
+    const formValues = Object.fromEntries(new FormData(e.target));
+    if (formValues.password !== formValues['password-confirmation']) {
+      setErrorMessage('Parolni tasdiqlash muvaffqiyatsiz bajarildi');
+      setHasError(true);
+      return;
+    }
+    if (!(formValues.username && formValues.first_name && formValues.last_name && formValues.email && formValues.password)) {
+      setErrorMessage('Barcha ma\'lumotlarni to\'ldiring');
+      setHasError(true);
+      return;
+    }
+    if (/[^a-zA-Z0-9\s-._]/.test(formValues.username) || filterPattern.test(formValues.first_name) || filterPattern.test(formValues.last_name)) {
+      setErrorMessage('Username, First Name, Last Namelarda quyidagi belgilar bo\'lishi mumkin emas: !#@&*()+{}|:"<>?');
+      setHasError(true);
+      return;
+    }
+    if (!isPasswordValid(formValues.password)) {
+      return;
+    } else {
+      setHasError(false);
+    }
+    setIsLoading(true);
+    formData.append('username', formValues.username);
+    formData.append('first_name', formValues.first_name);
+    formData.append('last_name', formValues.last_name);
+    formData.append('email', formValues.email);
+    formData.append('password', formValues.password);
+    if (imageFile) {
+      formData.append('profile_image', imageFile);
+    }
+    signUp(formData);
   };
 
   return (
     <div className="auth-container">
       <div className="auth-form">
-        <h1 className="auth-title">Ro'yxatdan o'tish</h1>
-        {errorMessage && <Error error_message={errorMessage} />}
-        <form onSubmit={handleSignup}>
+        <Section title="Ro'yxatdan o'tish" textSize='text-3xl'/>
+        {hasError && (<Error error_message={errorMessage}/>)}
+        <form onSubmit={handleSignUpForm} className="w-full">
           <input
             type="text"
+            name="username"
+            id="username"
             placeholder="Username"
             className="text-input"
-            value={username}
-            onChange={(e) => setUsername(e.target.value)}
             required
+            aria-label="Username"
+          />
+          <input
+            type="text"
+            name="first_name"
+            id="first_name"
+            placeholder="First Name"
+            className="text-input"
+            required
+            aria-label="First Name"
+          />
+          <input
+            type="text"
+            name="last_name"
+            id="last_name"
+            placeholder="Last Name"
+            className="text-input"
+            required
+            aria-label="Last Name"
           />
           <input
             type="email"
+            name="email"
+            id="email"
             placeholder="Email"
             className="text-input"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
             required
+            aria-label="Email"
           />
+          <input
+            type="file"
+            name="avatar"
+            id="avatar"
+            accept="image/*"
+            className="image-input"
+            onChange={handleImageChange}
+            ref={fileInputRef}
+            aria-hidden="true"
+          />
+          <div
+            className="image-preview"
+            onClick={handleContainerClick}
+            role="button"
+            aria-label="Upload profile image"
+          >
+            <img
+              src={imageSrc}
+              alt="Profile preview"
+              className="w-full h-full object-cover object-center"
+            />
+          </div>
           <div className="password-input-wrapper">
             <input
               type={showPassword ? 'text' : 'password'}
+              name="password"
+              id="password"
               placeholder="Parol"
               className="text-input"
-              value={password}
-              onChange={(e) => setPassword(e.target.value)}
               required
+              aria-label="Password"
             />
-            <span
+            <button
+              type="button"
+              onClick={togglePasswordVisibility}
               className="toggle-password"
-              onClick={() => setShowPassword(!showPassword)}
+              aria-label={showPassword ? 'Hide password' : 'Show password'}
             >
-              {showPassword ? (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M3.98 8.223A10.477 10.477 0 001.934 12C3.226 16.338 7.244 19.5 12 19.5c.993 0 1.953-.138 2.863-.395M6.228 6.228A10.45 10.45 0 0112 4.5c4.756 0 8.773 3.162 10.065 7.498a10.523 10.523 0 01-4.293 5.774M6.228 6.228L3 3m3.228 3.228l3.65 3.65m7.894 7.894L21 21m-3.228-3.228l-3.65-3.65m0 0a3 3 0 10-4.243-4.243m4.242 4.242L9.88 9.88" />
-                </svg>
-              ) : (
-                <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-6 h-6">
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M2.036 12.322a1.012 1.012 0 010-.639C3.423 7.51 7.36 4.5 12 4.5c4.638 0 8.573 3.007 9.963 7.178.07.207.07.431 0 .639C20.577 16.49 16.64 19.5 12 19.5c-4.638 0-8.573-3.007-9.963-7.178z" />
-                  <path strokeLinecap="round" strokeLinejoin="round" d="M15 12.a3 3 0 11-6 0 3 3 0 016 0z" />
-                </svg>
-              )}
-            </span>
+              {showPassword ? <EyeOff size={20}/> : <Eye size={20}/>}
+            </button>
           </div>
-          <button type="submit" className="auth-submit-btn" disabled={isLoading}>
-            {isLoading ? <ButtonLoadingAnimation /> : 'Ro\'yxatdan o\'tish'}
+          <div className="password-input-wrapper">
+            <input
+              type={showPasswordConfirmation ? 'text' : 'password'}
+              name="password-confirmation"
+              id="password-confirmation"
+              placeholder="Parolni tasdiqlash"
+              className="text-input"
+              required
+              aria-label="Password Confirmation"
+            />
+            <button
+              type="button"
+              onClick={togglePasswordConfirmationVisibility}
+              className="toggle-password"
+              aria-label={showPasswordConfirmation ? 'Hide password' : 'Show password'}
+            >
+              {showPasswordConfirmation ? <EyeOff size={20}/> : <Eye size={20}/>}
+            </button>
+          </div>
+          <button type="submit" className="auth-submit-btn" disabled={isLoading} aria-label="Sign up">
+            <span className={!isLoading ? 'block' : 'hidden'}>Ro'yxatdan o'tish</span>
+            <div className={`loading ${isLoading ? 'block' : 'hidden'} flex justify-center`}>
+              <ButtonLoadingAnimation/>
+            </div>
           </button>
+          <div className="my-4">
+            <GoogleSignInButton/>
+          </div>
+          <div className="goto-login-signup">Akkaunt bormi? <Link to={"/login"} className="link">Kirish</Link></div>
         </form>
-        <p className="goto-login-signup">
-          Hisobingiz bormi?
-          <Link to="/login" className="link">Kirish</Link>
-        </p>
       </div>
-      <HomeButton />
+      <HomeButton/>
     </div>
   );
 };

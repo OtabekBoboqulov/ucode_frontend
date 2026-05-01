@@ -1,7 +1,7 @@
 import React from 'react';
 import './Error.css';
 
-const Error = ({error_message}) => {
+const UIError = ({error_message}) => {
   return (
     <div className="error-container">
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth="1.5" stroke="currentColor" className="error-icon">
@@ -14,4 +14,4 @@ const Error = ({error_message}) => {
   );
 };
 
-export default Error;
+export default UIError;
